@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02C09B0E6F84F72E15C83404 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAC5D9E7BBEF6F1F6F7E99E /* HomeView.swift */; };
 		2377C5EE6D0A5EDA3FDBC9E8 /* DriveSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */; };
-		4BC0037F4D9145B0D741369B /* DriveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995C22057102A072BA61864 /* DriveListView.swift */; };
+		2679406871B1B75785AD6008 /* DriveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */; };
+		5CF38761B990AC9DCD816932 /* ScoreViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3650AAEDFB6877777973B3 /* ScoreViews.swift */; };
 		5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E0548A5B72251857492250 /* LocationService.swift */; };
 		67C4EB640DD41500BC24440B /* CurbsideCore in Frameworks */ = {isa = PBXBuildFile; productRef = 40DA7DE0C1514638382900A6 /* CurbsideCore */; };
 		6B319B42E20AF18E8FC55000 /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85A80137B17F1A2794F9B16 /* Format.swift */; };
@@ -16,6 +18,7 @@
 		748380ADE4DA0895BE6C3281 /* EventReplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0B026903B860A354AB5DA /* EventReplay.swift */; };
 		8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36060E0671B3A29A91DA1308 /* DriveRecorder.swift */; };
 		96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B07EA18884F73DA787960D /* MotionService.swift */; };
+		A2A37B72AA593074A0F5BB19 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA38B0881952A6986AC9B68 /* TrendsView.swift */; };
 		A6A10E5591A5DF3A966C158C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DBE22B56D5EB8FB249E381D /* Assets.xcassets */; };
 		AD9554960B1392250979E1FB /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA17784032113533F08F553 /* RecordingView.swift */; };
 		B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */; };
@@ -26,15 +29,18 @@
 
 /* Begin PBXFileReference section */
 		16E0548A5B72251857492250 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		1B3650AAEDFB6877777973B3 /* ScoreViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViews.swift; sourceTree = "<group>"; };
+		26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveHistoryView.swift; sourceTree = "<group>"; };
 		29B07EA18884F73DA787960D /* MotionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionService.swift; sourceTree = "<group>"; };
 		36060E0671B3A29A91DA1308 /* DriveRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveRecorder.swift; sourceTree = "<group>"; };
 		37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveSummaryView.swift; sourceTree = "<group>"; };
 		3D4CE434C6C2FFF664012492 /* CurbsideCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CurbsideCore; path = CurbsideCore; sourceTree = SOURCE_ROOT; };
 		3DBE22B56D5EB8FB249E381D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6BA38B0881952A6986AC9B68 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
 		756738551C7A755DD6CA58E5 /* PromptGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptGate.swift; sourceTree = "<group>"; };
 		7BA0B026903B860A354AB5DA /* EventReplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventReplay.swift; sourceTree = "<group>"; };
+		7DAC5D9E7BBEF6F1F6F7E99E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		86545892EBA84B5BB6316C23 /* Drive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive.swift; sourceTree = "<group>"; };
-		9995C22057102A072BA61864 /* DriveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveListView.swift; sourceTree = "<group>"; };
 		BCA17784032113533F08F553 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		BCD327013E52BEADF8D0B0A4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		C42B4D558E050C5A4BDBDD94 /* DriveDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveDebugView.swift; sourceTree = "<group>"; };
@@ -107,11 +113,21 @@
 			children = (
 				86545892EBA84B5BB6316C23 /* Drive.swift */,
 				C42B4D558E050C5A4BDBDD94 /* DriveDebugView.swift */,
-				9995C22057102A072BA61864 /* DriveListView.swift */,
+				26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */,
 				37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */,
 				7BA0B026903B860A354AB5DA /* EventReplay.swift */,
+				7DAC5D9E7BBEF6F1F6F7E99E /* HomeView.swift */,
 			);
 			path = Drives;
+			sourceTree = "<group>";
+		};
+		A7DF31AC66762087523242E0 /* Score */ = {
+			isa = PBXGroup;
+			children = (
+				1B3650AAEDFB6877777973B3 /* ScoreViews.swift */,
+				6BA38B0881952A6986AC9B68 /* TrendsView.swift */,
+			);
+			path = Score;
 			sourceTree = "<group>";
 		};
 		C572B10097A98B9C4FE461A5 /* Curbside */ = {
@@ -122,6 +138,7 @@
 				130B49097277698581C70568 /* App */,
 				8F2DF51C8C1734AA138F94B4 /* Drives */,
 				18C244AF8DC59297CEF02582 /* Recording */,
+				A7DF31AC66762087523242E0 /* Score */,
 				FAF024E69F693C642CD4CC0E /* Support */,
 			);
 			path = Curbside;
@@ -214,16 +231,19 @@
 				B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */,
 				D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */,
 				72E331DFC3D2C283792335FA /* DriveDebugView.swift in Sources */,
-				4BC0037F4D9145B0D741369B /* DriveListView.swift in Sources */,
+				2679406871B1B75785AD6008 /* DriveHistoryView.swift in Sources */,
 				8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */,
 				2377C5EE6D0A5EDA3FDBC9E8 /* DriveSummaryView.swift in Sources */,
 				748380ADE4DA0895BE6C3281 /* EventReplay.swift in Sources */,
 				6B319B42E20AF18E8FC55000 /* Format.swift in Sources */,
+				02C09B0E6F84F72E15C83404 /* HomeView.swift in Sources */,
 				5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */,
 				96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */,
 				CBE7A2A1C4180B0F2ED93C01 /* PromptGate.swift in Sources */,
 				AD9554960B1392250979E1FB /* RecordingView.swift in Sources */,
 				D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */,
+				5CF38761B990AC9DCD816932 /* ScoreViews.swift in Sources */,
+				A2A37B72AA593074A0F5BB19 /* TrendsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

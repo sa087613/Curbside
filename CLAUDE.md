@@ -42,13 +42,14 @@ long-term score, a family leaderboard, and rewards for safe driving.
 Curbside/                 iOS app target (SwiftUI, @Observable, SwiftData, Swift 6 strict concurrency)
   App/                    entry point, RootView, PromptGate
   Recording/              LocationService, MotionService, DriveRecorder, RecordingView
-  Drives/                 Drive (@Model), drive list, summary, debug views
+  Drives/                 Drive (@Model), home, history, summary, event replay, debug views
+  Score/                  gauge, score card, "what's moving your score", Trends tab
   Support/                formatting and shared UI helpers
 CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocation / SwiftUI
   Sources/CurbsideCore/
     CurbsideConfig.swift  ← ALL tunable thresholds and weights live here
     Detection/            EventDetector, AxisEstimator, GPSTrack
-    Scoring/              drive score (Curbside Score is added in Phase 4)
+    Scoring/              DriveScore (0–100) and CurbsideScoreReport (300–850, history, trend, factors)
     Replay/               EventClip: the 5 s before each event, rebuilt from stored data
     Export/               DriveLog (debug JSON format), DriveMetrics
   Sources/replay/         `replay` CLI: runs an exported drive through the real detection + scoring code
@@ -70,6 +71,17 @@ Rules already in place:
 - Event replay keeps no extra buffer. `EventClipBuilder` re-runs the raw log through `EventDetector` to
   recover the exact brake/cornering signal around each event. If the raw log is missing, it falls back to
   the stored 1 Hz route and estimates braking from GPS speed changes, with no cornering force.
+- The Curbside Score is never stored. `CurbsideScoreReport.compute` is a pure function of all scored
+  drives, so tuning `CurbsideScoreConfig` re-scores everything. The formula in plain words:
+  - It's a recency-weighted average of drive scores. Each older drive counts 0.95× the next newer one,
+    decaying by drive count, never by time.
+  - Each drive is weighted by distance (5 mi = 1 drive, clamped to 0.4–2).
+  - New drivers start with 8 virtual drives scoring 80, which is 660 (Fair).
+  - The average is mapped to 300–850 through `scaleAnchors`.
+- App navigation: tabs for Drive (home), Trends, and History. A saved drive opens its summary on the
+  Drive tab.
+- Chart colors: the habit series use a validated categorical palette (blue / orange / aqua, with fixed
+  light and dark values). Tier and severity colors always appear with a text label.
 - Units are mph only.
 - Gotcha: never assign to a property inside its own `didSet` on an `@Observable` class. The macro turns it
   into a computed property and it recurses until it crashes.
@@ -100,6 +112,6 @@ clear message, and stop until they've tested.
    speed chart)
 3. ✅ 5-second event replay: tap an event to watch a car marker, a speed readout, and a brake-force indicator
    over the 5 s leading up to it
-4. Curbside Score (pure module + tests), trends, and history
+4. ✅ Curbside Score (pure module + tests), trends, and history
 5. Accounts, families, parent dashboard, leaderboard, and teen consent
 6. Rewards: parent goals plus a mock partner catalog behind a protocol

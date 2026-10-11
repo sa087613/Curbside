@@ -425,7 +425,8 @@ struct Card<Content: View>: View {
     @ViewBuilder var content: Content
 
     var body: some View {
-        content
+        // VStack so multi-view content shares one card instead of each child getting its own.
+        VStack(alignment: .leading, spacing: 0) { content }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))

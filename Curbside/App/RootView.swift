@@ -6,18 +6,42 @@ struct RootView: View {
     @Environment(PromptGate.self) private var prompts
     @Environment(\.openURL) private var openURL
     @Environment(\.modelContext) private var context
-    @State private var path: [Drive] = []
+    @State private var tab: AppTab = .home
+    @State private var homePath: [Drive] = []
+
+    enum AppTab: Hashable {
+        case home, trends, history
+    }
 
     var body: some View {
-        NavigationStack(path: $path) {
-            DriveListView()
+        TabView(selection: $tab) {
+            NavigationStack(path: $homePath) {
+                HomeView(showTrends: { tab = .trends }, showHistory: { tab = .history })
+            }
+            .tabItem { Label("Drive", systemImage: "car.fill") }
+            .tag(AppTab.home)
+
+            NavigationStack {
+                TrendsView()
+            }
+            .tabItem { Label("Trends", systemImage: "chart.line.uptrend.xyaxis") }
+            .tag(AppTab.trends)
+
+            NavigationStack {
+                DriveHistoryView()
+            }
+            .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
+            .tag(AppTab.history)
         }
         // Open the summary of the drive that was just saved.
         .onChange(of: recorder.lastSavedDriveID) { _, id in
             guard let id else { return }
             recorder.lastSavedDriveID = nil
             let descriptor = FetchDescriptor<Drive>(predicate: #Predicate { $0.id == id })
-            if let drive = try? context.fetch(descriptor).first { path = [drive] }
+            if let drive = try? context.fetch(descriptor).first {
+                tab = .home
+                homePath = [drive]
+            }
         }
         .fullScreenCover(isPresented: Binding(get: { recorder.isRecording }, set: { _ in })) {
             RecordingView()

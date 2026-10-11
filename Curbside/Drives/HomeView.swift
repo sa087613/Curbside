@@ -2,13 +2,27 @@ import CurbsideCore
 import SwiftData
 import SwiftUI
 
-struct DriveListView: View {
+/// Home: Curbside Score, Start Drive, what's moving the score, and the latest drives.
+struct HomeView: View {
     @Query(sort: \Drive.startDate, order: .reverse) private var drives: [Drive]
     @Environment(\.modelContext) private var context
     @Environment(DriveRecorder.self) private var recorder
+    var showTrends: () -> Void
+    var showHistory: () -> Void
+
+    private let recentCount = 5
 
     var body: some View {
+        let report = CurbsideScoreReport.from(drives)
         List {
+            Section {
+                Button(action: showTrends) {
+                    CurbsideScoreCard(report: report)
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows score trends")
+            }
+
             Section {
                 Button {
                     Task { await recorder.start() }
@@ -23,34 +37,45 @@ struct DriveListView: View {
                 .listRowBackground(Color.clear)
             }
 
-            Section("Drives") {
+            Section("What's moving your score") {
+                FactorList(report: report)
+            }
+
+            Section {
                 if drives.isEmpty {
                     Text("Your recorded drives will show up here.")
                         .foregroundStyle(.secondary)
                 }
-                ForEach(drives) { drive in
+                ForEach(drives.prefix(recentCount)) { drive in
                     NavigationLink(value: drive) {
                         DriveRow(drive: drive)
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete { offsets in
+                    offsets.map { drives[$0] }.forEach { $0.deleteWithLog(in: context) }
+                }
+                if drives.count > recentCount {
+                    Button("See all \(drives.count) drives", action: showHistory)
+                }
+            } header: {
+                Text("Recent drives")
             }
         }
         .navigationTitle("Curbside")
         .navigationDestination(for: Drive.self) { DriveSummaryView(drive: $0) }
     }
+}
 
-    private func delete(at offsets: IndexSet) {
-        for index in offsets {
-            let drive = drives[index]
-            DriveFiles.delete(drive.logFileName)
-            context.delete(drive)
-        }
+extension Drive {
+    /// Deletes the drive and its raw sensor log.
+    func deleteWithLog(in context: ModelContext) {
+        DriveFiles.delete(logFileName)
+        context.delete(self)
         try? context.save()
     }
 }
 
-private struct DriveRow: View {
+struct DriveRow: View {
     let drive: Drive
 
     var body: some View {

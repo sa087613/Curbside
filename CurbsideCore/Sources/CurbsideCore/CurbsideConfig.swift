@@ -228,3 +228,58 @@ public struct ReplayConfig: Codable, Sendable, Equatable {
 
     public static let `default` = ReplayConfig()
 }
+
+// MARK: - Curbside Score (300–850)
+
+/// The long-term score: a recency-weighted average of drive scores, mapped onto 300–850.
+///
+/// - Weight of a drive = `decayPerDrive^k × distance weight`, where k = how many drives ago it was.
+///   Decay counts drives, not days, so a break from driving never moves the score.
+/// - A new driver starts with `priorWeight` "virtual drives" scoring `priorDriveScore`. They decay
+///   like real drives, so they stop mattering after a few dozen drives.
+/// - The 0–100 average is converted with the piecewise-linear `scaleAnchors`.
+public struct CurbsideScoreConfig: Codable, Sendable, Equatable {
+    /// How much each older drive counts relative to the next newer one (0.95 → half weight ~14 drives back).
+    public var decayPerDrive: Double = 0.95
+    /// A drive of this many miles counts as one drive.
+    public var milesPerDriveWeight: Double = 5
+    /// Bounds on a single drive's distance weight (a 1-mile errand counts 0.4; 10+ miles counts 2).
+    public var minDistanceWeight: Double = 0.4
+    public var maxDistanceWeight: Double = 2.0
+    /// New-driver starting point: this many virtual drives at this drive score (80 → 660).
+    public var priorWeight: Double = 8
+    public var priorDriveScore: Double = 80
+    /// (average drive score, Curbside Score) points; linear in between, clamped outside.
+    public var scaleAnchors: [ScaleAnchor] = [
+        ScaleAnchor(average: 40, score: 300),
+        ScaleAnchor(average: 70, score: 580),
+        ScaleAnchor(average: 85, score: 700),
+        ScaleAnchor(average: 95, score: 800),
+        ScaleAnchor(average: 100, score: 850),
+    ]
+    /// Lower bounds of each tier above Needs Work.
+    public var fairFrom = 580
+    public var goodFrom = 670
+    public var greatFrom = 740
+    public var excellentFrom = 800
+    /// Trend arrow compares with the score this many days ago…
+    public var trendWindowDays = 7
+    /// …and stays flat for changes this small.
+    public var trendDeadband = 3
+    /// "Momentum" factor: change over this many drives.
+    public var momentumDrives = 5
+
+    public init() {}
+
+    public static let `default` = CurbsideScoreConfig()
+}
+
+public struct ScaleAnchor: Codable, Sendable, Equatable {
+    public var average: Double
+    public var score: Double
+
+    public init(average: Double, score: Double) {
+        self.average = average
+        self.score = score
+    }
+}
