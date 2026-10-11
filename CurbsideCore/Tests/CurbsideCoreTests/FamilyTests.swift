@@ -39,7 +39,12 @@ struct FamilyTests {
     func everySharedFieldIsDisclosed(role: FamilyRole) throws {
         let disclosed = SharingDisclosure.forRole(role).disclosedFields
         let standing = SharedStanding(score: 712, trendDelta: 5, weekly: .empty, updatedAt: now)
-        let uploaded = try keys(of: sampleDrive()).union(keys(of: standing))
+        var uploaded = try keys(of: sampleDrive()).union(keys(of: standing))
+        if role == .teen {
+            // Teens also publish progress on rewards their parents set.
+            let progress = RewardProgress(currentScore: 712, streakStart: now, earnedAt: now, updatedAt: now)
+            uploaded.formUnion(try keys(of: ["progress": progress]))
+        }
         #expect(uploaded.subtracting(disclosed).isEmpty, "Shared but not disclosed: \(uploaded.subtracting(disclosed))")
     }
 

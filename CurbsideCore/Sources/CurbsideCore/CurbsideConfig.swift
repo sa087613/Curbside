@@ -306,3 +306,19 @@ public struct FamilyConfig: Codable, Sendable, Equatable {
 
     public static let `default` = FamilyConfig()
 }
+
+// MARK: - Rewards
+
+public struct RewardsConfig: Codable, Sendable, Equatable {
+    /// Score choices offered when a parent sets a goal (tier thresholds are suggested first).
+    public var goalScoreRange: ClosedRange<Int> = 600...850
+    public var goalScoreStep = 10
+    /// "Hold for N weeks" choices.
+    public var holdWeeksRange: ClosedRange<Int> = 1...12
+    /// Money prizes, in whole dollars.
+    public var maxPrizeDollars = 500
+
+    public init() {}
+
+    public static let `default` = RewardsConfig()
+}

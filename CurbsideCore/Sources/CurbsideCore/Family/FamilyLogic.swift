@@ -113,6 +113,11 @@ public struct SharingDisclosure: Sendable {
             detail: "When it started, how long it was, its distance and score, and a map of the route with each hard brake, fast start, and sharp turn pinned (what type, how severe, where).",
             fields: ["id", "startDate", "durationSeconds", "miles", "score", "events", "route",
                      "kind", "severity", "offsetSeconds", "lat", "lon"])
+        let rewardProgress = Item(
+            symbol: "gift",
+            title: "Progress on rewards your parents set",
+            detail: "Your current score and how close you are to each goal, like \"day 9 of 28 at 750+\".",
+            fields: ["progress", "currentScore", "streakStart", "earnedAt", "updatedAt"])
         let never: [Item] = [
             Item(symbol: "location.slash", title: "Where you are right now",
                  detail: "There's no live location. Parents only see a drive after it's finished.", fields: []),
@@ -127,7 +132,7 @@ public struct SharingDisclosure: Sendable {
         case .teen:
             return SharingDisclosure(
                 audience: "the parents in your family",
-                shared: [standing, weekly, drives],
+                shared: [standing, weekly, drives, rewardProgress],
                 neverShared: never,
                 controls: [
                     "You can turn sharing off at any time in Family › Settings. Parents will see \"Sharing paused\".",

@@ -21,6 +21,8 @@ final class FamilyStore {
     private(set) var family: FamilyInfo?
     private(set) var members: [MemberRecord] = []
     private(set) var invites: [FamilyRole: InviteInfo] = [:]
+    /// Parents: every reward in the family. Teens: their own.
+    private(set) var rewards: [ParentReward] = []
     /// Name from Sign in with Apple, to prefill the name step.
     private(set) var suggestedName = ""
     var isWorking = false
@@ -30,6 +32,7 @@ final class FamilyStore {
     @ObservationIgnored private let container: ModelContainer
     @ObservationIgnored private let prompts: PromptGate
     @ObservationIgnored private var membersTask: Task<Void, Never>?
+    @ObservationIgnored private var rewardsTask: Task<Void, Never>?
 
     init(container: ModelContainer, prompts: PromptGate) {
         self.container = container
@@ -167,6 +170,24 @@ final class FamilyStore {
         membersTask?.cancel()
         membersTask = nil
         members = []
+        rewardsTask?.cancel()
+        rewardsTask = nil
+        rewards = []
+    }
+
+    private func listenToRewards(familyID: String, me: MemberRecord) {
+        guard rewardsTask == nil else { return }
+        let teenID = me.role == .teen ? me.id : nil
+        rewardsTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                for try await list in self.backend.rewards(familyID: familyID, teenID: teenID) {
+                    self.rewards = list
+                }
+            } catch {
+                self.rewardsTask = nil
+            }
+        }
     }
 
     private func apply(_ list: [MemberRecord]) {
@@ -177,6 +198,7 @@ final class FamilyStore {
             return
         }
         phase = me.consentDecided ? .ready : .needsConsent
+        if let family { listenToRewards(familyID: family.id, me: me) }
     }
 
     // MARK: Consent & sharing
@@ -185,20 +207,76 @@ final class FamilyStore {
     func setSharing(_ on: Bool) async {
         guard let family else { return }
         await run {
+            // Clear reward progress first: once sharing is off the rules no longer let us write it.
+            if !on, self.myRole == .teen {
+                for reward in self.rewards where reward.progress != nil {
+                    try await self.backend.publishProgress(nil, rewardID: reward.id, familyID: family.id)
+                }
+            }
             try await self.backend.setSharing(on, familyID: family.id)
             if on { try await self.backend.publish(self.currentStanding(), familyID: family.id) }
         }
     }
 
     /// Called after every saved drive. Silent: never prompts (the driver may still be in the car).
-    func driveSaved(_ drive: Drive) async {
-        guard phase == .ready, let family, me?.sharing == true else { return }
-        do {
-            try await backend.upload(sharedDrive(for: drive), familyID: family.id)
-            try await backend.publish(currentStanding(), familyID: family.id)
-        } catch {
-            // Firestore queues writes offline; anything else is retried with the next drive.
+    /// Returns rewards this drive newly earned, for the post-drive celebration.
+    @discardableResult
+    func driveSaved(_ drive: Drive) async -> [ParentReward] {
+        guard let family, let me else { return [] }
+        if phase == .ready, me.sharing {
+            do {
+                try await backend.upload(sharedDrive(for: drive), familyID: family.id)
+                try await backend.publish(currentStanding(), familyID: family.id)
+            } catch {
+                // Firestore queues writes offline; anything else is retried with the next drive.
+            }
         }
+        guard me.role == .teen else { return [] }
+        // Newly earned = not earned just before this drive, earned just after. Works whether or not
+        // the teen shares; progress is only published while sharing.
+        var earned: [ParentReward] = []
+        for reward in rewards where reward.givenAt == nil {
+            let before = localProgress(for: reward, now: drive.startDate.addingTimeInterval(-1))
+            let after = localProgress(for: reward)
+            if before.earnedAt == nil, after.earnedAt != nil {
+                var updated = reward
+                updated.progress = after
+                earned.append(updated)
+            }
+            if me.sharing {
+                try? await backend.publishProgress(after, rewardID: reward.id, familyID: family.id)
+            }
+        }
+        return earned
+    }
+
+    // MARK: Rewards
+
+    /// Progress computed from this phone's score history (teens). Matches what gets published.
+    func localProgress(for reward: ParentReward, now: Date = .now) -> RewardProgress {
+        let report = CurbsideScoreReport.from(allDrives(), now: now)
+        let start = Int(CurbsideScale.score(forAverage: CurbsideScoreConfig.default.priorDriveScore).rounded())
+        return RewardEvaluator.progress(for: reward.goal, createdAt: reward.createdAt, history: report.history,
+                                        startingScore: start, previous: reward.progress, now: now)
+    }
+
+    func createReward(for teen: MemberRecord, goal: RewardGoal, prize: RewardPrize) async {
+        guard let family, let me else { return }
+        let reward = ParentReward(id: UUID().uuidString, teenID: teen.id, teenName: teen.displayName,
+                                  createdBy: me.id, createdByName: me.displayName, createdAt: .now, goal: goal, prize: prize)
+        await run { try await self.backend.createReward(reward, familyID: family.id) }
+    }
+
+    func markGiven(_ reward: ParentReward, given: Bool = true) async {
+        guard let family else { return }
+        var updated = reward
+        updated.givenAt = given ? .now : nil
+        await run { try await self.backend.updateReward(updated, familyID: family.id) }
+    }
+
+    func deleteReward(_ reward: ParentReward) async {
+        guard let family else { return }
+        await run { try await self.backend.deleteReward(id: reward.id, familyID: family.id) }
     }
 
     /// Keeps the weekly summary current when the app opens.

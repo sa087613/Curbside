@@ -88,6 +88,13 @@ public struct CurbsideScorePoint: Sendable, Equatable {
     public var driveID: UUID
     public var score: Int
     public var exactScore: Double
+
+    public init(date: Date, driveID: UUID, score: Int, exactScore: Double) {
+        self.date = date
+        self.driveID = driveID
+        self.score = score
+        self.exactScore = exactScore
+    }
 }
 
 public enum TrendDirection: Sendable, Equatable {

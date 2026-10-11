@@ -7,6 +7,7 @@ rules_version = '2';
 //   families/{fid}                               family name/creator – members only
 //   families/{fid}/members/{uid}                 role, consent, published standing – members only
 //   families/{fid}/members/{uid}/drives/{id}     shared drive summaries – owner + parents, only with consent
+//   families/{fid}/rewards/{rid}                 parent-set rewards – parents + the teen it's for
 //   inviteCodes/{code}                           code → family – get by exact code only, never listed
 //
 // Privacy guarantees enforced here (not just in the app):
@@ -14,6 +15,7 @@ rules_version = '2';
 //   2. Drive summaries are readable only by their owner and the family's parents.
 //   3. Teens never read other members' drives; they see the member list (names, scores) only.
 //   4. Nobody outside a family can read anything about it.
+//   5. Rewards: parents set goals and prizes; only the teen (while sharing) can write progress.
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -75,6 +77,26 @@ service cloud.firestore {
           // Owners clean up when they stop sharing; parents when they remove a member.
           allow delete: if signedIn() && (uid == me() || isParent(fid));
         }
+      }
+
+      match /rewards/{rid} {
+        allow read: if isParent(fid) || (isMember(fid) && resource.data.teenID == me());
+
+        allow create: if isParent(fid)
+          && request.resource.data.createdBy == me()
+          && get(memberPath(fid, request.resource.data.teenID)).data.role == 'teen'
+          && !('progress' in request.resource.data)
+          && !('givenAt' in request.resource.data);
+
+        // Parents edit the goal/prize or mark it given; they can't fake progress or reassign it.
+        // The teen it's for can only update progress, and only while sharing.
+        allow update: if
+          (isParent(fid)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['goal', 'prize', 'givenAt']))
+          || (isMember(fid) && resource.data.teenID == me() && isSharing(fid, me())
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['progress']));
+
+        allow delete: if isParent(fid);
       }
     }
 

@@ -13,6 +13,8 @@ final class DemoFamilyBackend: FamilyBackend {
     private var memberList: [MemberRecord]
     private var sharedDrives: [String: [SharedDrive]]
     private var continuations: [UUID: AsyncThrowingStream<[MemberRecord], Error>.Continuation] = [:]
+    private var rewardList: [ParentReward] = []
+    private var rewardContinuations: [UUID: (teenID: String?, continuation: AsyncThrowingStream<[ParentReward], Error>.Continuation)] = [:]
 
     /// - Parameters:
     ///   - role: the role you preview as.
@@ -42,6 +44,27 @@ final class DemoFamilyBackend: FamilyBackend {
                                            standing: standing(705, -6, drives: 6, miles: 70, avg: 88, brakes: 3, starts: 2, turns: 1)))
         }
         sharedDrives = ["riley": Self.makeDrives(center: c, now: now)]
+
+        let day: TimeInterval = 86_400
+        if role == .parent {
+            rewardList = [
+                ParentReward(id: "demo-r1", teenID: "riley", teenName: "Riley", createdBy: "me", createdByName: displayName,
+                             createdAt: now.addingTimeInterval(-12 * day), goal: .hold(750, weeks: 4), prize: .money(20),
+                             progress: RewardProgress(currentScore: 781, streakStart: now.addingTimeInterval(-9 * day), earnedAt: nil, updatedAt: now)),
+                ParentReward(id: "demo-r2", teenID: "riley", teenName: "Riley", createdBy: "jordan", createdByName: "Jordan",
+                             createdAt: now.addingTimeInterval(-30 * day), goal: .reach(740), prize: .privilege("Later curfew on Friday"),
+                             progress: RewardProgress(currentScore: 781, streakStart: nil, earnedAt: now.addingTimeInterval(-4 * day), updatedAt: now)),
+                ParentReward(id: "demo-r3", teenID: "sam", teenName: "Sam", createdBy: "me", createdByName: displayName,
+                             createdAt: now.addingTimeInterval(-2 * day), goal: .reach(700), prize: .custom("Pick the weekend movie")),
+            ]
+        } else {
+            rewardList = [
+                ParentReward(id: "demo-t1", teenID: "me", teenName: displayName, createdBy: "jordan", createdByName: "Jordan",
+                             createdAt: now.addingTimeInterval(-3 * day), goal: .hold(750, weeks: 2), prize: .money(25)),
+                ParentReward(id: "demo-t2", teenID: "me", teenName: displayName, createdBy: "casey", createdByName: "Casey",
+                             createdAt: now.addingTimeInterval(-3 * day), goal: .reach(700), prize: .privilege("Car for the weekend")),
+            ]
+        }
     }
 
     // MARK: Made-up drives
@@ -144,4 +167,47 @@ final class DemoFamilyBackend: FamilyBackend {
     }
 
     func leaveFamily(familyID: String) async throws {}
+
+    // MARK: Rewards
+
+    private func broadcastRewards() {
+        for (teenID, continuation) in rewardContinuations.values {
+            continuation.yield(rewardList.filter { teenID == nil || $0.teenID == teenID })
+        }
+    }
+
+    func rewards(familyID: String, teenID: String?) -> AsyncThrowingStream<[ParentReward], Error> {
+        AsyncThrowingStream { continuation in
+            let id = UUID()
+            rewardContinuations[id] = (teenID, continuation)
+            continuation.yield(rewardList.filter { teenID == nil || $0.teenID == teenID })
+            continuation.onTermination = { [weak self] _ in
+                Task { @MainActor in self?.rewardContinuations[id] = nil }
+            }
+        }
+    }
+
+    func createReward(_ reward: ParentReward, familyID: String) async throws {
+        rewardList.insert(reward, at: 0)
+        broadcastRewards()
+    }
+
+    func updateReward(_ reward: ParentReward, familyID: String) async throws {
+        guard let i = rewardList.firstIndex(where: { $0.id == reward.id }) else { return }
+        rewardList[i].goal = reward.goal
+        rewardList[i].prize = reward.prize
+        rewardList[i].givenAt = reward.givenAt
+        broadcastRewards()
+    }
+
+    func deleteReward(id: String, familyID: String) async throws {
+        rewardList.removeAll { $0.id == id }
+        broadcastRewards()
+    }
+
+    func publishProgress(_ progress: RewardProgress?, rewardID: String, familyID: String) async throws {
+        guard let i = rewardList.firstIndex(where: { $0.id == rewardID }) else { return }
+        rewardList[i].progress = progress
+        broadcastRewards()
+    }
 }

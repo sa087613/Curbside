@@ -5,6 +5,7 @@ struct RootView: View {
     @Environment(DriveRecorder.self) private var recorder
     @Environment(PromptGate.self) private var prompts
     @Environment(FamilyStore.self) private var family
+    @Environment(RewardsCenter.self) private var rewards
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
     @Environment(\.modelContext) private var context
@@ -12,7 +13,7 @@ struct RootView: View {
     @State private var homePath: [Drive] = []
 
     enum AppTab: Hashable {
-        case home, trends, history, family
+        case home, trends, history, family, rewards
     }
 
     var body: some View {
@@ -38,6 +39,29 @@ struct RootView: View {
             FamilyTabView()
                 .tabItem { Label("Family", systemImage: "person.3.fill") }
                 .tag(AppTab.family)
+
+            NavigationStack {
+                RewardsView(showFamily: { tab = .family })
+            }
+            .tabItem { Label("Rewards", systemImage: "gift.fill") }
+            .tag(AppTab.rewards)
+        }
+        // Post-drive celebrations, shown over everything once the drive has ended.
+        .overlay {
+            if let celebration = rewards.current {
+                CelebrationView(celebration: celebration,
+                                onSeeRewards: {
+                                    tab = .rewards
+                                    homePath = []
+                                    rewards.dismissCurrent()
+                                },
+                                onDismiss: { rewards.dismissCurrent() })
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: rewards.current)
+        .onChange(of: recorder.phase) { _, phase in
+            if phase == .idle { rewards.showNextSoon() }
         }
         .task { await family.refresh() }
         .onChange(of: scenePhase) { _, phase in

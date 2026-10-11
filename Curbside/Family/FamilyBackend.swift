@@ -94,4 +94,15 @@ protocol FamilyBackend: AnyObject {
     func removeMember(_ memberID: String, familyID: String) async throws
     /// Leave the family, deleting everything you shared with it.
     func leaveFamily(familyID: String) async throws
+
+    // MARK: Rewards
+
+    /// Live rewards. Parents get all of the family's; pass `teenID` for a teen's own.
+    func rewards(familyID: String, teenID: String?) -> AsyncThrowingStream<[ParentReward], Error>
+    func createReward(_ reward: ParentReward, familyID: String) async throws
+    /// Parent edits: goal, prize, given.
+    func updateReward(_ reward: ParentReward, familyID: String) async throws
+    func deleteReward(id: String, familyID: String) async throws
+    /// Teen only, while sharing. Nil clears it.
+    func publishProgress(_ progress: RewardProgress?, rewardID: String, familyID: String) async throws
 }

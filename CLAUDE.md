@@ -45,6 +45,7 @@ Curbside/                 iOS app target (SwiftUI, @Observable, SwiftData, Swift
   Drives/                 Drive (@Model), home, history, summary, event replay, debug views
   Score/                  gauge, score card, "what's moving your score", Trends tab
   Family/                 FamilyBackend (Firebase + demo), FamilyStore, sign-in, consent, leaderboard, parent dashboard
+  Rewards/                Rewards tab, parent reward cards and the new-reward form, partner catalog, RewardsCenter, celebration
   Support/                formatting and shared UI helpers
 CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocation / SwiftUI
   Sources/CurbsideCore/
@@ -52,6 +53,8 @@ CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocati
     Detection/            EventDetector, AxisEstimator, GPSTrack
     Scoring/              DriveScore (0–100) and CurbsideScoreReport (300–850, history, trend, factors)
     Replay/               EventClip: the 5 s before each event, rebuilt from stored data
+    Family/               SharedDrive/SharedStanding (what leaves the phone), leaderboard, invite codes, disclosure
+    Rewards/              ParentReward + RewardEvaluator, TierUnlock, CelebrationQueue, PartnerRewardsProvider + mock
     Export/               DriveLog (debug JSON format), DriveMetrics
   Sources/replay/         `replay` CLI: runs an exported drive through the real detection + scoring code
   Tests/                  Swift Testing suites; SyntheticDrive builds physically consistent fake drives
@@ -84,6 +87,21 @@ Rules already in place:
   Drive tab.
 - Chart colors: the habit series use a validated categorical palette (blue / orange / aqua, with fixed
   light and dark values). Tier and severity colors always appear with a text label.
+- Rewards:
+  - Parents set a goal (reach N+, or hold N+ for W weeks) and a prize. The prize is money, a privilege, or
+    something custom.
+  - Progress is computed on the teen's phone (`RewardEvaluator`, from score history) and is only published
+    while the teen is sharing.
+  - Rules: only parents create, edit, or delete rewards; only the teen writes `progress`.
+  - A hold streak keeps running between drives, because the score only changes when you drive.
+- Partner catalog:
+  - `PartnerRewardsProvider` with `MockPartnerRewardsProvider`. The partners are fictional placeholders,
+    use SF Symbols, and are marked as samples.
+  - A test fails if a real brand name shows up in the mock data. Swap the provider to go live.
+- Celebrations: a parent reward earned, or a new tier reached for the first time.
+  - They're detected only when a drive is saved, by comparing just before vs just after the drive.
+  - They're shown only through `RewardsCenter`/`CelebrationQueue`, which refuses while recording or saving.
+  - Never show a celebration at any other time.
 - Units are mph only.
 - Gotcha: never assign to a property inside its own `didSet` on an `@Observable` class. The macro turns it
   into a computed property and it recurses until it crashes.
@@ -131,4 +149,4 @@ clear message, and stop until they've tested.
    over the 5 s leading up to it
 4. ✅ Curbside Score (pure module + tests), trends, and history
 5. ✅ Accounts, families, parent dashboard, leaderboard, and teen consent
-6. Rewards: parent goals plus a mock partner catalog behind a protocol
+6. ✅ Rewards: parent goals plus a mock partner catalog behind a protocol

@@ -7,6 +7,7 @@ struct CurbsideApp: App {
     @State private var prompts: PromptGate
     @State private var recorder: DriveRecorder
     @State private var family: FamilyStore
+    @State private var rewards: RewardsCenter
 
     init() {
         do {
@@ -18,9 +19,18 @@ struct CurbsideApp: App {
         _prompts = State(initialValue: prompts)
         let recorder = DriveRecorder(container: container, prompts: prompts)
         let family = FamilyStore(container: container, prompts: prompts)
-        recorder.onDriveSaved = { [weak family] drive in await family?.driveSaved(drive) }
+        let rewards = RewardsCenter(container: container)
+        // Celebrations wait until recording has fully stopped and no drive is in progress.
+        rewards.isDriving = { [weak recorder, weak prompts] in
+            (recorder?.isRecording ?? false) || (prompts?.isDriving ?? false)
+        }
+        recorder.onDriveSaved = { [weak family, weak rewards] drive in
+            let earned = await family?.driveSaved(drive) ?? []
+            rewards?.driveEnded(earned: earned)
+        }
         _recorder = State(initialValue: recorder)
         _family = State(initialValue: family)
+        _rewards = State(initialValue: rewards)
     }
 
     var body: some Scene {
@@ -29,6 +39,7 @@ struct CurbsideApp: App {
                 .environment(prompts)
                 .environment(recorder)
                 .environment(family)
+                .environment(rewards)
         }
         .modelContainer(container)
     }

@@ -36,6 +36,7 @@ final class FirebaseFamilyBackend: FamilyBackend {
     private func drivesRef(_ fid: String, _ uid: String) -> CollectionReference {
         memberRef(fid, uid).collection("drives")
     }
+    private func rewardsRef(_ fid: String) -> CollectionReference { familyRef(fid).collection("rewards") }
 
     /// Firestore shape of a member document.
     private struct MemberDoc: Codable {
@@ -209,7 +210,52 @@ final class FirebaseFamilyBackend: FamilyBackend {
 
     func removeMember(_ memberID: String, familyID: String) async throws {
         try await deleteAllDrives(familyID: familyID, memberID: memberID)
+        let theirRewards = try await rewardsRef(familyID).whereField("teenID", isEqualTo: memberID).getDocuments()
+        for doc in theirRewards.documents { try await doc.reference.delete() }
         try await memberRef(familyID, memberID).delete()
+    }
+
+    // MARK: Rewards
+
+    func rewards(familyID: String, teenID: String?) -> AsyncThrowingStream<[ParentReward], Error> {
+        // Teens must query only their own (the rules reject anything broader).
+        let query: Query = teenID.map { rewardsRef(familyID).whereField("teenID", isEqualTo: $0) } ?? rewardsRef(familyID)
+        return AsyncThrowingStream { continuation in
+            let registration = query.addSnapshotListener { snapshot, error in
+                if let error {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                let rewards = (snapshot?.documents ?? []).compactMap { try? $0.data(as: ParentReward.self) }
+                continuation.yield(rewards.sorted { $0.createdAt > $1.createdAt })
+            }
+            continuation.onTermination = { _ in registration.remove() }
+        }
+    }
+
+    func createReward(_ reward: ParentReward, familyID: String) async throws {
+        var clean = reward
+        clean.progress = nil
+        clean.givenAt = nil
+        try rewardsRef(familyID).document(reward.id).setData(from: clean)
+    }
+
+    func updateReward(_ reward: ParentReward, familyID: String) async throws {
+        let encoder = Firestore.Encoder()
+        try await rewardsRef(familyID).document(reward.id).updateData([
+            "goal": try encoder.encode(reward.goal),
+            "prize": try encoder.encode(reward.prize),
+            "givenAt": reward.givenAt.map { Timestamp(date: $0) } ?? FieldValue.delete(),
+        ])
+    }
+
+    func deleteReward(id: String, familyID: String) async throws {
+        try await rewardsRef(familyID).document(id).delete()
+    }
+
+    func publishProgress(_ progress: RewardProgress?, rewardID: String, familyID: String) async throws {
+        let value: Any = try progress.map { try Firestore.Encoder().encode($0) } ?? FieldValue.delete()
+        try await rewardsRef(familyID).document(rewardID).updateData(["progress": value])
     }
 
     func leaveFamily(familyID: String) async throws {

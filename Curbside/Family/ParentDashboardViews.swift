@@ -85,6 +85,7 @@ struct TeenDetailView: View {
     let member: MemberRecord
     @Environment(FamilyStore.self) private var store
     @State private var drives: [SharedDrive]?
+    @State private var showNewReward = false
 
     /// Latest version of this member from the live list.
     private var live: MemberRecord { store.members.first { $0.id == member.id } ?? member }
@@ -115,6 +116,28 @@ struct TeenDetailView: View {
                                         : "\(m.displayName) hasn't turned on sharing. They can do it in Family › Settings. Only they can choose to share.",
                               systemImage: m.sharing ? "car" : "eye.slash")
                             .font(.subheadline)
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Rewards").font(.title3.weight(.bold))
+                        Spacer()
+                        Button {
+                            showNewReward = true
+                        } label: {
+                            Label("New", systemImage: "plus")
+                        }
+                    }
+                    let theirs = store.rewards.filter { $0.teenID == m.id }
+                    if theirs.isEmpty {
+                        Card {
+                            Text("Set a goal like \"Hold 750+ for 4 weeks\" with a reward \(m.displayName) cares about.")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    }
+                    ForEach(theirs) { reward in
+                        RewardCard(reward: reward, viewer: .parent, displayProgress: reward.progress)
                     }
                 }
 
@@ -159,6 +182,7 @@ struct TeenDetailView: View {
         .navigationTitle(m.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .task(id: m.sharing) { drives = m.sharing ? await store.drives(of: m) : [] }
+        .sheet(isPresented: $showNewReward) { NewRewardSheet(preselectedTeen: m) }
         .refreshable { drives = await store.drives(of: live) }
     }
 }
