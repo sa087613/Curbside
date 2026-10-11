@@ -110,6 +110,20 @@ for e in result.events {
 if result.events.isEmpty { print("  none") }
 print("")
 
+if let score = DriveScore.compute(events: result.events, distanceMeters: metrics.distanceMeters) {
+    print("Drive score: \(score.rounded) / 100")
+    for d in score.deductions {
+        print("  \(pad(d.kind.displayName, 11)) ×\(d.count)  " + String(format: "−%.1f pts", d.points))
+    }
+    if let habit = score.habitToFix {
+        print("  Habit to fix: \(habit.kind.displayName.lowercased()) (cost \(Int(habit.points.rounded())) points)")
+    }
+} else {
+    print(String(format: "Drive score: not scored (%.2f mi is under the %.1f mi minimum)",
+                 metrics.distanceMiles, ScoringConfig.default.minScoredMiles))
+}
+print("")
+
 let byReason = Dictionary(grouping: result.rejected, by: { $0.reason.key })
 print("Rejected candidates (\(result.rejected.count)): "
       + byReason.sorted { $0.value.count > $1.value.count }.map { "\($0.key) ×\($0.value.count)" }.joined(separator: ", "))

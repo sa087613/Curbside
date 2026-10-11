@@ -168,3 +168,48 @@ extension TurnEventConfig {
         g >= severeG ? .severe : g >= hardG ? .hard : .moderate
     }
 }
+
+// MARK: - Drive score (0–100)
+
+/// Score = 100 − Σ(points × severity multiplier) × (normalizationMiles / max(miles, minimumMiles)),
+/// clamped to 0…100.
+///
+/// Read the point values as "points lost per event, per `normalizationMiles` driven". So one hard-severity
+/// hard brake (8 × 1.5 = 12 points) costs 12 on a 5-mile drive, 6 on a 10-mile drive, and 20 on a short
+/// errand (anything under `minimumMiles` counts as `minimumMiles`).
+public struct ScoringConfig: Codable, Sendable, Equatable {
+    public var hardBrakePoints: Double = 8
+    public var harshAccelerationPoints: Double = 5
+    public var sharpTurnPoints: Double = 6
+
+    public var moderateMultiplier: Double = 1.0
+    public var hardMultiplier: Double = 1.5
+    public var severeMultiplier: Double = 2.5
+
+    /// Deductions are expressed per this many miles.
+    public var normalizationMiles: Double = 5
+    /// Short drives count as at least this long, so one event on a 1-mile errand doesn't zero the score.
+    public var minimumMiles: Double = 3
+    /// Drives shorter than this aren't scored at all (parking-lot moves, GPS noise).
+    public var minScoredMiles: Double = 0.3
+
+    public init() {}
+
+    public static let `default` = ScoringConfig()
+
+    public func points(for kind: DrivingEventKind) -> Double {
+        switch kind {
+        case .hardBrake: hardBrakePoints
+        case .harshAcceleration: harshAccelerationPoints
+        case .sharpTurn: sharpTurnPoints
+        }
+    }
+
+    public func multiplier(for severity: EventSeverity) -> Double {
+        switch severity {
+        case .moderate: moderateMultiplier
+        case .hard: hardMultiplier
+        case .severe: severeMultiplier
+        }
+    }
+}

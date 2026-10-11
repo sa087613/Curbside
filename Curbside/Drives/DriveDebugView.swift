@@ -1,13 +1,11 @@
 import CurbsideCore
 import SwiftUI
 
-/// Phase 1 drive detail: stats, detected events, and the debug export.
-/// (Phase 2 replaces the top of this with the scored summary and map.)
-struct DriveDetailView: View {
+/// Sensor/detector diagnostics and the raw JSON export, for tuning.
+struct DriveDebugView: View {
     let drive: Drive
 
     var body: some View {
-        let events = drive.events
         let rejected = drive.rejected
         List {
             Section {
@@ -15,16 +13,7 @@ struct DriveDetailView: View {
                 LabeledContent("Duration", value: Format.duration(drive.duration))
                 LabeledContent("Distance", value: Format.miles(drive.distanceMeters))
                 LabeledContent("Top speed", value: Format.mph(drive.maxSpeedMps))
-            }
-
-            Section("Events") {
-                if events.isEmpty {
-                    Text("No hard brakes, fast starts, or sharp turns.")
-                        .foregroundStyle(.secondary)
-                }
-                ForEach(events) { event in
-                    EventRow(event: event)
-                }
+                LabeledContent("Route points", value: drive.route.count.formatted())
             }
 
             Section {
@@ -73,27 +62,7 @@ struct DriveDetailView: View {
                 }
             }
         }
-        .navigationTitle(drive.startDate.formatted(.dateTime.month().day().hour().minute()))
+        .navigationTitle("Debug details")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-private struct EventRow: View {
-    let event: DrivingEvent
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: event.kind.symbol)
-                .font(.title3)
-                .foregroundStyle(event.severity.color)
-                .frame(width: 28)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("\(event.kind.displayName) · \(event.severity.displayName)")
-                    .font(.subheadline.weight(.semibold))
-                Text("at \(Format.clock(event.startTime)) · \(event.peakG, format: .number.precision(.fractionLength(2)))g · \(Format.mph(event.speedBefore)) → \(Format.mph(event.speedAfter))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
     }
 }

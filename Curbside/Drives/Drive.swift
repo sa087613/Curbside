@@ -18,9 +18,12 @@ final class Drive {
     private var eventsData: Data
     private var rejectedData: Data
     private var notesData: Data
+    /// 1 Hz route for the map and speed chart. Empty for drives recorded before Phase 2 until
+    /// `DriveRouteLoader` backfills it from the raw log.
+    var routeData = Data()
 
     init(id: UUID, startDate: Date, endDate: Date, metrics: DriveMetrics, result: DetectionResult,
-         motionSampleCount: Int, locationCount: Int, logFileName: String) {
+         route: [RoutePoint], motionSampleCount: Int, locationCount: Int, logFileName: String) {
         self.id = id
         self.startDate = startDate
         self.endDate = endDate
@@ -34,6 +37,7 @@ final class Drive {
         self.eventsData = (try? encoder.encode(result.events)) ?? Data()
         self.rejectedData = (try? encoder.encode(result.rejected)) ?? Data()
         self.notesData = (try? encoder.encode(result.notes)) ?? Data()
+        self.routeData = (try? encoder.encode(route)) ?? Data()
     }
 
     var duration: TimeInterval { endDate.timeIntervalSince(startDate) }
@@ -42,7 +46,28 @@ final class Drive {
     var rejected: [RejectedCandidate] { (try? JSONDecoder().decode([RejectedCandidate].self, from: rejectedData)) ?? [] }
     var notes: [DetectorNote] { (try? JSONDecoder().decode([DetectorNote].self, from: notesData)) ?? [] }
 
+    var route: [RoutePoint] { (try? JSONDecoder().decode([RoutePoint].self, from: routeData)) ?? [] }
+
+    /// Computed rather than stored, so tuning `ScoringConfig` re-scores every past drive.
+    var score: DriveScore? { DriveScore.compute(events: events, distanceMeters: distanceMeters) }
+
     var logURL: URL { DriveFiles.url(for: logFileName) }
+}
+
+/// Fills in the route for drives saved before routes were stored, by reading the raw log once.
+enum DriveRouteLoader {
+    @MainActor
+    static func backfillIfNeeded(_ drive: Drive) async {
+        guard drive.routeData.isEmpty else { return }
+        let url = drive.logURL
+        let route = await Task.detached(priority: .userInitiated) { () -> [RoutePoint]? in
+            guard let data = try? Data(contentsOf: url), let log = try? DriveLog.decode(data) else { return nil }
+            return RoutePoint.route(from: log.locations)
+        }.value
+        guard let route, let data = try? JSONEncoder().encode(route) else { return }
+        drive.routeData = data
+        try? drive.modelContext?.save()
+    }
 }
 
 /// Raw drive logs, stored in Documents/Drives so they also show up in the Files app.

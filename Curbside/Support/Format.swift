@@ -25,6 +25,32 @@ enum Format {
 }
 
 extension DrivingEventKind {
+    /// "Hard braking cost you 12 points"
+    var habitName: String {
+        switch self {
+        case .hardBrake: "Hard braking"
+        case .harshAcceleration: "Fast starts"
+        case .sharpTurn: "Sharp turns"
+        }
+    }
+
+    func noun(count: Int) -> String {
+        let singular = switch self {
+        case .hardBrake: "hard brake"
+        case .harshAcceleration: "fast start"
+        case .sharpTurn: "sharp turn"
+        }
+        return count == 1 ? singular : singular + "s"
+    }
+
+    var tip: String {
+        switch self {
+        case .hardBrake: "Leave more space and look further ahead so you can slow down gradually."
+        case .harshAcceleration: "Press the gas gently when pulling away and take a few seconds to reach speed."
+        case .sharpTurn: "Slow down before the turn, not during it, and turn the wheel smoothly."
+        }
+    }
+
     var symbol: String {
         switch self {
         case .hardBrake: "exclamationmark.octagon.fill"
@@ -37,9 +63,31 @@ extension DrivingEventKind {
 extension EventSeverity {
     var color: Color {
         switch self {
-        case .moderate: .yellow
+        case .moderate: Color(red: 0.93, green: 0.70, blue: 0.0)
         case .hard: .orange
         case .severe: .red
+        }
+    }
+}
+
+enum ScoreStyle {
+    static func color(_ score: Int?) -> Color {
+        guard let score else { return .secondary }
+        switch score {
+        case 90...: return .green
+        case 75..<90: return Color.accentColor
+        case 60..<75: return .orange
+        default: return .red
+        }
+    }
+
+    static func headline(_ score: Int?) -> String {
+        guard let score else { return "Not scored" }
+        switch score {
+        case 90...: return "Excellent drive"
+        case 75..<90: return "Good drive"
+        case 60..<75: return "Room to improve"
+        default: return "Rough drive"
         }
     }
 }

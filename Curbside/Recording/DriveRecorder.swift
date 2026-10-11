@@ -27,6 +27,9 @@ final class DriveRecorder {
     /// Latest GPS speed, m/s. Nil until the first valid fix.
     private(set) var speedMps: Double?
 
+    /// The drive just saved, so the UI can open its summary.
+    var lastSavedDriveID: UUID?
+
     /// True while the recording screen should be shown.
     var isRecording: Bool { phase == .recording || phase == .saving }
 
@@ -137,8 +140,10 @@ final class DriveRecorder {
 
         let context = container.mainContext
         context.insert(Drive(id: id, startDate: start, endDate: end, metrics: metrics, result: capture.result,
+                             route: RoutePoint.route(from: capture.locations),
                              motionSampleCount: capture.motion.count, locationCount: capture.locations.count,
                              logFileName: fileName))
         try context.save()
+        lastSavedDriveID = id
     }
 }

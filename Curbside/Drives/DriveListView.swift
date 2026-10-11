@@ -37,7 +37,7 @@ struct DriveListView: View {
             }
         }
         .navigationTitle("Curbside")
-        .navigationDestination(for: Drive.self) { DriveDetailView(drive: $0) }
+        .navigationDestination(for: Drive.self) { DriveSummaryView(drive: $0) }
     }
 
     private func delete(at offsets: IndexSet) {
@@ -55,24 +55,39 @@ private struct DriveRow: View {
 
     var body: some View {
         let events = drive.events
-        VStack(alignment: .leading, spacing: 4) {
-            Text(drive.startDate, format: .dateTime.weekday(.wide).hour().minute())
-                .font(.headline)
-            HStack(spacing: 12) {
-                Text(Format.duration(drive.duration))
-                Text(Format.miles(drive.distanceMeters))
-                Spacer()
-                ForEach(DrivingEventKind.allCases, id: \.self) { kind in
-                    let count = events.filter { $0.kind == kind }.count
-                    if count > 0 {
-                        Label("\(count)", systemImage: kind.symbol)
-                            .labelStyle(.titleAndIcon)
+        let score = drive.score?.rounded
+        HStack(spacing: 14) {
+            Text(score.map(String.init) ?? "—")
+                .font(.headline.weight(.bold))
+                .monospacedDigit()
+                .foregroundStyle(score == nil ? Color.secondary : Color.white)
+                .frame(width: 44, height: 44)
+                .background(score == nil ? Color.secondary.opacity(0.15) : ScoreStyle.color(score), in: Circle())
+                .accessibilityLabel(score.map { "Score \($0)" } ?? "Not scored")
+            VStack(alignment: .leading, spacing: 4) {
+                Text(drive.startDate, format: .dateTime.weekday(.wide).hour().minute())
+                    .font(.headline)
+                HStack(spacing: 10) {
+                    Text("\(Format.duration(drive.duration)) · \(Format.miles(drive.distanceMeters))")
+                        .lineLimit(1)
+                    Spacer(minLength: 4)
+                    ForEach(DrivingEventKind.allCases, id: \.self) { kind in
+                        let count = events.filter { $0.kind == kind }.count
+                        if count > 0 {
+                            HStack(spacing: 3) {
+                                Image(systemName: kind.symbol)
+                                Text("\(count)").monospacedDigit()
+                            }
                             .foregroundStyle(.orange)
+                            .fixedSize()
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("\(count) \(kind.noun(count: count))")
+                        }
                     }
                 }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
         }
         .padding(.vertical, 2)
     }
