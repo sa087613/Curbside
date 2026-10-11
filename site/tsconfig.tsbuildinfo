@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/cite.tsx","./src/components/drivingdemo.tsx","./src/components/navigation.tsx","./src/components/researchsection.tsx","./src/components/route.tsx","./src/data/references.ts","./src/data/scenarios.ts","./src/lib/scoring.test.ts","./src/lib/scoring.ts"],"version":"5.9.3"}

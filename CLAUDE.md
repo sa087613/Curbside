@@ -113,6 +113,7 @@ CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocati
   Sources/replay/         `replay` CLI: runs an exported drive through the real detection + scoring code
   Tests/                  Swift Testing suites; SyntheticDrive builds physically consistent fake drives
 firebase/                 firestore.rules + emulator tests (npm test)
+site/                     presentation website (Vite + React + TS, M3 styling); see site/README.md
 project.yml               XcodeGen spec, the source of truth for Curbside.xcodeproj
 ```
 

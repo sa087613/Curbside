@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Curbside brag</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="ui.css">
+<style>
+html,body{margin:0;background:#0D0D0F;overflow:hidden}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;color:#fff;font-family:'Inter',system-ui,sans-serif;
+  background:radial-gradient(60% 70% at 0% 0%,rgba(255,196,0,.13),transparent 60%),radial-gradient(55% 60% at 100% 100%,rgba(125,211,252,.08),transparent 62%),linear-gradient(165deg,#0D0D0F 0%,#17171A 55%,#0D0D0F 100%)}
+.serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+.blk{position:absolute;opacity:0}
+#t0 .hd{font-size:136px}
+.lab{display:flex;align-items:center;gap:18px;font-size:22px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.62);white-space:nowrap}
+.lab b{background:#FFC400;color:#0B0B0C;font-weight:800;letter-spacing:.14em;padding:6px 13px;border-radius:8px}
+.lab i{display:block;width:56px;height:1.5px;background:rgba(255,255,255,.25)}
+.hd{font-size:108px;line-height:1.04;color:#fff;letter-spacing:-.5px}
+.hd em{font-style:normal;color:#FFC400;position:relative;white-space:nowrap}
+.hd em u{position:absolute;left:0;bottom:-2px;height:7px;border-radius:4px;background:#FFC400;width:0;text-decoration:none}
+.sub{font-size:40px;line-height:1.3;color:rgba(255,255,255,.72);font-weight:500}
+.phone{top:111px;left:2100px;transform-origin:50% 50%}
+#glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,0,.16),transparent 62%);top:90px;left:2000px;pointer-events:none}
+#route{position:absolute;left:0;top:0}
+</style>
+</head>
+<body>
+<div id="stage">
+<svg id="topo" style="position:absolute;left:0;top:0;opacity:.05" width="1920" height="1080" viewBox="0 0 356 756" preserveAspectRatio="none"><path d="M-10 170C80 120 150 210 250 150S340 110 370 130M-10 330C70 290 160 380 260 320S350 290 370 300M-10 520C90 470 150 560 250 500S340 470 370 490M40 0C20 120 90 200 60 330S10 560 50 756M220 0C260 140 190 230 240 360S300 600 230 756" stroke="#fff" stroke-width="1" fill="none" vector-effect="non-scaling-stroke"/></svg>
+<svg id="route" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <path id="rglow" d="M-40 880C260 880 380 760 640 770S1020 900 1300 840S1700 700 1980 720" pathLength="1" fill="none" stroke="#FFC400" stroke-width="40" stroke-linecap="round" opacity=".14" stroke-dasharray="1" stroke-dashoffset="1"/>
+  <path id="rline" d="M-40 880C260 880 380 760 640 770S1020 900 1300 840S1700 700 1980 720" pathLength="1" fill="none" stroke="#FFC400" stroke-width="14" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1"/>
+  <g id="rcar"><path d="M0 -26l26 52-26-15-26 15z" fill="#fff" stroke="#0B0B0C" stroke-width="5" stroke-linejoin="round"/></g>
+</svg>
+<div id="glow"></div>
+<div id="texts"></div>
+<div id="phoneHost"></div>
+</div>
+<script>
+var $=function(id){return document.getElementById(id)};
+var clamp=function(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v))};
+var ease=function(x){return x*x*(3-2*x)};
+var eo=function(x){return 1-Math.pow(1-x,3)};
+var pr=function(lt,s,d){return ease(clamp((lt-s)/d))};
+var pe=function(lt,s,d){return eo(clamp((lt-s)/d))};
+var lerp=function(a,b,t){return a+(b-a)*t};
+</script>
+<script src="ui.js"></script>
+<script>
+ICO.drive=ICO.car;
+
+/* scenes: start, end, text side ('L' = text left, phone right), phone x */
+var PR=1290, PL=250;
+var SC=[
+ {id:'t0',a:0,b:3.0},
+ {id:'t1',a:3.0,b:6.0,px:PR,scr:'h1'},
+ {id:'t2',a:6.0,b:9.5,px:PL,scr:'dr'},
+ {id:'t3',a:9.5,b:13.5,px:PR,scr:'tp'},
+ {id:'t4',a:13.5,b:16.2,px:PL,scr:'rw'},
+ {id:'t5',a:16.2,b:19.2,px:PR,scr:'fm'},
+ {id:'t6',a:19.2,b:22.0,px:PR,scr:'h6'}
+];
+var TOTAL=22.0;
+
+function block(id,x,y,w,label,head,sub){
+ var h='<div id="'+id+'" class="blk" style="left:'+x+'px;top:'+y+'px;width:'+w+'px">';
+ if(label)h+='<div class="lab" id="'+id+'l">'+label+'</div>';
+ h+='<div class="hd serif" id="'+id+'h" style="margin-top:'+(label?34:0)+'px">'+head+'</div>';
+ if(sub)h+='<div class="sub" id="'+id+'s" style="margin-top:36px">'+sub+'</div>';
+ return h+'</div>'}
+var TL=150, TR=830, TW=880;
+var TX='';
+TX+=block('t0',150,230,1600,'',"Nobody rewards you<br>for <em>driving well<u></u></em>.",'');
+TX+=block('t1',TL,350,TW,'<b>Curbside</b><i></i><span>A driving coach for teens</span>',"Meet <em>Curbside<u></u></em>.","Rewards teens for every smooth trip.");
+TX+=block('t2',TR,320,TW,'<b>01</b><i></i><span>The drive</span>',"Then just <em>drive<u></u></em>.","It starts on its own.<br>No alerts while you drive.");
+TX+=block('t3',TL,310,TW,'<b>02</b><i></i><span>The score</span>',"Every trip, scored<br>and <em>explained<u></u></em>.","A score out of 100, and<br>the one habit to fix.");
+TX+=block('t4',TR,320,TW,'<b>03</b><i></i><span>Rewards</span>',"Safe driving<br><em>pays<u></u></em> today.","Higher tiers unlock<br>bigger offers.");
+TX+=block('t5',TL,310,TW,'<b>04</b><i></i><span>Family</span>',"Parents are on<br>the <em>board<u></u></em> too.","Scores only. Routes<br>never leave the phone.");
+TX+=block('t6',TL,340,TW,'<b>Curbside</b><i></i><span>For new drivers and their families</span>',"Drive well.<br><em>Get rewarded.<u></u></em>",'');
+$('texts').innerHTML=TX;
+
+var LAY={h1:scrScore('h1'),dr:scrDrive('dr'),tp:scrTrip('tp'),rw:scrRewards('rw'),fm:scrFamily('fm'),h6:scrScore('h6')};
+var lh='';for(var k in LAY)lh+='<div class="scr" id="L'+k+'">'+LAY[k]+'</div>';
+$('phoneHost').innerHTML='<div class="phone" id="gph"><div class="screen">'+lh+'</div><div class="sb" style="right:-4px;top:210px;height:90px"></div><div class="sb" style="right:-4px;top:330px;height:60px"></div></div>';
+/* no live popups during the drive (product safety rule) */
+['drtD','drtB','drtT'].forEach(function(i){$(i).style.display='none'});
+
+/* text in/out: label, then headline, then sub; lift out before the cut */
+function textAt(s,t){var el=$(s.id),lt=t-s.a,out=(s.b<TOTAL)?pr(t,s.b-0.42,0.32):0;
+ if(lt<-0.05||t>s.b){el.style.opacity=0;return}
+ el.style.opacity=1-out;el.style.transform='translateY('+(-26*out)+'px)';
+ var parts=[[s.id+'l',0.0,14],[s.id+'h',0.08,34],[s.id+'s',0.45,22]];
+ parts.forEach(function(p){var e=$(p[0]);if(!e)return;var a=pe(lt,p[1],0.55);e.style.opacity=a;e.style.transform='translateY('+((1-a)*p[2])+'px)'});
+ var u=el.getElementsByTagName('u');for(var i=0;i<u.length;i++)u[i].style.width=(100*pe(lt,0.5,0.45))+'%'}
+
+/* driving speed curve */
+function vOf(lt){if(lt<=0)return 0;var r=ease(clamp(lt/2.2));return r*(27+3*Math.sin(lt*1.1))}
+function posOf(lt){var s=0,n=Math.max(0,Math.floor(lt/0.02));for(var i=0;i<n;i++)s+=vOf(i*0.02)*0.02;return s}
+
+var SCR={
+ h1:function(lt){setGauge('h1',lerp(56,84,pr(lt,0.35,1.6)));$('h1wk').style.opacity=pe(lt,1.6,0.4);setChart('h1',1)},
+ dr:function(lt){$('drg').setAttribute('transform','translate(0 '+((posOf(lt)*9)%160)+')');$('drspd').textContent=Math.round(vOf(lt));
+   var tm=734+Math.floor(Math.max(0,lt));$('drtm').textContent=Math.floor(tm/60)+':'+(tm%60<10?'0':'')+(tm%60)},
+ tp:function(lt){var f=pr(lt,0.25,1.1);setRing('tp',0.92*f,Math.round(92*f));$('tpsc').style.transform='translateY('+(-600*pr(lt,2.0,0.9))+'px)'},
+ rw:function(lt){var cols=['#CD7F32','#C0C7D1','#FFC400','#F2F6FF'];for(var i=0;i<4;i++){var c=$('rwch'+i),cur=(i===2);c.style.borderColor=cur?cols[i]:'rgba(255,255,255,.16)';c.style.color=cur?cols[i]:'rgba(255,255,255,.6)';c.style.background=cur?'rgba(255,255,255,.1)':'transparent'}
+   var o=$('rwoffer'),op=pe(lt,0.2,0.55);o.style.opacity=op;o.style.transform='translateY('+((1-op)*30)+'px)';var l=$('rwlock'),lp=pe(lt,0.4,0.55);l.style.opacity=lp;l.style.transform='translateY('+((1-lp)*30)+'px)';$('rwpb').style.width=(60*pr(lt,0.9,1.0))+'%'},
+ fm:function(lt){var sc=[92,84,81,74];for(var i=0;i<4;i++){var e=$('fmr'+i),p=pe(lt,0.15+i*0.1,0.5);e.style.opacity=p;e.style.transform='translateX('+((1-p)*40)+'px)';$('fmv'+i).textContent=Math.round(sc[i]*pr(lt,0.3+i*0.1,0.9))}
+   var g=$('fmgoal'),gp=pe(lt,0.8,0.5);g.style.opacity=gp;g.style.transform='translateY('+((1-gp)*24)+'px)'},
+ h6:function(lt){setGauge('h6',84);$('h6wk').style.opacity=1;setChart('h6',1)}
+};
+
+function phoneAt(t){
+ /* x: off right until reveal, then glide between scene positions (0.7s, ending just after each cut) */
+ var x=2100;var first=SC[1];x=lerp(2100,first.px,pe(t,first.a-0.3,0.85));
+ for(var i=2;i<SC.length;i++){x+=(SC[i].px-SC[i-1].px)*pr(t,SC[i].a-0.35,0.7)}
+ var ph=$('gph');ph.style.left=x+'px';
+ var sc=1.1*(1-0.03*pr(t,SC[6].a,2.8));ph.style.transform='scale('+sc+') rotate('+(-2.5*(1-pe(t,first.a-0.3,1.05)))+'deg)';
+ $('glow').style.left=(x+190-450)+'px';$('glow').style.opacity=pe(t,first.a,0.8);
+ for(var j=1;j<SC.length;j++){var s=SC[j],L=$('L'+s.scr),lt=t-s.a;
+   var inn=(j===1)?1:pe(t,s.a-0.05,0.3),outn=(j<SC.length-1)?pr(t,s.b-0.3,0.25):0;
+   var op=(t>=s.a-0.1&&t<s.b)?inn*(1-outn):0;
+   if(op>0.001){L.style.display='block';L.style.opacity=op;SCR[s.scr](lt)}else L.style.display='none'}}
+
+function hookAt(t){var f=pr(t,0.15,2.3);$('rline').style.strokeDashoffset=1-f;$('rglow').style.strokeDashoffset=1-f;
+ var p=$('rline'),L=p.getTotalLength(),pt=p.getPointAtLength(L*Math.max(0.001,f)),pt2=p.getPointAtLength(Math.max(0,L*f-6));
+ var ang=Math.atan2(pt.y-pt2.y,pt.x-pt2.x)*180/Math.PI+90;$('rcar').setAttribute('transform','translate('+pt.x+' '+pt.y+') rotate('+ang+')');
+ var out=pr(t,2.55,0.45);$('route').style.opacity=(1-out)*clamp(t/0.15);}
+
+window.renderAt=function(t){SC.forEach(function(s){textAt(s,t)});hookAt(t);phoneAt(t)};
+renderAt(0);
+var q=new URLSearchParams(location.search);if(q.has('t'))renderAt(parseFloat(q.get('t')));
+if(q.has('play')){var st=performance.now();(function loop(n){renderAt(((n-st)/1000)%TOTAL);requestAnimationFrame(loop)})(st)}
+</script>
+</body>
+</html>

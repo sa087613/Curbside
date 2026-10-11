@@ -1,0 +1,16 @@
+/* Material 3 dark scheme seeded from the Curbside iOS app (Support/DesignSystem.swift). */
+:root {
+  --md-primary: #FFC400; --md-on-primary: #0B0B0C;
+  --md-primary-container: #3A2E00; --md-on-primary-container: #FFE08A;
+  --md-surface: #0D0D0F; --md-surface-dim: #0A0A0B;
+  --md-surface-container-low: #141416; --md-surface-container: #1A1A1D; --md-surface-container-high: #232327; --md-surface-container-highest: #2C2C31;
+  --md-on-surface: #F2F2F4; --md-on-surface-variant: rgba(255,255,255,.68);
+  --md-outline: rgba(255,255,255,.28); --md-outline-variant: rgba(255,255,255,.13);
+  --md-error: #FF5A4E; --md-good: #4ADE80; --md-ice: #7DD3FC;
+  --ev-braking: #FF5A4E; --ev-acceleration: #FF9F1C; --ev-overspeed: #7DD3FC; --ev-cornering: #4ADE80;
+  --shape-xs: 4px; --shape-s: 8px; --shape-m: 12px; --shape-l: 16px; --shape-xl: 28px; --shape-full: 999px;
+  --font: 'Roboto Flex', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --nav-h: 64px; --gutter: clamp(16px, 4vw, 48px); --max: 1200px;
+  --ease: cubic-bezier(.2,0,0,1);
+}
