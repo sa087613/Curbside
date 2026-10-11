@@ -33,15 +33,15 @@ final class DemoFamilyBackend: FamilyBackend {
             MemberRecord(id: "me", displayName: displayName, role: role, sharing: false,
                          consentDecided: role == .parent, standing: nil),
             MemberRecord(id: "jordan", displayName: "Jordan", role: .parent, sharing: true, consentDecided: true,
-                         standing: standing(742, 4, drives: 9, miles: 61, avg: 93, brakes: 2, starts: 1, turns: 0)),
+                         standing: standing(79, 1, drives: 9, miles: 61, avg: 93, brakes: 2, starts: 1, turns: 0)),
             MemberRecord(id: "riley", displayName: "Riley", role: .teen, sharing: true, consentDecided: true,
-                         standing: standing(781, 12, drives: 11, miles: 48, avg: 95, brakes: 1, starts: 1, turns: 1)),
+                         standing: standing(86, 2, drives: 11, miles: 48, avg: 95, brakes: 1, starts: 1, turns: 1)),
             MemberRecord(id: "sam", displayName: "Sam", role: .teen, sharing: false, consentDecided: false, standing: nil),
         ]
         if role == .teen {
             // A second parent so the teen preview has someone to share with besides Jordan.
             memberList.append(MemberRecord(id: "casey", displayName: "Casey", role: .parent, sharing: true, consentDecided: true,
-                                           standing: standing(705, -6, drives: 6, miles: 70, avg: 88, brakes: 3, starts: 2, turns: 1)))
+                                           standing: standing(73, -1, drives: 6, miles: 70, avg: 88, brakes: 3, starts: 2, turns: 1)))
         }
         sharedDrives = ["riley": Self.makeDrives(center: c, now: now)]
 
@@ -49,20 +49,20 @@ final class DemoFamilyBackend: FamilyBackend {
         if role == .parent {
             rewardList = [
                 ParentReward(id: "demo-r1", teenID: "riley", teenName: "Riley", createdBy: "me", createdByName: displayName,
-                             createdAt: now.addingTimeInterval(-12 * day), goal: .hold(750, weeks: 4), prize: .money(20),
-                             progress: RewardProgress(currentScore: 781, streakStart: now.addingTimeInterval(-9 * day), earnedAt: nil, updatedAt: now)),
+                             createdAt: now.addingTimeInterval(-12 * day), goal: .hold(80, weeks: 4), prize: .money(20),
+                             progress: RewardProgress(currentScore: 86, streakStart: now.addingTimeInterval(-9 * day), earnedAt: nil, updatedAt: now)),
                 ParentReward(id: "demo-r2", teenID: "riley", teenName: "Riley", createdBy: "jordan", createdByName: "Jordan",
-                             createdAt: now.addingTimeInterval(-30 * day), goal: .reach(740), prize: .privilege("Later curfew on Friday"),
-                             progress: RewardProgress(currentScore: 781, streakStart: nil, earnedAt: now.addingTimeInterval(-4 * day), updatedAt: now)),
+                             createdAt: now.addingTimeInterval(-30 * day), goal: .reach(80), prize: .privilege("Later curfew on Friday"),
+                             progress: RewardProgress(currentScore: 86, streakStart: nil, earnedAt: now.addingTimeInterval(-4 * day), updatedAt: now)),
                 ParentReward(id: "demo-r3", teenID: "sam", teenName: "Sam", createdBy: "me", createdByName: displayName,
-                             createdAt: now.addingTimeInterval(-2 * day), goal: .reach(700), prize: .custom("Pick the weekend movie")),
+                             createdAt: now.addingTimeInterval(-2 * day), goal: .reach(75), prize: .custom("Pick the weekend movie")),
             ]
         } else {
             rewardList = [
                 ParentReward(id: "demo-t1", teenID: "me", teenName: displayName, createdBy: "jordan", createdByName: "Jordan",
-                             createdAt: now.addingTimeInterval(-3 * day), goal: .hold(750, weeks: 2), prize: .money(25)),
+                             createdAt: now.addingTimeInterval(-3 * day), goal: .hold(80, weeks: 2), prize: .money(25)),
                 ParentReward(id: "demo-t2", teenID: "me", teenName: displayName, createdBy: "casey", createdByName: "Casey",
-                             createdAt: now.addingTimeInterval(-3 * day), goal: .reach(700), prize: .privilege("Car for the weekend")),
+                             createdAt: now.addingTimeInterval(-3 * day), goal: .reach(75), prize: .privilege("Car for the weekend")),
             ]
         }
     }

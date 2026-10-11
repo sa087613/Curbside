@@ -20,13 +20,13 @@ enum TrendRange: String, CaseIterable, Identifiable {
 }
 
 /// Habit series colors: fixed per habit (never by rank), validated for color-vision deficiency
-/// in light and dark mode. Always shown with a legend; the table view covers low-contrast aqua.
+/// on the dark background. Always shown with a legend; the table view covers low-contrast aqua.
 private extension DrivingEventKind {
     var seriesColor: Color {
         switch self {
-        case .hardBrake: Color(light: 0x2A78D6, dark: 0x3987E5)
-        case .harshAcceleration: Color(light: 0xEB6834, dark: 0xD95926)
-        case .sharpTurn: Color(light: 0x1BAF7A, dark: 0x199E70)
+        case .hardBrake: DS.Palette.hardBrake
+        case .harshAcceleration: DS.Palette.harshAcceleration
+        case .sharpTurn: DS.Palette.sharpTurn
         }
     }
 }
@@ -84,7 +84,7 @@ struct TrendsView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle("Trends")
     }
 }
@@ -133,7 +133,7 @@ private struct SummaryTiles: View {
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+            .glassCard(radius: DS.Radius.row, padding: nil)
             .accessibilityElement(children: .combine)
         }
     }
@@ -166,19 +166,19 @@ private struct ScoreHistoryChart: View {
                 }
                 ForEach(points, id: \.driveID) { p in
                     LineMark(x: .value("Date", p.date), y: .value("Score", p.score))
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(DS.Palette.accent)
                         .lineStyle(StrokeStyle(lineWidth: 2))
                         .interpolationMethod(.monotone)
                 }
                 if points.count == 1, let only = points.first {
                     PointMark(x: .value("Date", only.date), y: .value("Score", only.score))
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(DS.Palette.accent)
                 }
                 if let p = selectedPoint {
                     RuleMark(x: .value("Date", p.date))
                         .foregroundStyle(Color.secondary.opacity(0.5))
                     PointMark(x: .value("Date", p.date), y: .value("Score", p.score))
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(DS.Palette.accent)
                         .symbolSize(80)
                         .annotation(position: .top, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
                             ChartTooltip(title: p.date.formatted(.dateTime.month().day().hour().minute()),
@@ -208,7 +208,7 @@ private struct ScoreHistoryChart: View {
     /// Axis starts at the tier boundary below the lowest score shown, so the line isn't squashed.
     private var lowerBound: Int {
         let minScore = points.map(\.score).min() ?? CurbsideScale.minimum
-        return CurbsideTier.allCases.map { $0.range().lowerBound }.filter { $0 <= minScore - 15 }.max() ?? CurbsideScale.minimum
+        return CurbsideTier.allCases.map { $0.range().lowerBound }.filter { $0 <= minScore - 3 }.max() ?? CurbsideScale.minimum
     }
 
     /// Middle of each visible tier band, used to place the tier name labels.
@@ -240,7 +240,7 @@ private struct DriveScoreChart: View {
             Chart {
                 ForEach(Array(drives.enumerated()), id: \.offset) { _, d in
                     PointMark(x: .value("Date", d.date), y: .value("Score", d.score))
-                        .foregroundStyle(Color("AccentColor"))
+                        .foregroundStyle(DS.Palette.accent)
                         .symbolSize(50)
                 }
                 if let d = selectedDrive {
@@ -340,17 +340,6 @@ private struct ChartTooltip: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-extension Color {
-    /// A color with separate light- and dark-mode values, from 0xRRGGBB.
-    init(light: UInt32, dark: UInt32) {
-        func ui(_ hex: UInt32) -> UIColor {
-            UIColor(red: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255,
-                    blue: CGFloat(hex & 0xFF) / 255, alpha: 1)
-        }
-        self.init(uiColor: UIColor { $0.userInterfaceStyle == .dark ? ui(dark) : ui(light) })
+        .background(DS.Palette.surface, in: RoundedRectangle(cornerRadius: 8))
     }
 }

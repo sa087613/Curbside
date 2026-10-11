@@ -116,7 +116,7 @@ public struct SharingDisclosure: Sendable {
         let rewardProgress = Item(
             symbol: "gift",
             title: "Progress on rewards your parents set",
-            detail: "Your current score and how close you are to each goal, like \"day 9 of 28 at 750+\".",
+            detail: "Your current score and how close you are to each goal, like \"day 9 of 28 at 80+\".",
             fields: ["progress", "currentScore", "streakStart", "earnedAt", "updatedAt"])
         let never: [Item] = [
             Item(symbol: "location.slash", title: "Where you are right now",

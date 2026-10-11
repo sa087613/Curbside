@@ -33,7 +33,7 @@ struct ConsentView: View {
                 Card {
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(disclosure.shared) { item in
-                            DisclosureRow(item: item, tint: Color("AccentColor"))
+                            DisclosureRow(item: item, tint: DS.Palette.accent)
                         }
                     }
                 }
@@ -79,7 +79,7 @@ struct ConsentView: View {
                                 .font(.headline)
                                 .frame(maxWidth: .infinity, minHeight: 44)
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.primary)
                         .disabled(store.isWorking)
 
                         Button {
@@ -105,7 +105,7 @@ struct ConsentView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle(mode == .info ? "What you share" : "Sharing")
         .navigationBarTitleDisplayMode(.inline)
     }

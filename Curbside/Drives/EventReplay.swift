@@ -165,7 +165,7 @@ struct ReplayPanel: View {
                     Image(systemName: player.isPlaying ? "pause.fill" : (player.isAtEnd ? "arrow.counterclockwise" : "play.fill"))
                         .font(.title3)
                         .frame(width: 44, height: 44)
-                        .background(Color.accentColor.opacity(0.15), in: Circle())
+                        .background(DS.Palette.accent.opacity(0.15), in: Circle())
                 }
                 .accessibilityLabel(player.isPlaying ? "Pause" : "Play")
 
@@ -223,7 +223,7 @@ struct ForceBar: View {
         if value >= t.severe { return EventSeverity.severe.color }
         if value >= t.hard { return EventSeverity.hard.color }
         if value >= t.moderate { return EventSeverity.moderate.color }
-        return .green
+        return DS.Palette.good
     }
 
     var body: some View {

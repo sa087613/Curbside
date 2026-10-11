@@ -28,19 +28,18 @@ struct RecordingView: View {
             Button {
                 Task { await recorder.stop() }
             } label: {
-                Text(recorder.phase == .saving ? "Saving…" : "Stop")
+                Text(recorder.phase == .saving ? "Saving…" : "End drive")
                     .font(.title2.weight(.bold))
                     .frame(maxWidth: .infinity, minHeight: 64)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.red)
+            .buttonStyle(.danger)
             .disabled(recorder.phase == .saving)
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .foregroundStyle(.white)
-        .background(Color.black.ignoresSafeArea())
+        .screenBackground()
         .preferredColorScheme(.dark)
         .animation(.default, value: speedText)
     }

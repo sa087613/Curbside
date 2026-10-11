@@ -117,7 +117,7 @@ struct FamilyTests {
 
     @Test func leaderboardRanksByScoreWithParentsIncluded() {
         let ranked = Leaderboard.rank([
-            member("Sam", .teen, 702), member("Alex", .parent, 755), member("Riley", .teen, 781, me: true),
+            member("Sam", .teen, 74), member("Alex", .parent, 83), member("Riley", .teen, 88, me: true),
         ])
         #expect(ranked.map(\.member.displayName) == ["Riley", "Alex", "Sam"])
         #expect(ranked.map(\.rank) == [1, 2, 3])
@@ -125,8 +125,8 @@ struct FamilyTests {
 
     @Test func tiesShareARankAndNonSharersGoLast() {
         let ranked = Leaderboard.rank([
-            member("Zoe", .teen, nil), member("Bea", .teen, 740), member("Al", .parent, 740),
-            member("Cy", .teen, 690), member("Ann", .parent, nil),
+            member("Zoe", .teen, nil), member("Bea", .teen, 79), member("Al", .parent, 79),
+            member("Cy", .teen, 70), member("Ann", .parent, nil),
         ])
         #expect(ranked.map(\.member.displayName) == ["Al", "Bea", "Cy", "Ann", "Zoe"])
         #expect(ranked.map(\.rank) == [1, 1, 3, nil, nil])

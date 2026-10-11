@@ -63,9 +63,9 @@ extension DrivingEventKind {
 extension EventSeverity {
     var color: Color {
         switch self {
-        case .moderate: Color(red: 0.93, green: 0.70, blue: 0.0)
-        case .hard: .orange
-        case .severe: .red
+        case .moderate: DS.Palette.severityModerate
+        case .hard: DS.Palette.severityHard
+        case .severe: DS.Palette.severitySevere
         }
     }
 }
@@ -74,17 +74,17 @@ enum ScoreStyle {
     static func color(_ score: Int?) -> Color {
         guard let score else { return .secondary }
         switch score {
-        case 90...: return .green
-        case 75..<90: return Color.accentColor
-        case 60..<75: return .orange
-        default: return .red
+        case 90...: return DS.Palette.good
+        case 75..<90: return DS.Palette.accent
+        case 60..<75: return DS.Palette.severityModerate
+        default: return DS.Palette.coral
         }
     }
 
     static func headline(_ score: Int?) -> String {
         guard let score else { return "Not scored" }
         switch score {
-        case 90...: return "Excellent drive"
+        case 90...: return "Great drive"
         case 75..<90: return "Good drive"
         case 60..<75: return "Room to improve"
         default: return "Rough drive"

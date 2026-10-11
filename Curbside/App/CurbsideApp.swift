@@ -10,6 +10,7 @@ struct CurbsideApp: App {
     @State private var rewards: RewardsCenter
 
     init() {
+        DS.configureAppearance()
         do {
             container = try ModelContainer(for: Drive.self)
         } catch {

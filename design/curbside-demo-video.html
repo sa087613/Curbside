@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Curbside Demo Video (2:30) (Copy)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#F1EFE8;--fg:#0B0B0C;--muted:#5E5E63;--panel:#FFFFFF;--line:#DAD7CC;--accent:#FFC400;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B0B0C;--fg:#F5F3EC;--muted:#A0A0A6;--panel:#161618;--line:#2C2C30;--accent:#FFC400}}
+:root[data-theme="dark"]{--bg:#0B0B0C;--fg:#F5F3EC;--muted:#A0A0A6;--panel:#161618;--line:#2C2C30;--accent:#FFC400}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+.page{max-width:1280px;margin:0 auto;padding:20px 16px 48px}
+h1.pt{font-family:'DM Serif Display',Georgia,'Times New Roman',serif;font-weight:400;font-size:32px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 16px;font-size:15px;line-height:1.5}
+.wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:14px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.14)}
+.wrap:fullscreen{border-radius:0;background:#fff;aspect-ratio:auto;box-shadow:none}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#FFFFFF;color:#0B0B0C;font-family:'Inter',system-ui,sans-serif;overflow:hidden}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+.controls button{font:600 14px 'Inter',system-ui,sans-serif;padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.controls button:hover{border-color:var(--accent)}
+#scrub{flex:1;min-width:180px;accent-color:#FFC400}
+#time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;min-width:96px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:12px}
+summary{cursor:pointer;font-weight:600}
+details p{line-height:1.55;margin:10px 0;font-size:15px}
+details b{background:#FFC400;color:#0B0B0C;padding:1px 7px;border-radius:5px;font-size:13px}
+.mini{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.5}
+
+/* stage */
+.abs{position:absolute}
+.scene{position:absolute;left:0;top:0;width:1920px;height:1080px;display:none}
+.serif{font-family:'DM Serif Display',Georgia,'Times New Roman',serif;font-weight:400}
+.lab{position:absolute;display:flex;align-items:center;gap:18px;font-size:22px;letter-spacing:.22em;text-transform:uppercase;color:#47474B;white-space:nowrap}
+.lab b{background:#FFC400;color:#0B0B0C;font-weight:700;letter-spacing:.14em;padding:5px 12px;border-radius:7px}
+.lab i{display:block;width:56px;height:1px;background:#C9C9CD}
+.hd{position:absolute;font-size:92px;line-height:1.05;color:#0B0B0C}
+.hd em{font-style:normal;background-image:linear-gradient(#FFD21F,#FFD21F);background-repeat:no-repeat;background-position:0 84%;background-size:0% 34%;padding:0 6px;margin:0 -6px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.rule{position:absolute;height:1px;background:#E4E4E6}
+.it{position:absolute;display:flex;gap:24px;align-items:flex-start;width:760px;box-sizing:border-box}
+.it.bt{border-top:1px solid #ECECEE}
+.it .n{flex:none;width:50px;height:32px;margin-top:6px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;letter-spacing:.1em;font-weight:700}
+.it .t{font-size:38px;line-height:1.2}
+.it .s{font-size:26px;line-height:1.3;margin-top:6px}
+.ghost{position:absolute;left:1150px;top:300px;font-size:900px;line-height:1;color:#FFF6D6;white-space:nowrap}
+.fline{position:absolute;left:120px;width:1680px;top:985px;height:1px;background:#E6E6E8}
+.fprog{position:absolute;left:120px;top:984px;height:3px;width:0;background:#FFC400;border-radius:2px}
+.fl,.fr{position:absolute;top:1006px;font-size:20px;letter-spacing:.26em;color:#6B6B70;white-space:nowrap}
+.fl{left:120px;display:flex;align-items:center;gap:14px}
+.fl i{display:block;width:12px;height:12px;border-radius:6px;background:#FFC400}
+.fr{right:120px;color:#0B0B0C}
+.col{position:absolute;width:520px;border-top:2px solid #E4E4E6;padding-top:22px;box-sizing:border-box}
+.ck{font-size:20px;letter-spacing:.2em;text-transform:uppercase;color:#0B0B0C;font-weight:700;display:flex;align-items:center;gap:12px}
+.ck:before{content:'';display:block;width:14px;height:14px;border-radius:7px;background:#FFC400}
+.cn{font-size:128px;line-height:1.05;margin-top:14px}
+.cl{font-size:28px;line-height:1.35;margin-top:12px}
+.phone{position:absolute;top:100px;left:1980px;width:380px;height:780px;box-sizing:border-box;border-radius:76px;background:#0B0B0C;padding:12px;box-shadow:0 50px 90px rgba(11,11,12,.26),0 0 0 2px #2A2A2E inset}
+.phone .sb{position:absolute;width:5px;border-radius:3px;background:#1C1C20}
+.screen{position:relative;width:356px;height:756px;border-radius:64px;overflow:hidden;background:radial-gradient(120% 55% at 8% 0%,rgba(255,196,0,.14),transparent 58%),radial-gradient(90% 50% at 100% 100%,rgba(125,211,252,.09),transparent 62%),linear-gradient(165deg,#0D0D0F 0%,#17171A 55%,#0D0D0F 100%);color:#fff;font-family:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif}
+.scr{position:absolute;left:0;top:0;width:356px;height:756px;opacity:0;display:none;overflow:hidden}
+.gl{position:absolute;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);border-radius:28px;box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.cap2{font-size:10.5px;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-top:3px;line-height:1.25}
+.num{font-family:ui-rounded,'SF Pro Rounded','Inter',system-ui,sans-serif}
+.pillm{position:absolute;display:flex;align-items:center;justify-content:center;height:46px;border-radius:23px;font-size:18px;font-weight:700;color:#fff;opacity:0;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+#cap{position:absolute;left:210px;width:1500px;top:906px;text-align:center;font-size:30px;line-height:1.28;color:#3A3A3E;opacity:0}
+.nocap #cap{display:none}
+</style>
+</head>
+<body>
+<div class="page">
+<h1 class="pt">Curbside demo video</h1>
+<p class="sub">Runs 2:30. The Curbside Score is out of 100 with four tiers (Bronze, Silver, Gold, Platinum), and the rewards screen has the offer card with the QR code. The phone keeps the detailed dark glass look. Press Fullscreen, screen record at 1080p, and lay your voiceover over it.</p>
+<div class="wrap" id="wrap"><div id="stage"><div id="cap"></div></div></div>
+<div class="controls">
+<button id="play">Pause</button>
+<button id="restart">Restart</button>
+<input id="scrub" type="range" min="0" max="1500" value="0" aria-label="Timeline">
+<span id="time">0:00 / 2:30</span>
+<button id="capBtn">Captions on</button>
+<button id="fs">Fullscreen</button>
+</div>
+<div class="chips" id="chips"></div>
+
+<details open>
+<summary>Voiceover script with timestamps (about 300 words)</summary>
+<p><b>0:00 to 0:12</b> Intro. "You drive carefully every day, and nobody rewards you for it. Meet Curbside, the app that rewards new drivers for every smooth trip."</p>
+<p><b>0:12 to 0:32</b> The problem. "New drivers face the highest crash risk, and their families pay for it. Having a teen on the policy adds about $3,700 a year. Insurers reward safe driving, but at renewal, on the parent's bill. The teen gets nothing today."</p>
+<p><b>0:32 to 0:52</b> The drive. "Curbside starts on its own the moment you drive. Just drive. The screen stays minimal, with no live ranking to distract you. Behind the scenes, your phone's sensors catch hard braking, harsh launches, and sharp turns, and GPS confirms each one."</p>
+<p><b>0:52 to 1:10</b> The score. "When the trip ends, you get a score out of 100, and a map of exactly where points were lost. Then one thing to change next time. Clear feedback, not guesswork."</p>
+<p><b>1:10 to 1:28</b> Your Curbside Score. "Every trip builds your Curbside Score. Smooth driving moves you up through Bronze, Silver, Gold, and Platinum. And your trends show whether hard braking is going down."</p>
+<p><b>1:28 to 1:46</b> Rewards. "Higher tiers unlock real rewards, right now. Discounts at places teens already spend money. Safe driving finally pays off today, not at renewal."</p>
+<p><b>1:46 to 2:00</b> Family. "A family leaderboard puts everyone on the board, parents included. It is shared motivation, not surveillance. No location history is ever shared."</p>
+<p><b>2:00 to 2:18</b> Under the hood. "Under the hood, Curbside is a native SwiftUI app. A hard brake only counts when the accelerometer and GPS agree. Scoring runs on the phone, and only the score syncs to power rewards and the leaderboard."</p>
+<p><b>2:18 to 2:30</b> Close. "Safer teens. Rewards today. Peace of mind for parents. Curbside. Drive well. Get rewarded."</p>
+</details>
+<p class="mini">Tiers, offers, names, and the sample drives are illustrative. Say pilot offers unless a partner has signed. If you keep a live action opener, trim it to about 25 seconds so the full video stays under 3 minutes.</p>
+</div>
+
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var clamp=function(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v))};
+var ease=function(x){return x*x*(3-2*x)};
+var eo=function(x){return 1-Math.pow(1-x,3)};
+var pr=function(lt,s,d){return ease(clamp((lt-s)/d))};
+var pe=function(lt,s,d){return eo(clamp((lt-s)/d))};
+var lerp=function(a,b,t){return a+(b-a)*t};
+var fmt=function(n){return Math.round(n).toLocaleString('en-US')};
+function mixc(a,b,t){return 'rgb('+Math.round(lerp(a[0],b[0],t))+','+Math.round(lerp(a[1],b[1],t))+','+Math.round(lerp(a[2],b[2],t))+')'}
+var Y='#FFC400',TEAL='#3E8F82',GREEN='#67C466',ORANGE='#F5923E',RED='#E5675F',GRAY='#8E8E93',UP='#4CB867';
+var CT_I=[158,158,164],CT_A=[11,11,12],CS_I=[196,196,202],CS_A=[106,106,112],NB_I=[241,241,243],NB_A=[255,196,0],NT_I=[185,185,190],NT_A=[11,11,12];
+
+/* icons */
+var Y='#FFC400',CORAL='#FF5A4E',ICE='#7DD3FC',GOOD='#4ADE80',MUTE='rgba(255,255,255,.62)',BGD='#0D0D0F';
+var ICO={
+car:'<path fill-rule="evenodd" fill="currentColor" stroke="none" d="M5.4 10.2l1.4-3.9A2.3 2.3 0 018.9 4.8h6.2a2.3 2.3 0 012.1 1.5l1.4 3.9a2 2 0 011.9 1.9v4.4a1 1 0 01-1 1H18v1.6a.9.9 0 01-.9.9h-1.3a.9.9 0 01-.9-.9V18H8.1v1.6a.9.9 0 01-.9.9H5.9a.9.9 0 01-.9-.9V18H4a1 1 0 01-1-1v-4.900a2 2 0 012.400-1.900zM8.600 6.800L7.600 9.800h8.800l-1-3zM7 12.600a1.300 1.300 0 100 2.600 1.300 1.300 0 000-2.600zm10 0a1.300 1.300 0 100 2.600 1.300 1.300 0 000-2.600z"/>',
+trends:'<path d="M3 4v16h18"/><path d="M7 15l4-4 3 3 6-7"/><path d="M15.500 7H20v4.500"/>',
+history:'<path d="M3.500 12a8.500 8.500 0 102.600-6.100M3.500 4v4.500H8"/><path d="M12 7.500V12l3 2"/>',
+family:'<g fill="currentColor" stroke="none"><circle cx="12" cy="7.200" r="3"/><circle cx="4.800" cy="9" r="2.300"/><circle cx="19.200" cy="9" r="2.300"/><path d="M12 11.400c-3.200 0-5.500 2-5.500 4.600V18.500h11V16c0-2.600-2.300-4.600-5.500-4.600z"/><path d="M4.800 12.200C2.800 12.200 1.300 13.600 1.300 15.500v1.700H5v-1.400c0-1.500.6-2.800 1.700-3.500a4.500 4.500 0 00-1.900-.1zM19.200 12.200c-.7 0-1.300 0-1.900.1 1.100.7 1.700 2 1.700 3.500v1.400h3.700v-1.700c0-1.900-1.500-3.300-3.500-3.300z"/></g>',
+gift:'<rect x="3" y="8" width="18" height="5" rx="1.200"/><path d="M4.500 13v7a1 1 0 001 1h13a1 1 0 001-1v-7M12 8v13M12 8C10.500 4 7 4 7 6.500 7 8 9 8 12 8zM12 8c1.500-4 5-4 5-1.500 0 1.500-2 1.500-5 1.500z"/>',
+cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.500V16c0 1.500 3 3 6 3s6-1.500 6-3v-4.500M22 9v6"/>',
+trend2:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+oct:'<path d="M8.500 3h7L21 8.500v7L15.500 21h-7L3 15.500v-7z"/><path d="M12 8v5M12 16h.01"/>',
+lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+chev:'<path d="M9 5l7 7-7 7"/>',
+bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.500c.8.8 1 1.500 1 2.500h6c0-1 .2-1.700 1-2.500A6 6 0 0012 3z"/>',
+check:'<path d="M5 12.500l4.500 4.500L19 7"/>',
+trophy:'<path d="M7 4h10v5a5 5 0 01-10 0V4zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3M12 14v4M8 20h8"/>',
+warn:'<path d="M12 4l9 16H3L12 4zM12 10v4M12 17h.01"/>',
+flag:'<path d="M6 21V4M6 5h12l-3 4 3 4H6"/>',
+route:'<path d="M6 4v9a4 4 0 004 4h8M15 13l4 4-4 4"/>',
+clock:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 3h6"/>',
+gauge:'<path d="M4 17a8 8 0 1116 0"/><path d="M12 17l4-5"/>',
+sliders:'<path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/>',
+spark:'<path d="M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800z"/>',
+rep:'<path d="M3 12a9 9 0 109-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/>'
+};
+function ic(n,sz,col,sw){return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="'+(col||'currentColor')+'" stroke-width="'+(sw||2)+'" stroke-linecap="round" stroke-linejoin="round" style="display:block">'+ICO[n]+'</svg>'}
+function G(l,t,w,h,inner,ex){return '<div class="gl" style="left:'+l+'px;top:'+t+'px;width:'+w+'px;height:'+h+'px;'+(ex||'')+'">'+inner+'</div>'}
+function T(l,t,txt,ex){return '<div style="position:absolute;left:'+l+'px;top:'+t+'px;'+(ex||'')+'">'+txt+'</div>'}
+var TOPO='<svg style="position:absolute;left:0;top:0;opacity:.07" width="356" height="756" viewBox="0 0 356 756"><path d="M-10 170C80 120 150 210 250 150S340 110 370 130M-10 330C70 290 160 380 260 320S350 290 370 300M-10 520C90 470 150 560 250 500S340 470 370 490M40 0C20 120 90 200 60 330S10 560 50 756M220 0C260 140 190 230 240 360S300 600 230 756" stroke="#fff" stroke-width="1.600" fill="none"/></svg>';
+function sbar(){return '<div style="position:absolute;left:0;top:0;width:356px;height:58px;background:linear-gradient('+BGD+' 52%,rgba(13,13,15,0));z-index:4"></div><div style="position:absolute;left:0;top:0;width:356px;height:44px;z-index:5"><div style="position:absolute;left:36px;top:13px;font-size:15px;font-weight:600;color:#fff">9:41</div><div style="position:absolute;left:123px;top:10px;width:110px;height:32px;border-radius:16px;background:#000"></div><div style="position:absolute;right:30px;top:16px;display:flex;gap:6px;align-items:center"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#fff"/><rect x="10" y="2.500" width="3" height="9.500" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.500" y="0.500" width="22" height="11" rx="3.500" fill="none" stroke="#fff" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2.200" fill="#fff"/><rect x="24" y="4" width="2" height="4" rx="1" fill="#fff" opacity=".45"/></svg></div></div>'}
+function tabbar(a){var names=['Drive','Trends','History','Family','Rewards'],icons=['car','trends','history','family','gift'];
+return '<div style="position:absolute;left:10px;top:688px;width:336px;height:58px;border-radius:29px;background:rgba(24,24,27,.92);border:1.5px solid rgba(255,255,255,.14);box-shadow:0 10px 28px rgba(0,0,0,.45);display:flex;align-items:center;padding:0 5px;box-sizing:border-box;z-index:6">'+names.map(function(n,i){var on=(i===a);return '<div style="flex:1;height:48px;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:'+(on?800:600)+';color:'+(on?'#0B0B0C':'rgba(255,255,255,.62)')+';background:'+(on?Y:'transparent')+'">'+ic(icons[i],22,'currentColor',1.9)+n+'</div>'}).join('')+'</div>'}
+function fadeBottom(){return '<div style="position:absolute;left:0;top:618px;width:356px;height:92px;background:linear-gradient(rgba(13,13,15,0),rgba(13,13,15,.96) 76%);z-index:3"></div>'}
+function tile(icon,num,lab,w,h){return '<div class="gl" style="position:relative;padding:14px 16px;height:'+(h||112)+'px;'+(w?'width:'+w+'px;':'')+'border-radius:24px"><div style="color:'+Y+'">'+ic(icon,22)+'</div><div class="num" style="font-size:28px;font-weight:800;margin-top:12px;line-height:1.1">'+num+'</div><div class="cap2">'+lab+'</div></div>'}
+function ctile(icon,num,lab){return '<div class="gl" style="position:relative;padding:12px 12px;height:100px;border-radius:22px"><div style="color:'+Y+'">'+ic(icon,19)+'</div><div class="num" style="font-size:25px;font-weight:800;margin-top:10px;line-height:1.1">'+num+'</div><div class="cap2" style="font-size:9.500px">'+lab+'</div></div>'}
+function qrSvg(sz){var n=9,c=sz/n,seed=11,s='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 '+sz+' '+sz+'"><rect width="'+sz+'" height="'+sz+'" rx="10" fill="#FFFFFF"/>';
+for(var y=0;y<n;y++){for(var x=0;x<n;x++){var on;var corner=(x<3&&y<3)||(x>5&&y<3)||(x<3&&y>5);if(corner){var cx=x%6,cy=y%6;on=!(cx===1&&cy===1)}else{seed=(seed*9301+49297)%233280;on=(seed/233280)>0.48}
+if(on){s+='<rect x="'+(x*c+2)+'" y="'+(y*c+2)+'" width="'+(c-3)+'" height="'+(c-3)+'" rx="2" fill="#0B0B0C"/>'}}}
+return s+'</svg>'}
+
+/* Curbside Score gauge, 0 to 100, four tiers */
+var GE=[0,60,80,90,100];
+var GB=[{c:'#CD7F32',n:'Bronze',rgb:'205,127,50'},{c:'#C0C7D1',n:'Silver',rgb:'192,199,209'},{c:'#FFC400',n:'Gold',rgb:'255,196,0'},{c:'#F2F6FF',n:'Platinum',rgb:'242,246,255'}];
+var GCX=162,GCY=200,GR=120;
+function gPath(a,b){var t1=Math.PI*(1-a),t2=Math.PI*(1-b);return 'M'+(GCX+GR*Math.cos(t1)).toFixed(2)+' '+(GCY-GR*Math.sin(t1)).toFixed(2)+' A'+GR+' '+GR+' 0 0 1 '+(GCX+GR*Math.cos(t2)).toFixed(2)+' '+(GCY-GR*Math.sin(t2)).toFixed(2)}
+function gaugeSvg(p){var s='<svg width="324" height="270" viewBox="0 0 324 270" style="position:absolute;left:0;top:0">';
+for(var i=0;i<4;i++){var a=GE[i]/100+0.004,b=GE[i+1]/100-0.004;s+='<path id="'+p+'b'+i+'" d="'+gPath(a,b)+'" fill="none" stroke="'+GB[i].c+'" stroke-opacity=".36" stroke-width="24"/>'}
+s+='<circle id="'+p+'k" cx="'+(GCX-GR)+'" cy="'+GCY+'" r="13" fill="#fff" stroke="#FFC400" stroke-width="7"/>';
+s+='<text id="'+p+'n" x="'+GCX+'" y="'+(GCY-14)+'" text-anchor="middle" font-size="76" font-weight="800" fill="#fff" font-family="ui-rounded,SF Pro Rounded,Inter,system-ui,sans-serif">0</text><text x="'+GCX+'" y="'+(GCY+18)+'" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.55)" font-family="Inter,system-ui,sans-serif">out of 100</text>';
+s+='<text x="'+(GCX-GR)+'" y="'+(GCY+30)+'" text-anchor="middle" font-size="10.500" fill="rgba(255,255,255,.45)" font-family="Inter,system-ui,sans-serif">0</text><text x="'+(GCX+GR)+'" y="'+(GCY+30)+'" text-anchor="middle" font-size="10.500" fill="rgba(255,255,255,.45)" font-family="Inter,system-ui,sans-serif">100</text></svg>';return s}
+function setGauge(p,sc){var f=clamp(sc/100),t=Math.PI*(1-f),bi=0;for(var i=0;i<4;i++){if(sc>=GE[i])bi=i}
+for(var j=0;j<4;j++){$(p+'b'+j).setAttribute('stroke-opacity',j===bi?'1':'.36')}
+var k=$(p+'k'),kx=(GCX+GR*Math.cos(t)).toFixed(2),ky=(GCY-GR*Math.sin(t)).toFixed(2);k.setAttribute('cx',kx);k.setAttribute('cy',ky);k.setAttribute('stroke',GB[bi].c);
+$(p+'n').textContent=Math.round(sc);var c=$(p+'c');c.textContent=GB[bi].n;c.style.background='rgba('+GB[bi].rgb+',.2)';c.style.color=GB[bi].c;
+var tr=$(p+'tier');if(tr){tr.textContent=GB[bi].n;tr.style.color=GB[bi].c;$(p+'mk').style.left=(sc*2.84-2)+'px'}}
+/* 270 degree ring used for the 0 to 100 drive score */
+var RC={};
+function ringSvg(p,w,h,cx,cy,r,sw,label){var C=2*Math.PI*r;RC[p]=C;return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" style="position:absolute;left:0;top:0"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="'+sw+'" stroke-linecap="round" stroke-dasharray="'+(0.75*C)+' '+C+'" transform="rotate(135 '+cx+' '+cy+')"/><circle id="'+p+'arc" cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+Y+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-dasharray="0 '+C+'" transform="rotate(135 '+cx+' '+cy+')"/><text id="'+p+'num" x="'+cx+'" y="'+(cy+r*0.3)+'" text-anchor="middle" font-size="'+Math.round(r*0.95)+'" font-weight="800" fill="#fff" font-family="ui-rounded,SF Pro Rounded,Inter,system-ui,sans-serif">0</text><text x="'+cx+'" y="'+(cy+r*0.3+26)+'" text-anchor="middle" font-size="11.500" letter-spacing="2.400" fill="rgba(255,255,255,.6)" font-family="Inter,system-ui,sans-serif">'+label+'</text></svg>'}
+function setRing(p,frac,num){$(p+'arc').style.strokeDasharray=(0.75*RC[p]*frac)+' '+RC[p];$(p+'num').textContent=num}
+
+function factor(icon,title,sub,up,val,impact,first){return '<div style="display:flex;align-items:center;gap:11px;padding:0 14px;height:66px;box-sizing:border-box;'+(first?'':'border-top:1px solid rgba(255,255,255,.08)')+'"><div style="width:34px;height:34px;border-radius:17px;background:rgba(255,196,0,.14);color:'+Y+';display:flex;align-items:center;justify-content:center;flex:none">'+ic(icon,18,'currentColor',2)+'</div><div style="flex:1;min-width:0"><div style="font-size:14.500px;font-weight:700;line-height:1.2;white-space:nowrap">'+title+'</div><div style="font-size:11.500px;color:'+MUTE+';line-height:1.3;margin-top:2px">'+sub+'</div></div><div style="text-align:right;flex:none"><div style="font-size:16px;font-weight:800"><span style="color:'+(up?GOOD:CORAL)+'">'+(up?'&uarr;':'&darr;')+'</span> '+val+'</div><div style="font-size:11px;color:'+MUTE+'">'+impact+'</div></div></div>'}
+function driveRow(day,sub,badge,evt,first){return '<div style="display:flex;align-items:center;gap:13px;padding:0 14px;height:66px;box-sizing:border-box;'+(first?'':'border-top:1px solid rgba(255,255,255,.08)')+'"><div class="num" style="width:44px;height:44px;border-radius:22px;background:'+GOOD+';color:#0B0B0C;display:flex;align-items:center;justify-content:center;font-size:'+(badge>99?16:19)+'px;font-weight:800;flex:none;box-shadow:0 0 14px rgba(74,222,128,.35)">'+badge+'</div><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700;line-height:1.2;white-space:nowrap">'+day+'</div><div style="font-size:12.500px;color:'+MUTE+';margin-top:2px">'+sub+'</div></div>'+(evt?'<div style="display:flex;align-items:center;gap:4px;color:#FF9F1C;font-weight:800;font-size:14px">'+ic('oct',19,'#FF9F1C',2)+evt+'</div>':'')+'<div style="color:rgba(255,255,255,.35)">'+ic('chev',15,'currentColor',2.600)+'</div></div>'}
+
+/* score history chart */
+var CP=[[10,98],[66,80],[122,65],[178,50],[234,41],[290,32]];
+function chartSvg(p){var d='M'+CP.map(function(q){return q[0]+' '+q[1]}).join(' L'),area=d+' L290 104 L10 104 Z';
+return '<svg width="300" height="130" viewBox="0 0 300 130" style="position:absolute;left:12px;top:48px"><defs><linearGradient id="'+p+'ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC400" stop-opacity=".34"/><stop offset="1" stop-color="#FFC400" stop-opacity="0"/></linearGradient></defs><g stroke="rgba(255,255,255,.08)" stroke-width="1"><path d="M10 14H290M10 44H290M10 74H290M10 104H290"/></g><path id="'+p+'ar" d="'+area+'" fill="url(#'+p+'ag)" opacity="0"/><path id="'+p+'cp" d="'+d+'" pathLength="1" fill="none" stroke="'+Y+'" stroke-width="3.200" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1" stroke-dashoffset="1"/><circle id="'+p+'cd" cx="290" cy="32" r="6" fill="#fff" stroke="'+Y+'" stroke-width="3.500" opacity="0"/><g font-size="10" fill="rgba(255,255,255,.45)" font-family="Inter,system-ui,sans-serif" text-anchor="middle"><text x="10" y="122">W1</text><text x="66" y="122">W2</text><text x="122" y="122">W3</text><text x="178" y="122">W4</text><text x="234" y="122">W5</text><text x="290" y="122">W6</text></g></svg>'}
+function setChart(p,f){$(p+'cp').style.strokeDashoffset=1-f;$(p+'ar').setAttribute('opacity',f);$(p+'cd').setAttribute('opacity',f>0.98?1:0)}
+
+/* screens */
+function scrScore(p){var plus='<div id="'+p+'plus" style="position:absolute;left:236px;top:78px;padding:5px 12px;border-radius:15px;background:rgba(74,222,128,.2);color:'+GOOD+';font-size:15px;font-weight:800;opacity:0">+1</div>';
+return TOPO+sbar()+'<div id="'+p+'sc" style="position:absolute;left:0;top:0;width:356px;height:1900px">'+
+T(20,56,'Curbside','font-size:34px;font-weight:800;letter-spacing:-.5px" class="num')+
+G(16,108,324,270,T(0,16,'CURBSIDE SCORE','width:324px;text-align:center;font-size:11.500px;font-weight:700;letter-spacing:.2em;color:'+MUTE)+gaugeSvg(p)+plus+
+'<div style="position:absolute;left:18px;top:228px;display:flex;align-items:center;gap:12px"><div id="'+p+'c" style="padding:6px 16px;border-radius:18px;font-size:16px;font-weight:800">Gold</div><div id="'+p+'wk" style="display:flex;align-items:center;gap:5px;font-size:15px;font-weight:600"><span style="color:'+GOOD+';font-size:18px;font-weight:800">&nearr;</span>+6 this week</div></div>')+
+'<div style="position:absolute;left:16px;top:392px;width:324px;height:54px;border-radius:27px;background:'+Y+';color:#0B0B0C;font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px rgba(255,196,0,.35)">'+ic('drive',20,'#0B0B0C')+'Start Drive</div>'+
+'<div style="position:absolute;left:16px;top:460px;width:324px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">'+ctile('gauge','92','Last drive')+ctile('trophy','98','Best drive')+ctile('route','14','Drives scored')+'</div>'+
+G(16,580,324,108,'<div style="position:absolute;left:20px;top:16px;width:284px;display:flex;justify-content:space-between;align-items:baseline"><span id="'+p+'tier" style="font-size:20px;font-weight:800;color:'+Y+'">Gold</span><span style="font-size:11px;letter-spacing:.14em;color:'+MUTE+'">TIER</span></div><div style="position:absolute;left:20px;top:50px;width:284px;height:12px"><div style="position:absolute;left:0;top:0;width:170.4px;height:12px;background:#CD7F32;border-radius:6px 0 0 6px"></div><div style="position:absolute;left:170.4px;top:0;width:56.8px;height:12px;background:#C0C7D1"></div><div style="position:absolute;left:227.2px;top:0;width:28.4px;height:12px;background:'+Y+'"></div><div style="position:absolute;left:255.6px;top:0;width:28.4px;height:12px;background:#F2F6FF;border-radius:0 6px 6px 0"></div><div id="'+p+'mk" style="position:absolute;left:0;top:-5px;width:5px;height:22px;border-radius:3px;background:#fff;box-shadow:0 0 0 2px #0D0D0F"></div></div><div style="position:absolute;left:20px;top:76px;font-size:11.500px;color:'+MUTE+'">Silver 60 &middot; Gold 80 &middot; Platinum 90</div>')+
+G(16,704,324,190,T(18,16,'Score history','font-size:17px;font-weight:800')+T(18,38,'Last 6 weeks','font-size:12px;color:'+MUTE)+T(246,16,'+22','font-size:16px;font-weight:800;color:'+GOOD+';text-align:right;width:60px')+chartSvg(p))+
+T(22,916,'What&rsquo;s moving your score','font-size:15.500px;font-weight:700;color:'+MUTE)+
+'<div class="gl" style="left:16px;top:944px;width:324px;height:198px;overflow:hidden;border-radius:26px">'+factor('cap','Building your history','Still settling in (14 drives so far)',false,'-6','High impact',true)+factor('trend2','Improving lately','Over your last 5 drives',true,'+4','Medium impact')+factor('oct','Hard braking','1 hard brake in last 5 drives',false,'-2','Low impact')+'</div>'+
+G(16,1158,324,214,'<div style="display:flex;align-items:center;gap:12px;padding:16px 18px 0"><div style="width:42px;height:42px;border-radius:21px;background:rgba(255,196,0,.15);color:'+Y+';display:flex;align-items:center;justify-content:center">'+ic('sliders',22,'currentColor',2)+'</div><div><div style="font-size:18px;font-weight:800">What&rsquo;s changing</div><div style="font-size:12.500px;color:'+MUTE+'">Last 4 drives vs the 3 before</div></div></div><div style="padding:0 18px"><div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:11px;letter-spacing:.12em;color:'+MUTE+'"><span>HARD BRAKES / 10 MI</span><span style="font-size:16px;letter-spacing:0;color:#fff;font-weight:600">3.1 &rarr; <b style="color:'+GOOD+'">1.8</b></span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;letter-spacing:.12em;color:'+MUTE+'"><span>HARSH LAUNCHES / 10 MI</span><span style="font-size:16px;letter-spacing:0;color:#fff;font-weight:600">0.9 &rarr; <b style="color:'+GOOD+'">0.7</b></span></div><div style="margin-top:16px;font-size:13.500px;line-height:1.4;color:rgba(255,255,255,.9)">Smoother braking is lifting your score. Keep it up.</div></div>')+
+T(22,1394,'Recent drives','font-size:15.500px;font-weight:700;color:'+MUTE)+
+'<div class="gl" style="left:16px;top:1422px;width:324px;height:394px;overflow:hidden;border-radius:26px">'+driveRow('Today 4:49 PM','15 min &middot; 5.0 mi',92,'1',true)+driveRow('Friday 10:45 PM','15 min &middot; 5.0 mi',100)+driveRow('Thursday 10:45 PM','15 min &middot; 5.0 mi',92,'1')+driveRow('Wednesday 10:45 PM','15 min &middot; 5.0 mi',100)+driveRow('Tuesday 10:45 PM','15 min &middot; 5.0 mi',100)+'<div style="height:64px;display:flex;align-items:center;padding:0 18px;font-size:15px;font-weight:700;color:'+Y+';border-top:1px solid rgba(255,255,255,.08)">See all 14 drives</div></div>'+
+'</div>'+fadeBottom()+tabbar(0)}
+
+function scrDrive(p){var bld='',lab='',j;for(j=-1;j<6;j++){var y=j*160;bld+='<rect x="12" y="'+(y+16)+'" width="116" height="128" rx="12" fill="#151518"/><rect x="228" y="'+(y+16)+'" width="116" height="128" rx="12" fill="#151518"/><path d="M0 '+(y+160)+'H356" stroke="#242428" stroke-width="12"/><circle cx="70" cy="'+(y+80)+'" r="2.400" fill="#2D2D32"/><circle cx="286" cy="'+(y+80)+'" r="2.400" fill="#2D2D32"/>';lab+='<text x="0" y="0" transform="translate(160 '+(y+110)+') rotate(-90)" font-size="9" letter-spacing="1.600" fill="#4A4A52" font-family="Inter,sans-serif">PEACHTREE ST</text>'}
+var dash='';for(j=-1;j<6;j++){dash+='<rect x="175" y="'+(j*160+30)+'" width="6" height="60" rx="3" fill="#44444B"/>'}
+return '<svg style="position:absolute;left:0;top:0" width="356" height="756" viewBox="0 0 356 756"><rect width="356" height="756" fill="#0C0C0E"/><g id="'+p+'g">'+bld+'<rect x="144" y="-200" width="68" height="1200" fill="#1B1B1F"/>'+dash+lab+'</g><path d="M178 0V756" stroke="'+Y+'" stroke-width="9" stroke-linecap="round"/><path d="M178 0V756" stroke="'+Y+'" stroke-width="18" stroke-linecap="round" opacity=".18"/><path d="M178 372l17 36-17-10-17 10z" fill="#fff" stroke="#0B0B0C" stroke-width="3" stroke-linejoin="round"/></svg>'+sbar()+
+'<div class="gl" style="left:16px;top:58px;width:auto;padding:8px 14px;border-radius:20px;font-size:14.500px;font-weight:700;display:flex;align-items:center;gap:8px;z-index:5;background:rgba(24,24,27,.82)"><span style="color:'+CORAL+'">&#9679;</span><span id="'+p+'tm">02:14</span><span style="color:'+MUTE+';font-weight:500">Driving</span></div>'+
+'<div id="'+p+'tD" class="pillm" style="left:58px;top:330px;width:240px;background:'+Y+';color:#0B0B0C">Drive detected</div><div id="'+p+'tB" class="pillm" style="left:58px;top:330px;width:240px;background:'+CORAL+'">Hard brake</div><div id="'+p+'tT" class="pillm" style="left:58px;top:330px;width:240px;background:'+ICE+';color:#0B0B0C">Sharp turn</div>'+
+'<div class="gl" style="left:16px;top:476px;width:324px;height:236px;background:rgba(24,24,27,.9);box-shadow:0 14px 34px rgba(0,0,0,.5)"><div style="position:absolute;left:20px;top:18px;font-size:11.500px;letter-spacing:.16em;font-weight:700;color:'+MUTE+'"><span style="color:'+Y+'">&#9679;</span>&nbsp; DRIVE DETECTED</div><div style="position:absolute;left:20px;top:40px;font-size:15px;font-weight:600">Home to campus</div><div id="'+p+'spd" class="num" style="position:absolute;right:62px;top:20px;font-size:64px;font-weight:800;line-height:1;text-align:right;width:120px;letter-spacing:-2px">0</div><div style="position:absolute;right:20px;top:54px;font-size:13px;letter-spacing:.12em;color:'+MUTE+';font-weight:600">MPH</div>'+
+'<div style="position:absolute;left:20px;top:100px;width:284px;font-size:13.500px;color:rgba(255,255,255,.78)">5:04 PM &middot; 12 min &middot; 4.2 mi left</div><div style="position:absolute;left:20px;top:128px;width:284px;font-size:12.500px;color:'+MUTE+'">Minimal screen while you drive. No live ranking.</div>'+
+'<div style="position:absolute;left:18px;top:166px;width:288px;height:52px;border-radius:26px;background:'+CORAL+';color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center">End drive</div></div>'+
+'<div style="position:absolute;left:118px;top:742px;width:120px;height:5px;border-radius:3px;background:#fff;opacity:.8;z-index:6"></div>'}
+
+function scrTrip(p){var spd='M10 96L22 60L34 78L46 40L58 66L70 52L82 74L94 30L102 22L108 84L112 100L120 70L132 48L144 62L156 36L168 58L180 44L192 70L204 54L216 80L228 62L240 90L252 70L264 96L276 74L290 100';
+return TOPO+sbar()+'<div id="'+p+'sc" style="position:absolute;left:0;top:0;width:356px;height:1720px">'+
+T(20,56,'Drive Complete','font-size:30px;font-weight:800;letter-spacing:-.4px" class="num')+T(20,98,'4:49 PM &middot; Car &middot; Home to campus','font-size:13.500px;color:'+MUTE)+
+G(16,128,324,262,ringSvg(p,324,262,162,128,82,17,'DRIVE SCORE')+T(0,226,'<span style="color:'+Y+'">&#9679;</span>&nbsp; Great drive &middot; 8 points lost','width:324px;text-align:center;font-size:13.500px;font-weight:600;color:rgba(255,255,255,.85)'))+
+'<div style="position:absolute;left:16px;top:404px;width:324px;display:grid;grid-template-columns:1fr 1fr;gap:12px">'+tile('route','5.0 mi','Distance')+tile('clock','15:00','Time')+tile('gauge','20','Moving avg mph')+tile('warn','-8','Points lost')+'</div>'+
+'<div class="gl" style="left:16px;top:660px;width:324px;height:150px;overflow:hidden;border-radius:26px"><svg width="324" height="150" viewBox="0 0 324 150"><rect width="324" height="150" fill="#0C0C0E"/><path d="M0 50L324 34M0 104L324 92M84 0L74 150M232 0L242 150" stroke="#242428" stroke-width="10" fill="none"/><path d="M26 124C62 124 72 62 122 60S192 112 236 86S284 44 298 46" stroke="'+Y+'" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="122" cy="60" r="11" fill="'+CORAL+'" stroke="#0C0C0E" stroke-width="3"/><circle cx="26" cy="124" r="7" fill="#fff"/></svg><div style="position:absolute;left:14px;bottom:10px;font-size:11.500px;color:rgba(255,255,255,.75)"><span style="color:'+CORAL+'">&#9679;</span> 1 hard brake</div></div>'+
+G(16,824,324,202,'<div style="display:flex;align-items:center;gap:10px;padding:16px 18px 0;font-size:18px;font-weight:800"><div style="width:38px;height:38px;border-radius:19px;background:rgba(255,196,0,.15);color:'+Y+';display:flex;align-items:center;justify-content:center">'+ic('bulb',20,'currentColor',2)+'</div>Coaching</div><div style="margin:14px 18px 0;height:6px;border-radius:3px;background:rgba(255,255,255,.12);position:relative"><div style="position:absolute;left:38%;top:-3px;width:3px;height:12px;border-radius:2px;background:'+CORAL+'"></div></div><div style="margin:10px 18px 0;height:10px;border-radius:5px;background:'+GOOD+';position:relative;overflow:hidden"><div style="position:absolute;right:0;top:0;width:14%;height:10px;background:'+CORAL+'"></div></div><div style="margin:14px 18px 0;font-size:14px;line-height:1.4;color:rgba(255,255,255,.92)">Brake earlier at stoplights. Everything else was smooth.</div><div style="margin:12px 18px 0;height:40px;border-radius:20px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700"><span style="color:'+Y+'">'+ic('trend2',17,'currentColor',2)+'</span>See the breakdown</div>')+
+G(16,1040,324,150,'<div style="display:flex;align-items:center;gap:10px;padding:14px 18px 0;font-size:14px"><span style="color:'+GOOD+';font-size:11px">&#9679;</span><span style="flex:1;color:rgba(255,255,255,.9)">Driving that cost you nothing</span><b>92 pts</b></div><div style="display:flex;align-items:center;gap:10px;padding:14px 18px 0;font-size:14px"><span style="color:'+CORAL+';font-size:11px">&#9679;</span><span style="flex:1;color:rgba(255,255,255,.9)">1 hard brake</span><b>8 pts</b></div><div style="display:flex;align-items:center;gap:10px;padding:14px 18px 0;font-size:14px"><span style="color:rgba(255,255,255,.4);font-size:11px">&#9679;</span><span style="flex:1;color:rgba(255,255,255,.9);line-height:1.25">How firmly you drive the rest of the time</span><b style="font-size:12.500px">under a point</b></div>')+
+G(16,1204,324,262,T(18,16,'Your speed','font-size:18px;font-weight:800')+T(18,42,'Your speed across the whole drive. Each mark is a moment Curbside judged harsh.','width:290px;font-size:12px;line-height:1.35;color:'+MUTE)+
+'<svg width="300" height="120" viewBox="0 0 300 120" style="position:absolute;left:12px;top:84px"><g stroke="rgba(255,255,255,.08)"><path d="M10 20H290M10 60H290M10 100H290"/></g><path d="'+spd+'" fill="none" stroke="'+Y+'" stroke-width="2.600" stroke-linejoin="round" stroke-linecap="round"/><path d="M108 8V108" stroke="rgba(255,90,78,.5)" stroke-width="1.500"/><circle cx="102" cy="22" r="5" fill="'+CORAL+'"/><g font-size="9.500" fill="rgba(255,255,255,.45)" font-family="Inter,sans-serif"><text x="10" y="118">Start</text><text x="190" y="118">15 min &#183; top 38 mph</text></g></svg>'+
+T(18,212,'<span style="color:'+CORAL+'">&#9679;</span>&nbsp; <b>2 min in, hard brake</b>','font-size:13px;color:#fff'))+
+G(16,1480,324,150,T(18,16,'YOUR CURBSIDE SCORE','font-size:11.500px;font-weight:700;letter-spacing:.14em;color:'+MUTE)+'<div style="position:absolute;left:18px;top:42px;display:flex;align-items:baseline;gap:12px"><div id="'+p+'imp" class="num" style="font-size:48px;font-weight:800;letter-spacing:-1px;line-height:1">83</div><div style="padding:5px 12px;border-radius:14px;background:rgba(74,222,128,.2);color:'+GOOD+';font-size:15px;font-weight:800">+1</div></div>'+T(18,108,'This drive moved your score from 83 to 84','font-size:13px;color:rgba(255,255,255,.75)'))+
+'<div style="position:absolute;left:16px;top:1646px;width:324px;height:54px;border-radius:27px;background:'+Y+';color:#0B0B0C;font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center">Done</div></div>'+fadeBottom()+tabbar(0)}
+
+function scrRewards(p){var chips=['Bronze','Silver','Gold','Platinum'];
+return TOPO+sbar()+T(20,56,'Rewards','font-size:34px;font-weight:800;letter-spacing:-.5px" class="num')+T(20,102,'Unlocked by your Curbside Score','font-size:13.500px;color:'+MUTE)+
+'<div style="position:absolute;left:16px;top:136px;width:324px;display:flex;gap:8px">'+chips.map(function(c,i){return '<div id="'+p+'ch'+i+'" style="flex:1;min-width:0;padding:0;white-space:nowrap;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:11.500px;font-weight:800;border:1.5px solid rgba(255,255,255,.16);color:rgba(255,255,255,.6)">'+c+'</div>'}).join('')+'</div>'+
+'<div id="'+p+'offer" class="gl" style="left:16px;top:196px;width:324px;height:304px;padding:20px 22px;border-color:rgba(255,196,0,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 30px rgba(255,196,0,.14);opacity:0"><div style="font-size:11px;letter-spacing:.16em;font-weight:700;color:'+MUTE+'">PARTNER OFFER &middot; ILLUSTRATIVE</div><div id="'+p+'off" class="num" style="font-size:58px;font-weight:800;line-height:1.05;margin-top:12px;color:'+Y+';white-space:nowrap">10% off</div><div id="'+p+'offt" style="font-size:18px;font-weight:700;margin-top:6px;color:'+Y+'">Gold tier reward</div><div style="position:absolute;left:22px;top:244px;font-size:14px;line-height:1.4;color:rgba(255,255,255,.8);width:150px">Show at checkout</div><div style="position:absolute;right:22px;bottom:22px;padding:6px;border-radius:14px;background:#fff">'+qrSvg(100)+'</div></div>'+
+'<div id="'+p+'lock" class="gl" style="left:16px;top:516px;width:324px;height:130px;padding:18px 22px;opacity:0"><div style="display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800"><span style="color:rgba(255,255,255,.7)">'+ic('lock',20)+'</span>Platinum &middot; 15% off</div><div style="margin-top:16px;height:10px;border-radius:5px;background:rgba(255,255,255,.14);overflow:hidden"><div id="'+p+'pb" style="width:0%;height:10px;background:'+Y+'"></div></div><div style="margin-top:12px;font-size:14px;color:rgba(255,255,255,.8)">6 points to go</div></div>'+tabbar(4)}
+
+function scrFamily(p){var rows=[['Mom','Parent','92','Platinum','&uarr; +2',true,'242,246,255','#F2F6FF','#34383F'],['Ava','You, teen','84','Gold','&uarr; +6',true,'255,196,0','#FFC400','#443B1A'],['Jordan','Teen','81','Gold','&uarr; +3',true,'255,196,0','#FFC400','#443B1A'],['Dad','Parent','74','Silver','&darr; -1',false,'192,199,209','#C0C7D1','#35383D']],o='';
+rows.forEach(function(r,i){o+='<div id="'+p+'r'+i+'" style="display:flex;align-items:center;gap:12px;padding:0 16px;height:76px;box-sizing:border-box;'+(i?'border-top:1px solid rgba(255,255,255,.08);':'')+(i===1?'background:rgba(255,196,0,.08);':'')+'opacity:0"><div style="width:22px;text-align:center;font-size:16px;font-weight:800;color:'+(i===0?Y:'rgba(255,255,255,.5)')+'">'+(i+1)+'</div><div style="width:44px;height:44px;border-radius:22px;background:'+r[8]+';color:'+r[7]+';display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex:none">'+r[0].charAt(0)+'</div><div style="flex:1;min-width:0"><div style="font-size:16.500px;font-weight:700;line-height:1.2">'+r[0]+'</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px"><span style="font-size:12px;color:'+MUTE+'">'+r[1]+'</span><span style="padding:2px 8px;border-radius:9px;background:rgba('+r[6]+',.2);color:'+r[7]+';font-size:10.500px;font-weight:800">'+r[3]+'</span></div></div><div style="text-align:right"><div id="'+p+'v'+i+'" class="num" style="font-size:25px;font-weight:800;letter-spacing:-.5px">0</div><div style="font-size:12px;font-weight:800;color:'+(r[5]?GOOD:CORAL)+'">'+r[4]+'</div></div></div>'});
+return TOPO+sbar()+T(20,56,'Family','font-size:34px;font-weight:800;letter-spacing:-.5px" class="num')+T(20,102,'This week &middot; parents included','font-size:13.500px;color:'+MUTE)+
+'<div class="gl" style="left:16px;top:130px;width:324px;height:306px;overflow:hidden;border-radius:26px">'+o+'</div>'+
+'<div id="'+p+'goal" class="gl" style="left:16px;top:452px;width:324px;height:118px;padding:16px 20px;opacity:0"><div style="font-size:11.500px;font-weight:700;color:'+MUTE+';letter-spacing:.14em">FAMILY GOAL</div><div style="font-size:18px;font-weight:800;margin-top:6px">Everyone above 80</div><div style="display:flex;gap:8px;margin-top:12px"><div style="flex:1;height:9px;border-radius:5px;background:'+Y+'"></div><div style="flex:1;height:9px;border-radius:5px;background:'+Y+'"></div><div style="flex:1;height:9px;border-radius:5px;background:'+Y+'"></div><div style="flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.14)"></div></div><div style="margin-top:7px;font-size:12.500px;color:'+MUTE+'">3 of 4 there</div></div>'+tabbar(3)}
+
+function scrPrivacy(p){var rows=[['Raw motion data','Never uploaded','chip'],['Location history','Stays on this phone','chip'],['Share score with family','Score only, no routes','tog'],['Partner offers','Redeem at checkout','tog']],o='';
+rows.forEach(function(r,i){var right=r[2]==='chip'?'<div style="padding:6px 12px;border-radius:14px;background:rgba(255,196,0,.18);color:'+Y+';font-size:12px;font-weight:800">On device</div>':'<div style="width:51px;height:31px;border-radius:16px;background:'+Y+';position:relative"><div style="position:absolute;right:2px;top:2px;width:27px;height:27px;border-radius:14px;background:#0B0B0C"></div></div>';
+o+='<div id="'+p+'r'+i+'" style="display:flex;align-items:center;gap:10px;padding:0 18px;height:74px;box-sizing:border-box;'+(i?'border-top:1px solid rgba(255,255,255,.08);':'')+'opacity:0"><div style="flex:1"><div style="font-size:16px;font-weight:700">'+r[0]+'</div><div style="font-size:12.500px;color:'+MUTE+';margin-top:3px">'+r[1]+'</div></div>'+right+'</div>'});
+return TOPO+sbar()+T(20,56,'Privacy','font-size:34px;font-weight:800;letter-spacing:-.5px" class="num')+T(20,102,'You control what leaves your phone','font-size:13.500px;color:'+MUTE)+
+'<div class="gl" style="left:16px;top:134px;width:324px;height:296px;overflow:hidden;border-radius:26px">'+o+'</div>'+T(24,446,'Only your score and tier leave your phone. Routes and raw sensor data never do.','width:308px;font-size:12.500px;line-height:1.45;color:'+MUTE)+tabbar(-1)}
+
+/* scene text builders */
+function contentScene(o){var tx=o.side==='R'?120:800,p=o.id,top=o.tops||[418,538,658],s='<div class="scene" id="'+p+'">';
+if(o.num)s+='<div class="ghost serif" id="'+p+'gh">'+o.num+'</div>';
+s+='<div class="lab" id="'+p+'lab" style="left:'+tx+'px;top:100px;opacity:0">'+(o.num?'<b>'+o.num+'</b><i></i>':'<b>'+(o.pill||'')+'</b><i></i>')+'<span>'+o.label+'</span></div>';
+s+='<div class="hd serif" id="'+p+'hd" style="left:'+tx+'px;top:160px;width:800px;opacity:0">'+o.head+'</div>';
+if(o.extra)s+=o.extra(tx);
+s+='<div class="rule" id="'+p+'rule" style="left:'+tx+'px;top:'+(o.ruleTop||396)+'px;width:0"></div>';
+o.items.forEach(function(it,i){s+='<div class="it'+(i>0?' bt':'')+'" id="'+p+'i'+i+'" style="left:'+tx+'px;top:'+top[i]+'px;padding-top:22px;opacity:0"><div class="n">0'+(i+1)+'</div><div><div class="t">'+it[0]+'</div><div class="s">'+it[1]+'</div></div></div>'});
+return s+'</div>'}
+var HTML='';
+HTML+='<div class="scene" id="s0"><div class="lab" id="s0lab" style="left:120px;top:100px;opacity:0"><b>Hacklanta</b><i></i><span>Social good</span></div><div class="hd serif" id="s0hd" style="left:120px;top:230px;width:1100px;font-size:100px;opacity:0">Nobody rewards you<br>for <em>driving well</em>.</div><div id="s0sub" class="abs" style="left:120px;top:540px;width:760px;font-size:38px;line-height:1.35;color:#5E5E63;opacity:0">Curbside rewards new drivers for every smooth trip.</div></div>';
+HTML+='<div class="scene" id="s1"><div class="lab" id="s1lab" style="left:120px;top:100px;opacity:0"><b>01</b><i></i><span>The problem</span></div><div class="hd serif" id="s1hd" style="left:120px;top:160px;width:1600px;opacity:0">New drivers carry the risk.<br>Families pay the <em>bill</em>.</div>'+
+'<div class="col" id="s1c0" style="left:120px;top:440px;opacity:0"><div class="ck">The risk</div><div class="cn serif" id="s1n0">0</div><div class="cl" id="s1l0">teens ages 13 to 19 killed in U.S. crashes in 2020</div></div>'+
+'<div class="col" id="s1c1" style="left:700px;top:440px;opacity:0"><div class="ck">The rate</div><div class="cn serif" id="s1n1">1x</div><div class="cl" id="s1l1">fatal crash rate per mile, ages 16 to 19 versus drivers 20 and older</div></div>'+
+'<div class="col" id="s1c2" style="left:1280px;top:440px;opacity:0"><div class="ck">The bill</div><div class="cn serif" id="s1n2">$0</div><div class="cl" id="s1l2">average yearly increase in a family&rsquo;s premium when a teen is added</div></div>'+
+'<div id="s1b" class="abs" style="left:120px;top:752px;width:1680px;font-size:40px;line-height:1.3;color:#0B0B0C;opacity:0">Safe driving discounts exist, but they arrive at renewal, on the parent&rsquo;s bill. The teen gets <span style="color:#E5483A;font-weight:600">$0 today</span>.</div>'+
+'<div id="s1src" class="abs" style="left:120px;top:882px;font-size:20px;color:#8E8E93;opacity:0">Sources: CDC Teen Drivers (2020 data); CarInsurance.com 2026 rate data; MoneyGeek and Bankrate telematics guides</div></div>';
+HTML+=contentScene({id:'s2',num:'02',label:'The drive',head:'Then just<br>drive.',side:'R',items:[['Starts on its own','Core Motion knows when you are in a car'],['A minimal screen','no live ranking, nothing to distract you'],['Risky moments caught','hard braking, harsh launches, sharp turns']]});
+HTML+=contentScene({id:'s3',num:'03',label:'The score',head:'Every trip,<br>scored and <em>explained</em>.',side:'L',items:[['A score out of 100','for every single trip'],['A map of where points were lost','hard brakes and sharp turns, marked'],['One thing to change','a single tip for next time']]});
+HTML+=contentScene({id:'s4',num:'04',label:'Your Curbside Score',head:'Smooth trips<br>add <em>up</em>.',side:'R',items:[['Your Curbside Score','a rolling score from your recent trips'],['Four tiers','Bronze, Silver, Gold, and Platinum'],['See what is changing','hard braking per 10 miles, trending down']]});
+HTML+=contentScene({id:'s5',num:'05',label:'Rewards',head:'Safe driving<br><em>pays</em> today.',side:'L',items:[['Unlocked by your tier','a higher score means a bigger offer'],['Where teens already spend','food, clothing, everyday places'],['Today, not at renewal','instant feedback, instant reward']]});
+HTML+=contentScene({id:'s6',num:'06',label:'Family',head:'Everyone is<br>on the <em>board</em>.',side:'R',items:[['Parents are on it too','teens and parents, one leaderboard'],['Shared motivation','not surveillance'],['No location history shared','only scores, never routes']]});
+HTML+=contentScene({id:'s7',num:'07',label:'Under the hood',head:'Scored on<br>your phone.',side:'L',ruleTop:562,tops:[580,684,788],items:[['Sensors must agree','accelerometer and GPS both confirm a hard brake'],['Scoring runs on the phone','raw motion and location data stay local'],['Only the score syncs','powering rewards and the leaderboard']],
+extra:function(tx){var b=[['Sensors','Motion and GPS'],['Scored here','On the phone'],['Cloud','Score only']],o='';b.forEach(function(x,i){o+='<div id="s7b'+i+'" class="abs" style="left:'+(tx+i*271)+'px;top:410px;width:215px;height:118px;box-sizing:border-box;padding:20px 22px;border-radius:20px;background:'+(i===1?'#FFF6D6':'#F6F6F7')+';border:2px solid '+(i===1?'#FFC400':'#E4E4E6')+';opacity:0"><div style="font-size:24px;font-weight:600;line-height:1.2">'+x[0]+'</div><div style="font-size:18px;color:#6B6B70;margin-top:6px;line-height:1.25">'+x[1]+'</div></div>';if(i<2)o+='<div id="s7a'+i+'" class="abs" style="left:'+(tx+i*271+222)+'px;top:446px;font-size:36px;color:#0B0B0C;opacity:0">&rarr;</div>'});return o}});
+HTML+=contentScene({id:'s8',num:'',pill:'Curbside',label:'Thank you',head:'Drive well.<br><em>Get rewarded.</em>',side:'R',items:[['Safer teens','a reason to drive well, every trip'],['Rewards today','not months later, at renewal'],['Peace of mind for parents','shared motivation, not surveillance']]});
+$('stage').insertAdjacentHTML('afterbegin',HTML);
+
+var LAYERS=[[0,scrScore('c0')],[2,scrDrive('d2')],[3,scrTrip('d3')],[4,scrScore('d4')],[5,scrRewards('d5')],[6,scrFamily('d6')],[7,scrPrivacy('d7')],[8,scrScore('c8')]];
+var lh='';LAYERS.forEach(function(l){lh+='<div class="scr" id="L'+l[0]+'">'+l[1]+'</div>'});
+$('stage').insertAdjacentHTML('beforeend','<div class="phone" id="gph"><div class="screen">'+lh+'</div><div class="sb" style="right:-4px;top:210px;height:90px"></div><div class="sb" style="right:-4px;top:330px;height:60px"></div></div>'+
+'<div class="fline"></div><div class="fprog" id="gprog"></div><div class="fl"><i></i>CURBSIDE</div><div class="fr" id="gfr"></div>');
+$('stage').appendChild($('cap'));
+
+function ch(p,lt,T,o){o=o||{};var a=pe(lt,-0.1,0.55),b=pe(lt,0,0.6),lab=$(p+'lab'),hd=$(p+'hd');
+lab.style.opacity=a;lab.style.transform='translateY('+((1-a)*14)+'px)';hd.style.opacity=b;hd.style.transform='translateY('+((1-b)*30)+'px)';
+var ems=hd.getElementsByTagName('em');for(var e=0;e<ems.length;e++){ems[e].style.backgroundSize=(100*pe(lt,0.55,0.5))+'% 34%'}
+var rl=$(p+'rule');if(rl)rl.style.width=(760*pe(lt,0.25,0.6))+'px';
+var n=T.length;for(var i=0;i<n;i++){var el=$(p+'i'+i);var ap=pe(lt,0.45+0.12*i,0.55);el.style.opacity=ap;el.style.transform='translateY('+((1-ap)*18)+'px)';
+var act=pr(lt,T[i],0.4);if(!o.all&&i<n-1){act*=1-pr(lt,T[i+1],0.4)}
+var k=el.children;k[0].style.background=mixc(NB_I,NB_A,act);k[0].style.color=mixc(NT_I,NT_A,act);var tx=k[1].children;tx[0].style.color=mixc(CT_I,CT_A,act);tx[1].style.color=mixc(CS_I,CS_A,act)}
+var gh=$(p+'gh');if(gh)gh.style.opacity=pe(lt,0.1,0.9)}
+
+function t0(lt){var a=pe(lt,-0.1,0.55),b=pe(lt,0,0.6),c=pe(lt,0.5,0.6);$('s0lab').style.opacity=a;$('s0lab').style.transform='translateY('+((1-a)*14)+'px)';var h=$('s0hd');h.style.opacity=b;h.style.transform='translateY('+((1-b)*30)+'px)';h.getElementsByTagName('em')[0].style.backgroundSize=(100*pe(lt,0.7,0.5))+'% 34%';var s=$('s0sub');s.style.opacity=c;s.style.transform='translateY('+((1-c)*20)+'px)'}
+function t1(lt){var a=pe(lt,-0.1,0.55),b=pe(lt,0,0.6);$('s1lab').style.opacity=a;$('s1lab').style.transform='translateY('+((1-a)*14)+'px)';var h=$('s1hd');h.style.opacity=b;h.style.transform='translateY('+((1-b)*30)+'px)';h.getElementsByTagName('em')[0].style.backgroundSize=(100*pe(lt,0.55,0.5))+'% 34%';
+var T=[0.8,3.4,6.0];for(var i=0;i<3;i++){var c=$('s1c'+i);var ap=pe(lt,0.4+0.12*i,0.6);c.style.opacity=ap;c.style.transform='translateY('+((1-ap)*26)+'px)';
+var act=pr(lt,T[i],0.4)*(i<2?1-pr(lt,T[i+1],0.4):1);c.style.borderTopColor=mixc([228,228,230],NB_A,act);$('s1n'+i).style.color=mixc(CS_I,CT_A,act);$('s1l'+i).style.color=mixc(CT_I,[74,74,80],act)}
+$('s1n0').textContent=fmt(2800*pr(lt,0.6,1.4));$('s1n1').textContent=Math.round(1+2*pr(lt,0.72,1.2))+'x';$('s1n2').textContent='$'+fmt(3721*pr(lt,0.84,1.4));
+var bb=pe(lt,12.0,0.6);$('s1b').style.opacity=bb;$('s1b').style.transform='translateY('+((1-bb)*20)+'px)';$('s1src').style.opacity=pe(lt,1.0,0.6)}
+function t7(lt){ch('s7',lt,[5,11,14],{});for(var i=0;i<3;i++){var b=$('s7b'+i),p=pe(lt,0.5+0.12*i,0.55);b.style.opacity=p;b.style.transform='translateY('+((1-p)*18)+'px)';if(i<2){$('s7a'+i).style.opacity=pe(lt,0.6+0.12*i,0.5)}}}
+
+/* one speed curve drives the speedometer and the road scroll */
+function vOf(lt){if(lt<=0)return 0;var ramp=ease(clamp(lt/2.4)),bs=ramp*(24+4*Math.sin(lt*0.7)),v=bs;if(lt>=12.2&&lt<13.2){v=lerp(bs,5,ease(lt-12.2))}else if(lt>=13.2&&lt<15.2){v=lerp(5,bs,ease((lt-13.2)/2))}return v}
+var CUM=[0],DT=0.05;for(var ci=1;ci<=500;ci++){CUM.push(CUM[ci-1]+vOf(ci*DT)*DT)}
+function posOf(lt){if(lt<=0)return 0;var f=lt/DT,i=Math.floor(f);if(i>=CUM.length-1)return CUM[CUM.length-1];return lerp(CUM[i],CUM[i+1],f-i)}
+
+/* screen renderers */
+function sc0(lt){var s=lerp(56,84,pr(lt,0.2,1.8));setGauge('c0',s);$('c0wk').style.opacity=pe(lt,1.4,0.5);setChart('c0',1)}
+function sc2(lt){var off=(posOf(lt)*9)%160;$('d2g').setAttribute('transform','translate(0 '+off+')');$('d2spd').textContent=Math.max(0,Math.round(vOf(lt)));
+var tm=134+Math.floor(Math.max(0,lt));$('d2tm').textContent='0'+Math.floor(tm/60)+':'+(tm%60<10?'0':'')+(tm%60);
+$('d2tD').style.opacity=pe(lt,0.4,0.3)*(1-pe(lt,3.4,0.3));$('d2tB').style.opacity=pe(lt,12.2,0.25)*(1-pe(lt,14.8,0.3));$('d2tT').style.opacity=pe(lt,16.0,0.25)*(1-pe(lt,18.2,0.3))}
+function sc3(lt){var f=pr(lt,0.3,1.3);setRing('d3',0.92*f,Math.round(92*f));
+$('d3sc').style.transform='translateY('+(-(560*pr(lt,6.0,0.9)+300*pr(lt,11.0,0.9)+300*pr(lt,14.2,0.9)))+'px)';$('d3imp').textContent=Math.round(lerp(83,84,pr(lt,14.6,0.9)))}
+function sc4(lt){var s=lerp(83,84,pr(lt,0.8,0.9));setGauge('d4',s);var pl=$('d4plus'),a=pe(lt,0.8,0.4)*(1-pe(lt,2.6,0.4));pl.style.opacity=a;pl.style.transform='translateY('+(-12*pe(lt,0.8,1.6))+'px)';
+setChart('d4',pr(lt,6.4,1.4));$('d4sc').style.transform='translateY('+(-(420*pr(lt,5.6,0.9)+420*pr(lt,11.5,0.9)+300*pr(lt,14.6,0.9)))+'px)'}
+function sc5(lt){var cols=['#CD7F32','#C0C7D1','#FFC400','#F2F6FF'];for(var i=0;i<4;i++){var c=$('d5ch'+i);var cur=(i===2);c.style.borderColor=cur?cols[i]:'rgba(255,255,255,.16)';c.style.color=cur?cols[i]:'rgba(255,255,255,.6)';c.style.background=cur?'rgba(255,255,255,.1)':'transparent';c.style.opacity=pe(lt,0.2,0.5)}
+var o=$('d5offer'),op=pe(lt,0.3,0.6);o.style.opacity=op;o.style.transform='translateY('+((1-op)*30)+'px)';var lk=$('d5lock'),lp=pe(lt,0.45,0.6);lk.style.opacity=lp;lk.style.transform='translateY('+((1-lp)*30)+'px)';$('d5pb').style.width=(40*pr(lt,1.2,1.2))+'%'}
+function sc6(lt){var sc=[92,84,81,74];for(var i=0;i<4;i++){var el=$('d6r'+i),p=pe(lt,0.2+i*0.12,0.55);el.style.opacity=p;el.style.transform='translateX('+((1-p)*40)+'px)';$('d6v'+i).textContent=Math.round(sc[i]*pr(lt,0.4+i*0.12,1.2))}
+var g=$('d6goal'),gp=pe(lt,0.8,0.55);g.style.opacity=gp;g.style.transform='translateY('+((1-gp)*24)+'px)'}
+function sc7(lt){for(var j=0;j<4;j++){var r=$('d7r'+j),q=pe(lt,0.2+j*0.12,0.55);r.style.opacity=q;r.style.transform='translateX('+((1-q)*40)+'px)'}}
+function sc8(lt){setGauge('c8',84);setChart('c8',1)}
+
+var TOTAL=150;
+var SC=[
+{id:'s0',start:0,dur:12,name:'Intro',px:1320,txt:t0,scr:sc0},
+{id:'s1',start:12,dur:20,name:'Problem',px:1980,txt:t1},
+{id:'s2',start:32,dur:20,name:'Drive',px:1320,txt:function(lt){ch('s2',lt,[2,6,11],{})},scr:sc2},
+{id:'s3',start:52,dur:18,name:'Score',px:230,txt:function(lt){ch('s3',lt,[1.5,6,11],{})},scr:sc3},
+{id:'s4',start:70,dur:18,name:'Curbside Score',px:1320,txt:function(lt){ch('s4',lt,[1.5,6,11.5],{})},scr:sc4},
+{id:'s5',start:88,dur:18,name:'Rewards',px:230,txt:function(lt){ch('s5',lt,[1.5,6.5,11.5],{})},scr:sc5},
+{id:'s6',start:106,dur:14,name:'Family',px:1320,txt:function(lt){ch('s6',lt,[1.0,5.5,9.5],{})},scr:sc6},
+{id:'s7',start:120,dur:18,name:'Under the hood',px:230,txt:t7,scr:sc7},
+{id:'s8',start:138,dur:12,name:'Close',px:1320,txt:function(lt){ch('s8',lt,[2.0,3.6,5.2],{all:true})},scr:sc8}];
+var FOOT=['HACKLANTA','01 / 07','02 / 07','03 / 07','04 / 07','05 / 07','06 / 07','07 / 07','HACKLANTA \u00b7 SOCIAL GOOD \u00b7 COX AUTOMOTIVE'];
+var CAPS=[[0,0.5,5.5,"You drive carefully every day, and nobody rewards you for it."],[0,6,11.5,"Meet Curbside, the app that rewards new drivers for every smooth trip."],
+[1,0.4,5.5,"New drivers face the highest crash risk, and their families pay for it."],[1,6,11.5,"Having a teen on the policy adds about $3,700 a year."],[1,12,19.5,"Insurers reward safe driving, but at renewal, on the parent's bill. The teen gets nothing today."],
+[2,0.4,5,"Curbside starts on its own the moment you drive."],[2,5.5,10.8,"Just drive. The screen stays minimal, with no live ranking to distract you."],[2,11.2,19.5,"Sensors catch hard braking, harsh launches, and sharp turns. GPS confirms each one."],
+[3,0.4,5.5,"When the trip ends, you get a score out of 100."],[3,6,10.5,"And a map of exactly where points were lost."],[3,11,17.5,"Then one thing to change next time. Clear feedback, not guesswork."],
+[4,0.4,5.5,"Every trip builds your Curbside Score."],[4,6,11,"Smooth driving moves you up through Bronze, Silver, Gold, and Platinum."],[4,11.5,17.5,"And your trends show whether hard braking is going down."],
+[5,0.4,6,"Higher tiers unlock real rewards, right now."],[5,6.5,11,"Discounts at places teens already spend money."],[5,11.5,17.5,"Safe driving finally pays off today, not at renewal."],
+[6,0.4,5,"A family leaderboard puts everyone on the board, parents included."],[6,5.5,9,"It is shared motivation, not surveillance."],[6,9.5,13.5,"No location history is ever shared."],
+[7,0.4,4.5,"Under the hood, Curbside is a native SwiftUI app."],[7,5,10.5,"A hard brake only counts when the accelerometer and GPS agree."],[7,11,17.5,"Scoring runs on the phone, and only the score syncs to power rewards and the leaderboard."],
+[8,0.4,9,"Safer teens. Rewards today. Peace of mind for parents."],[8,9.3,11.7,"Curbside. Drive well. Get rewarded."]];
+
+var t=0,playing=true,last=performance.now(),capsOn=true,capEl=$('cap'),LEAD=0.2;
+function fmtT(x){var m=Math.floor(x/60),s=Math.floor(x%60);return m+':'+(s<10?'0':'')+s}
+function render(){
+for(var i=0;i<SC.length;i++){var s=SC[i],el=$(s.id),lt=t-s.start,end=s.dur;
+if(lt>=-LEAD&&lt<end){el.style.display='block';var ex=pr(lt,end-0.38,0.34);el.style.opacity=1-ex;el.style.transform='translateY('+(-24*ex)+'px)';s.txt(lt)}else{el.style.display='none'}}
+var x=1980+(SC[0].px-1980)*pr(t,0,0.9);for(var k=1;k<SC.length;k++){x+=(SC[k].px-SC[k-1].px)*pr(t,SC[k].start-0.45,0.9)}
+$('gph').style.left=x+'px';
+for(var j=0;j<SC.length;j++){var sj=SC[j];if(!sj.scr)continue;var L=$('L'+j),lt2=t-sj.start;var op=pr(t,sj.start-0.4,0.4)*(1-pr(t,sj.start+sj.dur,0.4));
+if(op>0.001){L.style.display='block';L.style.opacity=op;sj.scr(lt2)}else{L.style.display='none'}}
+var fi=0;for(var m=0;m<SC.length;m++){if(t>=SC[m].start)fi=m}
+var bd=Math.abs(t-SC[fi].start);var fo=(fi===0)?1:Math.min(1,bd/0.2);$('gfr').textContent=FOOT[fi];$('gfr').style.opacity=fo;
+$('gprog').style.width=(1680*clamp(t/TOTAL))+'px';
+var cap=null;for(var q=0;q<CAPS.length;q++){var c=CAPS[q],st=SC[c[0]].start;if(t>=st+c[1]&&t<st+c[2]){cap=c;break}}
+if(cap){capEl.textContent=cap[3];capEl.style.opacity=Math.min(1,(t-SC[cap[0]].start-cap[1])/0.25,(SC[cap[0]].start+cap[2]-t)/0.25)}else{capEl.style.opacity=0}
+$('scrub').value=Math.round(t*10);$('time').textContent=fmtT(t)+' / '+fmtT(TOTAL)}
+function tick(now){var dt=(now-last)/1000;last=now;if(playing){t+=Math.min(dt,0.1);if(t>=TOTAL){t=TOTAL-0.01;playing=false;$('play').textContent='Replay'}}render();requestAnimationFrame(tick)}
+$('play').onclick=function(){if(t>=TOTAL-0.05){t=0}playing=!playing;$('play').textContent=playing?'Pause':'Play'};
+$('restart').onclick=function(){t=0;playing=true;$('play').textContent='Pause'};
+$('scrub').oninput=function(){t=clamp(this.value/10,0,TOTAL-0.01);render()};
+$('capBtn').onclick=function(){capsOn=!capsOn;$('wrap').classList.toggle('nocap',!capsOn);$('capBtn').textContent=capsOn?'Captions on':'Captions off'};
+$('fs').onclick=function(){var w=$('wrap');try{if(document.fullscreenElement){document.exitFullscreen()}else if(w.requestFullscreen){w.requestFullscreen()}}catch(e){}};
+SC.forEach(function(s){var b=document.createElement('button');b.textContent=s.name;b.style.cssText='font:600 13px Inter,system-ui,sans-serif;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer';b.onclick=function(){t=s.start+0.01;render()};$('chips').appendChild(b)});
+function fit(){var w=$('wrap');var W=w.clientWidth,H=w.clientHeight;var s=Math.min(W/1920,H/1080);$('stage').style.transform='translate('+((W-1920*s)/2)+'px,'+((H-1080*s)/2)+'px) scale('+s+')'}
+if(window.ResizeObserver){new ResizeObserver(fit).observe($('wrap'))}window.addEventListener('resize',fit);document.addEventListener('fullscreenchange',fit);
+fit();requestAnimationFrame(function(n){last=n;tick(n)});
+})();
+</script>
+</body>
+</html>

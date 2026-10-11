@@ -67,6 +67,7 @@ struct DriveHistoryView: View {
                 ContentUnavailableView("No matching drives", systemImage: "line.3.horizontal.decrease.circle")
             }
         }
+        .glassList()
         .navigationTitle("History")
         .navigationDestination(for: Drive.self) { DriveSummaryView(drive: $0) }
     }

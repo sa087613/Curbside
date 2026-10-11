@@ -37,7 +37,7 @@ struct CelebrationView: View {
                     Button(action: onSeeRewards) {
                         Text("See rewards").font(.headline).frame(maxWidth: .infinity, minHeight: 44)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
                     Button("Nice!", action: onDismiss)
                         .frame(maxWidth: .infinity, minHeight: 36)
                 }
@@ -45,7 +45,8 @@ struct CelebrationView: View {
             }
             .padding(24)
             .frame(maxWidth: 360)
-            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 28))
+            .background(DS.Palette.backgroundMid, in: RoundedRectangle(cornerRadius: DS.Radius.card))
+            .glassCard(padding: nil)
             .shadow(radius: 20)
             .padding(24)
             .scaleEffect(appeared || reduceMotion ? 1 : 0.85)
@@ -68,7 +69,7 @@ struct CelebrationView: View {
 
     private var accent: Color {
         switch celebration {
-        case .reward: Color("AccentColor")
+        case .reward: DS.Palette.accent
         case .tier(let tier, _): tier.color
         }
     }
@@ -96,7 +97,8 @@ private struct ConfettiView: View {
         var x: Double, delay: Double, speed: Double, spin: Double, size: Double, hue: Int, sway: Double
     }
 
-    private let colors: [Color] = [Color("AccentColor"), .orange, .yellow, .pink, .blue, .green]
+    private let colors: [Color] = [DS.Palette.accent, DS.Palette.coral, DS.Palette.good, DS.Palette.ice,
+                                   DS.tierColor(.platinum), DS.Palette.severityModerate]
     private let pieces: [Piece] = (0..<70).map { i in
         var rng = SystemRandomNumberGenerator()
         return Piece(x: Double.random(in: 0...1, using: &rng), delay: Double.random(in: 0...0.8, using: &rng),

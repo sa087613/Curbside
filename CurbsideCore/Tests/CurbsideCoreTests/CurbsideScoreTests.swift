@@ -22,8 +22,8 @@ struct CurbsideScoreTests {
 
     @Test func brandNewDriverStartsInTheMiddle() {
         let r = report([])
-        #expect(r.score == 660)
-        #expect(r.tier == .fair)
+        #expect(r.score == 65)
+        #expect(r.tier == .silver)
         #expect(r.history.isEmpty)
         #expect(r.trend.direction == .flat)
         #expect(r.factors.isEmpty)
@@ -32,18 +32,20 @@ struct CurbsideScoreTests {
     @Test func firstDriveMovesTheScoreOnlyALittle() {
         let perfect = report(drives([100]))
         let bad = report(drives([40]))
-        #expect(perfect.score > 660 && perfect.score - 660 < 25)
-        // New drivers have less history to cushion a bad drive than settled drivers (~25 points).
-        #expect(bad.score < 660 && 660 - bad.score < 50)
+        #expect(perfect.score > 65 && perfect.score - 65 <= 5)
+        // New drivers have less history to cushion a bad drive than settled drivers (~6 points).
+        #expect(bad.score < 65 && 65 - bad.score <= 11)
+        // One rough first drive doesn't drop a new driver to Bronze… by much.
+        #expect(bad.score >= 50)
         // The starting point is what's holding a perfect new driver back.
         #expect(perfect.factors.contains { $0.kind == .experience && $0.impact < 0 })
     }
 
-    @Test func newDriverCannotReachExcellentQuickly() {
+    @Test func newDriverCannotReachPlatinumQuickly() {
         let afterFive = report(drives(Array(repeating: 100, count: 5)))
         let afterTwenty = report(drives(Array(repeating: 100, count: 20)))
-        #expect(afterFive.tier < .great)
-        #expect(afterTwenty.tier == .excellent)
+        #expect(afterFive.tier < .gold)
+        #expect(afterTwenty.tier == .platinum)
     }
 
     // MARK: Steady good driving
@@ -52,13 +54,13 @@ struct CurbsideScoreTests {
         let scores = (0..<40).map { 93 + Double($0 % 3) } // 93, 94, 95, …
         let r = report(drives(scores))
         let values = r.history.map(\.score)
-        // Never jumps more than 15 points after any single drive.
-        #expect(zip([660] + values, values).allSatisfy { abs($1 - $0) <= 15 })
-        // Climbs over time and ends in Great.
+        // Never jumps more than 3 points after any single drive.
+        #expect(zip([65] + values, values).allSatisfy { abs($1 - $0) <= 3 })
+        // Climbs over time and ends in Gold.
         #expect(values[4] < values[19] && values[19] <= values[39])
-        #expect(values[4] < 740)
-        #expect(r.tier == .great)
-        #expect(r.score >= 770 && r.score <= 800)
+        #expect(values[4] < 80)
+        #expect(r.tier == .gold)
+        #expect(r.score >= 84 && r.score <= 89)
     }
 
     // MARK: One bad drive vs a bad streak
@@ -71,12 +73,12 @@ struct CurbsideScoreTests {
         withBad += drives([40], from: withBad.last!.date.addingTimeInterval(43_200))
         let after = report(withBad).score
         let drop = before - after
-        #expect(drop >= 10 && drop <= 40)
-        #expect(CurbsideTier.tier(for: after) >= .good)
+        #expect(drop >= 2 && drop <= 8)
+        #expect(CurbsideTier.tier(for: after) >= .gold)
 
         // Good driving afterwards earns it back.
         withBad += drives(Array(repeating: 95, count: 15), from: withBad.last!.date.addingTimeInterval(43_200))
-        #expect(before - report(withBad).score <= 12)
+        #expect(before - report(withBad).score <= 2)
     }
 
     @Test func badStreakDropsMuchMore() {
@@ -85,7 +87,7 @@ struct CurbsideScoreTests {
         let single = before - report(settled + drives([40], from: next)).score
         let streak = before - report(settled + drives(Array(repeating: 40, count: 5), from: next)).score
         #expect(streak >= 3 * single)
-        #expect(streak >= 80)
+        #expect(streak >= 15)
     }
 
     @Test func longBadDriveCountsMoreThanShortErrand() {
@@ -144,26 +146,57 @@ struct CurbsideScoreTests {
     // MARK: Scale and tiers
 
     @Test func scaleHitsAnchorsAndClamps() {
-        #expect(CurbsideScale.score(forAverage: 0) == 300)
-        #expect(CurbsideScale.score(forAverage: 40) == 300)
-        #expect(CurbsideScale.score(forAverage: 70) == 580)
-        #expect(CurbsideScale.score(forAverage: 80) == 660)
-        #expect(CurbsideScale.score(forAverage: 95) == 800)
-        #expect(CurbsideScale.score(forAverage: 100) == 850)
+        #expect(CurbsideScale.score(forAverage: 0) == 0)
+        #expect(CurbsideScale.score(forAverage: 50) == 0)
+        #expect(CurbsideScale.score(forAverage: 80) == 65)
+        #expect(CurbsideScale.score(forAverage: 90) == 80)
+        #expect(CurbsideScale.score(forAverage: 95) == 90)
+        #expect(CurbsideScale.score(forAverage: 100) == 100)
         let samples = stride(from: 0.0, through: 100, by: 0.5).map { CurbsideScale.score(forAverage: $0) }
         #expect(zip(samples, samples.dropFirst()).allSatisfy { $0 <= $1 })
     }
 
     @Test func tiersCoverTheWholeRange() {
-        #expect(CurbsideTier.tier(for: 300) == .needsWork)
-        #expect(CurbsideTier.tier(for: 579) == .needsWork)
-        #expect(CurbsideTier.tier(for: 580) == .fair)
-        #expect(CurbsideTier.tier(for: 670) == .good)
-        #expect(CurbsideTier.tier(for: 740) == .great)
-        #expect(CurbsideTier.tier(for: 800) == .excellent)
-        #expect(CurbsideTier.tier(for: 850) == .excellent)
+        #expect(CurbsideTier.tier(for: 0) == .bronze)
+        #expect(CurbsideTier.tier(for: 59) == .bronze)
+        #expect(CurbsideTier.tier(for: 60) == .silver)
+        #expect(CurbsideTier.tier(for: 79) == .silver)
+        #expect(CurbsideTier.tier(for: 80) == .gold)
+        #expect(CurbsideTier.tier(for: 89) == .gold)
+        #expect(CurbsideTier.tier(for: 90) == .platinum)
+        #expect(CurbsideTier.tier(for: 100) == .platinum)
         let covered = CurbsideTier.allCases.map { $0.range().count }.reduce(0, +)
-        #expect(covered == 551)
+        #expect(covered == 101)
+    }
+
+    /// The mapping table agreed on for the redesign (average drive score → Curbside Score).
+    @Test func mappingTable() {
+        let table: [(Double, Int, CurbsideTier)] = [
+            (50, 0, .bronze), (70, 43, .bronze), (77.7, 60, .silver), (80, 65, .silver), (85, 73, .silver),
+            (90, 80, .gold), (92, 84, .gold), (95, 90, .platinum), (98, 96, .platinum), (100, 100, .platinum),
+        ]
+        for (average, score, tier) in table {
+            let s = Int(CurbsideScale.score(forAverage: average).rounded())
+            #expect(s == score, "average \(average)")
+            #expect(CurbsideTier.tier(for: s) == tier, "average \(average)")
+        }
+    }
+
+    @Test func legacyScoresConvert() {
+        #expect(CurbsideScale.fromLegacy(660) == 65)
+        #expect(CurbsideScale.fromLegacy(750) == 80)
+        #expect(CurbsideScale.fromLegacy(800) == 90)
+        #expect(CurbsideScale.fromLegacy(850) == 100)
+        #expect(CurbsideScale.fromLegacy(300) == 0)
+        #expect(CurbsideScale.fromLegacy(84) == 84) // already new
+    }
+
+    @Test func legacyRewardGoalsConvertWhenDecoded() throws {
+        let json = #"{"kind":"hold","minScore":750,"weeks":4}"#.data(using: .utf8)!
+        let goal = try JSONDecoder().decode(RewardGoal.self, from: json)
+        #expect(goal == .hold(80, weeks: 4))
+        let fresh = try JSONDecoder().decode(RewardGoal.self, from: JSONEncoder().encode(RewardGoal.reach(85)))
+        #expect(fresh == .reach(85))
     }
 
     @Test func orderOfInputDoesNotMatter() {

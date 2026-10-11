@@ -13,6 +13,16 @@ public struct RewardGoal: Codable, Sendable, Equatable {
     public var minScore: Int
     public var weeks: Int?
 
+    private enum CodingKeys: String, CodingKey { case kind, minScore, weeks }
+
+    /// Goals saved before the 0–100 rescale (e.g. 750) are converted when read.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        kind = try c.decode(Kind.self, forKey: .kind)
+        minScore = CurbsideScale.fromLegacy(try c.decode(Int.self, forKey: .minScore))
+        weeks = try c.decodeIfPresent(Int.self, forKey: .weeks)
+    }
+
     public init(kind: Kind, minScore: Int, weeks: Int? = nil) {
         self.kind = kind
         self.minScore = minScore
@@ -24,7 +34,7 @@ public struct RewardGoal: Codable, Sendable, Equatable {
 
     var holdDuration: TimeInterval { Double(weeks ?? 0) * 7 * 86_400 }
 
-    /// "Hold 750+ for 4 weeks" / "Reach 750+"
+    /// "Hold 80+ for 4 weeks" / "Reach 80+"
     public var summary: String {
         switch kind {
         case .reach: "Reach \(minScore)+"
@@ -72,6 +82,17 @@ public struct RewardProgress: Codable, Sendable, Equatable {
     /// Set once the goal is met; never cleared.
     public var earnedAt: Date?
     public var updatedAt: Date
+
+    private enum CodingKeys: String, CodingKey { case currentScore, streakStart, earnedAt, updatedAt }
+
+    /// Progress published before the 0–100 rescale is converted when read.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        currentScore = CurbsideScale.fromLegacy(try c.decode(Int.self, forKey: .currentScore))
+        streakStart = try c.decodeIfPresent(Date.self, forKey: .streakStart)
+        earnedAt = try c.decodeIfPresent(Date.self, forKey: .earnedAt)
+        updatedAt = try c.decode(Date.self, forKey: .updatedAt)
+    }
 
     public init(currentScore: Int, streakStart: Date?, earnedAt: Date?, updatedAt: Date) {
         self.currentScore = currentScore
@@ -220,7 +241,7 @@ public enum TierUnlock {
     public static func newlyReachedTier(history: [CurbsideScorePoint], startingScore: Int) -> CurbsideTier? {
         guard let latest = history.last else { return nil }
         let earlier = [startingScore] + history.dropLast().map(\.score)
-        let best = earlier.map { CurbsideTier.tier(for: $0) }.max() ?? .needsWork
+        let best = earlier.map { CurbsideTier.tier(for: $0) }.max() ?? .bronze
         let now = CurbsideTier.tier(for: latest.score)
         return now > best ? now : nil
     }

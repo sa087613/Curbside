@@ -12,7 +12,7 @@ struct RootView: View {
     @State private var tab: AppTab = .home
     @State private var homePath: [Drive] = []
 
-    enum AppTab: Hashable {
+    enum AppTab: Hashable, CaseIterable {
         case home, trends, history, family, rewards
     }
 
@@ -21,30 +21,34 @@ struct RootView: View {
             NavigationStack(path: $homePath) {
                 HomeView(showTrends: { tab = .trends }, showHistory: { tab = .history })
             }
-            .tabItem { Label("Drive", systemImage: "car.fill") }
+            .floatingTabContent()
             .tag(AppTab.home)
 
             NavigationStack {
                 TrendsView()
             }
-            .tabItem { Label("Trends", systemImage: "chart.line.uptrend.xyaxis") }
+            .floatingTabContent()
             .tag(AppTab.trends)
 
             NavigationStack {
                 DriveHistoryView()
             }
-            .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
+            .floatingTabContent()
             .tag(AppTab.history)
 
             FamilyTabView()
-                .tabItem { Label("Family", systemImage: "person.3.fill") }
+                .floatingTabContent()
                 .tag(AppTab.family)
 
             NavigationStack {
                 RewardsView(showFamily: { tab = .family })
             }
-            .tabItem { Label("Rewards", systemImage: "gift.fill") }
+            .floatingTabContent()
             .tag(AppTab.rewards)
+        }
+        .overlay(alignment: .bottom) {
+            FloatingTabBar(selection: $tab)
+                .padding(.bottom, 2)
         }
         // Post-drive celebrations, shown over everything once the drive has ended.
         .overlay {
@@ -60,6 +64,8 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: rewards.current)
+        .tint(DS.Palette.accent)
+        .preferredColorScheme(.dark)
         .onChange(of: recorder.phase) { _, phase in
             if phase == .idle { rewards.showNextSoon() }
         }

@@ -14,53 +14,60 @@ struct HomeView: View {
 
     var body: some View {
         let report = CurbsideScoreReport.from(drives)
-        List {
-            Section {
+        ScrollView {
+            VStack(spacing: DS.Spacing.stack) {
                 Button(action: showTrends) {
                     CurbsideScoreCard(report: report)
+                        .glassCard()
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint("Shows score trends")
-            }
 
-            Section {
                 Button {
                     Task { await recorder.start() }
                 } label: {
                     Label("Start Drive", systemImage: "car.fill")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.primary)
                 .disabled(recorder.phase != .idle)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            }
 
-            Section("What's moving your score") {
-                FactorList(report: report)
-            }
+                SectionHeading("What's moving your score")
+                VStack(alignment: .leading, spacing: 14) {
+                    FactorList(report: report)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .glassCard()
 
-            Section {
+                SectionHeading("Recent drives")
                 if drives.isEmpty {
                     Text("Your recorded drives will show up here.")
-                        .foregroundStyle(.secondary)
+                        .font(DS.Typeface.body)
+                        .foregroundStyle(DS.Palette.muted)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .glassCard()
                 }
                 ForEach(drives.prefix(recentCount)) { drive in
                     NavigationLink(value: drive) {
                         DriveRow(drive: drive)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .glassCard(radius: DS.Radius.row, padding: 14)
                     }
-                }
-                .onDelete { offsets in
-                    offsets.map { drives[$0] }.forEach { $0.deleteWithLog(in: context) }
+                    .buttonStyle(.plain)
+                    .contextMenu {
+                        Button("Delete drive", systemImage: "trash", role: .destructive) {
+                            drive.deleteWithLog(in: context)
+                        }
+                    }
                 }
                 if drives.count > recentCount {
                     Button("See all \(drives.count) drives", action: showHistory)
+                        .buttonStyle(.glass)
                 }
-            } header: {
-                Text("Recent drives")
             }
+            .padding(.horizontal, DS.Spacing.gutter)
+            .padding(.bottom, DS.Spacing.stack)
         }
+        .screenBackground()
         .navigationTitle("Curbside")
         .navigationDestination(for: Drive.self) { DriveSummaryView(drive: $0) }
     }
@@ -83,9 +90,9 @@ struct DriveRow: View {
         let score = drive.score?.rounded
         HStack(spacing: 14) {
             Text(score.map(String.init) ?? "—")
-                .font(.headline.weight(.bold))
+                .font(DS.Typeface.number(18))
                 .monospacedDigit()
-                .foregroundStyle(score == nil ? Color.secondary : Color.white)
+                .foregroundStyle(score == nil ? DS.Palette.muted : DS.Palette.onAccent)
                 .frame(width: 44, height: 44)
                 .background(score == nil ? Color.secondary.opacity(0.15) : ScoreStyle.color(score), in: Circle())
                 .accessibilityLabel(score.map { "Score \($0)" } ?? "Not scored")
@@ -103,7 +110,7 @@ struct DriveRow: View {
                                 Image(systemName: kind.symbol)
                                 Text("\(count)").monospacedDigit()
                             }
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(DS.Palette.severityModerate)
                             .fixedSize()
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel("\(count) \(kind.noun(count: count))")

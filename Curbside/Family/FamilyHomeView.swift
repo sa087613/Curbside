@@ -66,7 +66,7 @@ struct FamilyHomeView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle("Family")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -102,7 +102,7 @@ private struct NotSharingBanner: View {
             Button("Review", action: review).buttonStyle(.bordered)
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+        .glassCard(radius: DS.Radius.row, padding: nil)
     }
 }
 
@@ -175,11 +175,11 @@ private struct TreeNode: View {
         VStack(spacing: 4) {
             ZStack(alignment: .top) {
                 Avatar(name: m.displayName, tier: m.standing?.tier, size: 52)
-                    .overlay(Circle().stroke(m.isMe ? Color("AccentColor") : .clear, lineWidth: 3))
+                    .overlay(Circle().stroke(m.isMe ? DS.Palette.accent : .clear, lineWidth: 3))
                 if entry.rank == 1 {
                     Image(systemName: "crown.fill")
                         .font(.caption)
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(DS.Palette.accent)
                         .shadow(radius: 1)
                         .offset(y: -12)
                         .accessibilityLabel("Leader")
@@ -253,8 +253,8 @@ struct TrendArrow: View {
 
     var body: some View {
         switch ScoreTrend(delta: delta).direction {
-        case .up: Image(systemName: "arrow.up.right").foregroundStyle(.green).accessibilityLabel("up \(delta)")
-        case .down: Image(systemName: "arrow.down.right").foregroundStyle(.red).accessibilityLabel("down \(-delta)")
+        case .up: Image(systemName: "arrow.up.right").foregroundStyle(DS.Palette.good).accessibilityLabel("up \(delta)")
+        case .down: Image(systemName: "arrow.down.right").foregroundStyle(DS.Palette.coral).accessibilityLabel("down \(-delta)")
         case .flat: Image(systemName: "arrow.right").foregroundStyle(.secondary).accessibilityLabel("steady")
         }
     }
@@ -292,7 +292,7 @@ private struct InviteSheet: View {
                         Label("Send code", systemImage: "square.and.arrow.up")
                             .frame(maxWidth: .infinity, minHeight: 44)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
                 } else {
                     ProgressView()
                 }

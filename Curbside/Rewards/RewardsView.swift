@@ -24,7 +24,7 @@ struct RewardsView: View {
                 } else {
                     Card {
                         HStack(spacing: 14) {
-                            Image(systemName: "gift").font(.title2).foregroundStyle(Color("AccentColor"))
+                            Image(systemName: "gift").font(.title2).foregroundStyle(DS.Palette.accent)
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Rewards from your family").font(.headline)
                                 Text("Join or create a family and parents can set rewards for hitting score goals.")
@@ -38,7 +38,7 @@ struct RewardsView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle("Rewards")
         .toolbar {
             if family.family != nil && family.isParent {
@@ -73,9 +73,9 @@ private struct ParentRewardsSection: View {
             } else if family.rewards.isEmpty {
                 Card {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Reward safe driving with something they care about, like \"Hold 750+ for 4 weeks → $20\".")
+                        Text("Reward safe driving with something they care about, like \"Hold 80+ for 4 weeks → $20\".")
                             .font(.subheadline).foregroundStyle(.secondary)
-                        Button("Set a reward", action: showNew).buttonStyle(.borderedProminent)
+                        Button("Set a reward", action: showNew).buttonStyle(.primary)
                     }
                 }
             }
@@ -145,8 +145,7 @@ struct RewardCard: View {
                     Spacer()
                     StatusBadge(status: status)
                 }
-                ProgressView(value: shown.fraction())
-                    .tint(statusColor(status))
+                GlassProgressBar(value: shown.fraction(), color: statusColor(status))
                     .accessibilityLabel("Progress")
                     .accessibilityValue(shown.progressDescription())
                 Text(shown.progressDescription())
@@ -156,7 +155,7 @@ struct RewardCard: View {
                     HStack {
                         if case .earned = status {
                             Button("Mark as given") { Task { await family.markGiven(reward) } }
-                                .buttonStyle(.borderedProminent)
+                                .buttonStyle(.primary)
                         }
                         if case .given = status {
                             Button("Undo given") { Task { await family.markGiven(reward, given: false) } }
@@ -184,8 +183,8 @@ struct RewardCard: View {
 
     private func statusColor(_ status: ParentReward.Status) -> Color {
         switch status {
-        case .earned, .given: .green
-        default: Color("AccentColor")
+        case .earned, .given: DS.Palette.good
+        default: DS.Palette.accent
         }
     }
 }
@@ -196,8 +195,8 @@ private struct StatusBadge: View {
     var body: some View {
         let (text, symbol, color): (String, String, Color) = switch status {
         case .waitingForProgress: ("Waiting", "hourglass", .secondary)
-        case .inProgress: ("In progress", "figure.walk.motion", Color("AccentColor"))
-        case .earned: ("Earned", "checkmark.seal.fill", .green)
+        case .inProgress: ("In progress", "figure.walk.motion", DS.Palette.accent)
+        case .earned: ("Earned", "checkmark.seal.fill", DS.Palette.good)
         case .given: ("Given", "gift.fill", .secondary)
         }
         Label(text, systemImage: symbol)
@@ -218,7 +217,7 @@ struct NewRewardSheet: View {
 
     @State private var teenID: String?
     @State private var goalKind: RewardGoal.Kind = .hold
-    @State private var score = 750
+    @State private var score = 80
     @State private var weeks = 4
     @State private var prizeKind: RewardPrize.Kind = .money
     @State private var dollars = 20
@@ -261,7 +260,7 @@ struct NewRewardSheet: View {
                         LabeledContent("Curbside Score", value: "\(score)+")
                     }
                     HStack {
-                        ForEach([CurbsideTier.good, .great, .excellent], id: \.self) { tier in
+                        ForEach([CurbsideTier.silver, .gold, .platinum], id: \.self) { tier in
                             Button(tier.displayName) { score = tier.range().lowerBound }
                                 .buttonStyle(.bordered)
                                 .tint(score == tier.range().lowerBound ? tier.color : .secondary)
@@ -316,6 +315,7 @@ struct NewRewardSheet: View {
                     }
                 }
             }
+            .glassList()
             .navigationTitle("New reward")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

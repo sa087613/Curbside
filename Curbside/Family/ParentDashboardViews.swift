@@ -132,7 +132,7 @@ struct TeenDetailView: View {
                     let theirs = store.rewards.filter { $0.teenID == m.id }
                     if theirs.isEmpty {
                         Card {
-                            Text("Set a goal like \"Hold 750+ for 4 weeks\" with a reward \(m.displayName) cares about.")
+                            Text("Set a goal like \"Hold 80+ for 4 weeks\" with a reward \(m.displayName) cares about.")
                                 .font(.subheadline).foregroundStyle(.secondary)
                         }
                     }
@@ -178,7 +178,7 @@ struct TeenDetailView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle(m.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .task(id: m.sharing) { drives = m.sharing ? await store.drives(of: m) : [] }
@@ -221,7 +221,7 @@ struct SharedDriveMap: View {
         Map(initialPosition: .automatic) {
             if drive.route.count > 1 {
                 MapPolyline(coordinates: drive.route.map { CLLocationCoordinate2D(latitude: $0.lat, longitude: $0.lon) })
-                    .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                    .stroke(DS.Palette.accent, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
             }
             ForEach(Array(drive.events.enumerated()), id: \.offset) { _, event in
                 if let lat = event.lat, let lon = event.lon {
@@ -286,7 +286,7 @@ struct SharedDriveView: View {
             }
             .padding(16)
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle("\(memberName)'s drive")
         .navigationBarTitleDisplayMode(.inline)
     }

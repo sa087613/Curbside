@@ -84,7 +84,7 @@ struct DriveSummaryView: View {
                                     }
                                     .buttonStyle(.plain)
                                     .padding(8)
-                                    .background(selectedEventID == event.id ? Color.accentColor.opacity(0.12) : .clear,
+                                    .background(selectedEventID == event.id ? DS.Palette.accent.opacity(0.12) : .clear,
                                                 in: RoundedRectangle(cornerRadius: 8))
                                 }
                             }
@@ -107,7 +107,7 @@ struct DriveSummaryView: View {
                 withAnimation { scroll.scrollTo("map", anchor: .top) }
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .screenBackground()
         .navigationTitle(drive.startDate.formatted(.dateTime.weekday(.abbreviated).month().day().hour().minute()))
         .navigationBarTitleDisplayMode(.inline)
         .task {
@@ -211,7 +211,7 @@ private struct HabitCard: View {
                 if let habit = score?.habitToFix {
                     Image(systemName: habit.kind.symbol)
                         .font(.title2)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(DS.Palette.severityModerate)
                         .frame(width: 32)
                     VStack(alignment: .leading, spacing: 6) {
                         Text("The one habit to fix")
@@ -227,7 +227,7 @@ private struct HabitCard: View {
                 } else {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.title2)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(DS.Palette.good)
                         .frame(width: 32)
                     VStack(alignment: .leading, spacing: 6) {
                         Text(score == nil ? "Too short to score" : "Nothing to fix")
@@ -259,12 +259,12 @@ private struct DriveMap: View {
         Map(position: $position, interactionModes: [.pan, .zoom]) {
             if route.count > 1 {
                 MapPolyline(coordinates: route.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
-                    // Map content doesn't resolve Color.accentColor to the app's accent; use the asset.
-                    .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    // Map content doesn't resolve DS.Palette.accent to the app's accent; use the asset.
+                    .stroke(DS.Palette.accent, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
             }
             if let start = route.first {
                 Annotation("Start", coordinate: CLLocationCoordinate2D(latitude: start.latitude, longitude: start.longitude)) {
-                    Circle().fill(.white).stroke(Color("AccentColor"), lineWidth: 4).frame(width: 14, height: 14)
+                    Circle().fill(.white).stroke(DS.Palette.accent, lineWidth: 4).frame(width: 14, height: 14)
                 }
             }
             if let end = route.last, route.count > 1 {
@@ -378,9 +378,9 @@ private struct SpeedChart: View {
             Chart {
                 ForEach(points) { p in
                     AreaMark(x: .value("Minutes", p.minutes), y: .value("mph", p.mph))
-                        .foregroundStyle(Color.accentColor.opacity(0.15).gradient)
+                        .foregroundStyle(DS.Palette.accent.opacity(0.15).gradient)
                     LineMark(x: .value("Minutes", p.minutes), y: .value("mph", p.mph))
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(DS.Palette.accent)
                         .lineStyle(StrokeStyle(lineWidth: 2))
                 }
                 ForEach(events) { event in
@@ -427,8 +427,7 @@ struct Card<Content: View>: View {
     var body: some View {
         // VStack so multi-view content shares one card instead of each child getting its own.
         VStack(alignment: .leading, spacing: 0) { content }
-            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+            .glassCard()
     }
 }

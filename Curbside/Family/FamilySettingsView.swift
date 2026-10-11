@@ -62,6 +62,7 @@ struct FamilySettingsView: View {
                 }
             }
         }
+        .glassList()
         .navigationTitle("Family settings")
         .sheet(isPresented: $showConsent) {
             if let role = store.myRole {
@@ -104,7 +105,7 @@ private struct DeleteAccountSheet: View {
             VStack(spacing: 20) {
                 Image(systemName: "person.crop.circle.badge.xmark")
                     .font(.system(size: 52))
-                    .foregroundStyle(.red)
+                    .foregroundStyle(DS.Palette.coral)
                 Text("Delete your Curbside account?").font(.title3.weight(.bold))
                 Text("This removes your profile, takes you out of your family, and deletes everything you've shared. It can't be undone.\n\nConfirm with Apple to continue.")
                     .multilineTextAlignment(.center)

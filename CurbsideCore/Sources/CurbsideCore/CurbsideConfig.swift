@@ -229,9 +229,9 @@ public struct ReplayConfig: Codable, Sendable, Equatable {
     public static let `default` = ReplayConfig()
 }
 
-// MARK: - Curbside Score (300–850)
+// MARK: - Curbside Score (0–100)
 
-/// The long-term score: a recency-weighted average of drive scores, mapped onto 300–850.
+/// The long-term score: a recency-weighted average of drive scores, mapped onto 0–100.
 ///
 /// - Weight of a drive = `decayPerDrive^k × distance weight`, where k = how many drives ago it was.
 ///   Decay counts drives, not days, so a break from driving never moves the score.
@@ -246,28 +246,31 @@ public struct CurbsideScoreConfig: Codable, Sendable, Equatable {
     /// Bounds on a single drive's distance weight (a 1-mile errand counts 0.4; 10+ miles counts 2).
     public var minDistanceWeight: Double = 0.4
     public var maxDistanceWeight: Double = 2.0
-    /// New-driver starting point: this many virtual drives at this drive score (80 → 660).
+    /// New-driver starting point: this many virtual drives at this drive score (80 → 65, mid-Silver).
     public var priorWeight: Double = 8
     public var priorDriveScore: Double = 80
     /// (average drive score, Curbside Score) points; linear in between, clamped outside.
+    /// These set how hard each tier is: Silver needs an average of ~78, Gold 90, Platinum 95.
     public var scaleAnchors: [ScaleAnchor] = [
-        ScaleAnchor(average: 40, score: 300),
-        ScaleAnchor(average: 70, score: 580),
-        ScaleAnchor(average: 85, score: 700),
-        ScaleAnchor(average: 95, score: 800),
-        ScaleAnchor(average: 100, score: 850),
+        ScaleAnchor(average: 50, score: 0),
+        ScaleAnchor(average: 80, score: 65),
+        ScaleAnchor(average: 90, score: 80),
+        ScaleAnchor(average: 95, score: 90),
+        ScaleAnchor(average: 100, score: 100),
     ]
-    /// Lower bounds of each tier above Needs Work.
-    public var fairFrom = 580
-    public var goodFrom = 670
-    public var greatFrom = 740
-    public var excellentFrom = 800
+    /// Lower bounds of each tier above Bronze.
+    public var silverFrom = 60
+    public var goldFrom = 80
+    public var platinumFrom = 90
     /// Trend arrow compares with the score this many days ago…
     public var trendWindowDays = 7
     /// …and stays flat for changes this small.
-    public var trendDeadband = 3
+    public var trendDeadband = 1
     /// "Momentum" factor: change over this many drives.
     public var momentumDrives = 5
+    /// "What's moving your score" labels a factor High / Medium impact from these many points.
+    public var highImpactFrom = 5
+    public var mediumImpactFrom = 3
 
     public init() {}
 
@@ -311,8 +314,8 @@ public struct FamilyConfig: Codable, Sendable, Equatable {
 
 public struct RewardsConfig: Codable, Sendable, Equatable {
     /// Score choices offered when a parent sets a goal (tier thresholds are suggested first).
-    public var goalScoreRange: ClosedRange<Int> = 600...850
-    public var goalScoreStep = 10
+    public var goalScoreRange: ClosedRange<Int> = 50...100
+    public var goalScoreStep = 1
     /// "Hold for N weeks" choices.
     public var holdWeeksRange: ClosedRange<Int> = 1...12
     /// Money prizes, in whole dollars.

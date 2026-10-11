@@ -17,17 +17,13 @@ struct PartnerCatalogSection: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Your score: \(score)").font(.headline).monospacedDigit()
-                        Text(tier.displayName)
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 8).padding(.vertical, 3)
-                            .background(tier.color.opacity(0.18), in: Capsule())
+                        TierBadge(tier: tier)
                     }
                     if let next = PartnerCatalog.nextUnlock(offers, score: score) {
                         Text("\(next.pointsNeeded) more points to \(next.tier.displayName) unlocks \(next.offers) more.")
                             .font(.subheadline).foregroundStyle(.secondary)
-                        ProgressView(value: Double(score - CurbsideScale.minimum),
-                                     total: Double(next.tier.range().lowerBound - CurbsideScale.minimum))
-                            .tint(next.tier.color)
+                        GlassProgressBar(value: Double(score - CurbsideScale.minimum)
+                                         / Double(next.tier.range().lowerBound - CurbsideScale.minimum))
                     } else if !offers.isEmpty {
                         Text("Everything's unlocked. Keep it up!").font(.subheadline).foregroundStyle(.secondary)
                     }
@@ -86,7 +82,7 @@ private struct OfferRow: View {
             }
         }
         .padding(12)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+        .glassCard(radius: DS.Radius.row, padding: nil)
         .accessibilityElement(children: .combine)
     }
 }
@@ -106,13 +102,7 @@ struct OfferIcon: View {
     }
 
     private var color: Color {
-        switch offer.category {
-        case .food: .orange
-        case .beauty: .pink
-        case .entertainment: .purple
-        case .retail: .blue
-        case .car: .teal
-        }
+        DS.categoryColor(offer.category)
     }
 }
 
@@ -141,7 +131,7 @@ private struct OfferDetailSheet: View {
                         Text(code.code)
                             .font(.system(.title, design: .monospaced).weight(.bold))
                             .padding(.horizontal, 18).padding(.vertical, 10)
-                            .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+                            .glassCard(radius: 12, padding: nil)
                         Text(code.instructions).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
                     }
                 } else if unlocked {
@@ -153,18 +143,18 @@ private struct OfferDetailSheet: View {
                     } label: {
                         Text("Show code").font(.headline).frame(maxWidth: .infinity, minHeight: 44)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
                 } else {
                     Label("Unlocks at \(offer.requiredTier.displayName) (\(offer.requiredTier.range().lowerBound)+). You're at \(score).",
                           systemImage: "lock.fill")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
-                if let error { Text(error).font(.caption).foregroundStyle(.red) }
+                if let error { Text(error).font(.caption).foregroundStyle(DS.Palette.coral) }
                 Text("Sample offer · not a real partnership")
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 8).padding(.vertical, 3)
-                    .background(Color.yellow.opacity(0.25), in: Capsule())
+                    .background(DS.Palette.accent.opacity(0.25), in: Capsule())
                 Spacer()
             }
             .padding(24)

@@ -47,7 +47,7 @@ private struct DemoBanner: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(.yellow.opacity(0.25))
+        .background(DS.Palette.accent.opacity(0.25))
     }
 }
 
@@ -62,7 +62,7 @@ private struct SignInView: View {
             VStack(spacing: 24) {
                 Image(systemName: "figure.2.and.child.holdinghands")
                     .font(.system(size: 64))
-                    .foregroundStyle(Color("AccentColor"))
+                    .foregroundStyle(DS.Palette.accent)
                     .padding(.top, 32)
                 VStack(spacing: 8) {
                     Text("Drive better together").font(.title2.weight(.bold))
@@ -103,6 +103,7 @@ private struct SignInView: View {
             }
             .padding(24)
         }
+        .screenBackground()
         .navigationTitle("Family")
     }
 }
@@ -114,7 +115,7 @@ private struct Bullet: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: symbol)
-                .foregroundStyle(Color("AccentColor"))
+                .foregroundStyle(DS.Palette.accent)
                 .frame(width: 28)
             Text(text)
         }
@@ -142,6 +143,7 @@ private struct NameStepView: View {
             Button("Continue", action: save)
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || store.isWorking)
         }
+        .glassList()
         .navigationTitle("Welcome")
         .onAppear { if name.isEmpty { name = store.suggestedName } }
     }
@@ -192,6 +194,7 @@ private struct FamilySetupView: View {
                 Button("Sign out", role: .destructive) { store.signOut() }
             }
         }
+        .glassList()
         .navigationTitle("Your family")
         .confirmationDialog(
             foundInvite.map { "Join \($0.familyName) as a \($0.role.displayName.lowercased())?" } ?? "",

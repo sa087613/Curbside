@@ -62,6 +62,7 @@ struct DriveDebugView: View {
                 }
             }
         }
+        .glassList()
         .navigationTitle("Debug details")
         .navigationBarTitleDisplayMode(.inline)
     }

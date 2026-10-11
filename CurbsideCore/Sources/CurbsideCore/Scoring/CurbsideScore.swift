@@ -24,46 +24,43 @@ public struct ScoredDrive: Sendable, Equatable {
 }
 
 public enum CurbsideTier: Int, Sendable, CaseIterable, Comparable {
-    case needsWork, fair, good, great, excellent
+    case bronze, silver, gold, platinum
 
     public static func < (a: Self, b: Self) -> Bool { a.rawValue < b.rawValue }
 
     public var displayName: String {
         switch self {
-        case .needsWork: "Needs Work"
-        case .fair: "Fair"
-        case .good: "Good"
-        case .great: "Great"
-        case .excellent: "Excellent"
+        case .bronze: "Bronze"
+        case .silver: "Silver"
+        case .gold: "Gold"
+        case .platinum: "Platinum"
         }
     }
 
     public static func tier(for score: Int, config: CurbsideScoreConfig = .default) -> CurbsideTier {
         switch score {
-        case config.excellentFrom...: .excellent
-        case config.greatFrom...: .great
-        case config.goodFrom...: .good
-        case config.fairFrom...: .fair
-        default: .needsWork
+        case config.platinumFrom...: .platinum
+        case config.goldFrom...: .gold
+        case config.silverFrom...: .silver
+        default: .bronze
         }
     }
 
     /// Score range covered by this tier.
     public func range(config: CurbsideScoreConfig = .default) -> ClosedRange<Int> {
         switch self {
-        case .needsWork: CurbsideScale.minimum...(config.fairFrom - 1)
-        case .fair: config.fairFrom...(config.goodFrom - 1)
-        case .good: config.goodFrom...(config.greatFrom - 1)
-        case .great: config.greatFrom...(config.excellentFrom - 1)
-        case .excellent: config.excellentFrom...CurbsideScale.maximum
+        case .bronze: CurbsideScale.minimum...(config.silverFrom - 1)
+        case .silver: config.silverFrom...(config.goldFrom - 1)
+        case .gold: config.goldFrom...(config.platinumFrom - 1)
+        case .platinum: config.platinumFrom...CurbsideScale.maximum
         }
     }
 }
 
-/// Converts a 0–100 average drive score to 300–850.
+/// Converts a 0–100 average drive score to the 0–100 Curbside Score.
 public enum CurbsideScale {
-    public static let minimum = 300
-    public static let maximum = 850
+    public static let minimum = 0
+    public static let maximum = 100
 
     public static func score(forAverage average: Double, config: CurbsideScoreConfig = .default) -> Double {
         let anchors = config.scaleAnchors.sorted { $0.average < $1.average }
@@ -79,6 +76,34 @@ public enum CurbsideScale {
             value = a.score + (b.score - a.score) * (average - a.average) / (b.average - a.average)
         }
         return min(Double(maximum), max(Double(minimum), value))
+    }
+}
+
+extension CurbsideScale {
+    /// The anchors of the pre-redesign 300–850 scale. Historical, not tunable.
+    static let legacyAnchors: [ScaleAnchor] = [
+        ScaleAnchor(average: 40, score: 300),
+        ScaleAnchor(average: 70, score: 580),
+        ScaleAnchor(average: 85, score: 700),
+        ScaleAnchor(average: 95, score: 800),
+        ScaleAnchor(average: 100, score: 850),
+    ]
+
+    /// Converts a score saved on the old 300–850 scale (e.g. a "750+" reward goal) to 0–100 by going back
+    /// to the average drive score it stood for. Scores already on 0–100 pass through unchanged.
+    public static func fromLegacy(_ score: Int, config: CurbsideScoreConfig = .default) -> Int {
+        guard score > maximum else { return score }
+        let anchors = legacyAnchors
+        let clamped = Double(min(850, score))
+        let i = anchors.firstIndex { $0.score >= clamped } ?? anchors.count - 1
+        let average: Double
+        if i == 0 {
+            average = anchors[0].average
+        } else {
+            let a = anchors[i - 1], b = anchors[i]
+            average = a.average + (b.average - a.average) * (clamped - a.score) / (b.score - a.score)
+        }
+        return Int(self.score(forAverage: average, config: config).rounded())
     }
 }
 

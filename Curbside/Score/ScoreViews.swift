@@ -14,22 +14,9 @@ extension CurbsideScoreReport {
     }
 }
 
-extension CurbsideTier {
-    /// Tier colors always appear next to the tier name, never alone.
-    var color: Color {
-        switch self {
-        case .needsWork: .red
-        case .fair: .orange
-        case .good: Color(red: 0.93, green: 0.70, blue: 0.0)
-        case .great: Color("AccentColor")
-        case .excellent: .green
-        }
-    }
-}
-
 // MARK: - Gauge
 
-/// Credit-score-style semicircle from 300 to 850, split into tier segments, with a marker at the score.
+/// Semicircle from 0 to 100, split into tier segments, with a marker at the score.
 struct ScoreGauge: View {
     let score: Int
     var lineWidth: CGFloat = 18
@@ -56,26 +43,26 @@ struct ScoreGauge: View {
                         .stroke(t.color.opacity(t == tier ? 1 : 0.3), style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
                 }
                 Circle()
-                    .fill(Color(.systemBackground))
+                    .fill(DS.Palette.background)
                     .overlay(Circle().stroke(tier.color, lineWidth: 5))
                     .frame(width: lineWidth + 10, height: lineWidth + 10)
                     .shadow(radius: 2)
                     .position(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
                 VStack(spacing: 0) {
                     Text("\(score)")
-                        .font(.system(size: radius * 0.5, weight: .bold, design: .rounded))
+                        .font(DS.Typeface.number(radius * 0.5))
                         .monospacedDigit()
                         .contentTransition(.numericText())
-                    Text("300 – 850")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    Text("out of 100")
+                        .font(DS.Typeface.small)
+                        .foregroundStyle(DS.Palette.muted)
                 }
                 .position(x: center.x, y: center.y - radius * 0.3)
             }
         }
         .aspectRatio(1.7, contentMode: .fit)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Curbside Score \(score) out of 850, \(tier.displayName)")
+        .accessibilityLabel("Curbside Score \(score) out of 100, \(tier.displayName)")
     }
 }
 
@@ -100,21 +87,15 @@ struct CurbsideScoreCard: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text("Curbside Score")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+            CapsLabel("Curbside Score")
             ScoreGauge(score: report.score)
                 .frame(maxWidth: 300)
             HStack(spacing: 10) {
-                Text(report.tier.displayName)
-                    .font(.headline)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 5)
-                    .background(report.tier.color.opacity(0.18), in: Capsule())
+                TierBadge(tier: report.tier, large: true)
                 TrendChip(trend: report.trend, hasDrives: report.scoredDriveCount > 0)
             }
             if report.scoredDriveCount == 0 {
-                Text("Everyone starts at 660. Record drives to build your score.")
+                Text("Everyone starts at \(CurbsideScoreReport.compute(drives: []).score). Record drives to build your score.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -131,8 +112,8 @@ struct TrendChip: View {
 
     var body: some View {
         let (symbol, color, text): (String, Color, String) = switch trend.direction {
-        case .up: ("arrow.up.right", .green, "+\(trend.delta) this week")
-        case .down: ("arrow.down.right", .red, "\(trend.delta) this week")
+        case .up: ("arrow.up.right", DS.Palette.good, "+\(trend.delta) this week")
+        case .down: ("arrow.down.right", DS.Palette.coral, "\(trend.delta) this week")
         case .flat: ("arrow.right", .secondary, hasDrives ? "Steady this week" : "No drives yet")
         }
         HStack(spacing: 4) {
@@ -166,7 +147,7 @@ struct FactorRow: View {
             VStack(alignment: .trailing, spacing: 2) {
                 HStack(spacing: 3) {
                     Image(systemName: factor.impact < 0 ? "arrow.down" : "arrow.up")
-                        .foregroundStyle(factor.impact < 0 ? Color.red : Color.green)
+                        .foregroundStyle(factor.impact < 0 ? DS.Palette.coral : DS.Palette.good)
                         .font(.caption.weight(.bold))
                     Text(factor.impact > 0 ? "+\(factor.impact)" : "\(factor.impact)")
                         .font(.subheadline.weight(.semibold).monospacedDigit())
@@ -178,9 +159,10 @@ struct FactorRow: View {
     }
 
     private var level: String {
-        switch abs(factor.impact) {
-        case 30...: "High impact"
-        case 10..<30: "Medium impact"
+        let config = CurbsideScoreConfig.default
+        return switch abs(factor.impact) {
+        case config.highImpactFrom...: "High impact"
+        case config.mediumImpactFrom...: "Medium impact"
         default: "Low impact"
         }
     }
