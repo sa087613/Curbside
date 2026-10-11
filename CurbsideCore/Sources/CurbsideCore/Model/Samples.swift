@@ -100,3 +100,12 @@ public func haversineMeters(lat1: Double, lon1: Double, lat2: Double, lon2: Doub
         + cos(lat1 * .pi / 180) * cos(lat2 * .pi / 180) * sin(dLon / 2) * sin(dLon / 2)
     return 2 * r * asin(min(1, a.squareRoot()))
 }
+
+/// Initial bearing from point 1 to point 2, degrees clockwise from north.
+public func bearingDegrees(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Double {
+    let φ1 = lat1 * .pi / 180, φ2 = lat2 * .pi / 180
+    let Δλ = (lon2 - lon1) * .pi / 180
+    let y = sin(Δλ) * cos(φ2)
+    let x = cos(φ1) * sin(φ2) - sin(φ1) * cos(φ2) * cos(Δλ)
+    return (atan2(y, x) * 180 / .pi + 360).truncatingRemainder(dividingBy: 360)
+}

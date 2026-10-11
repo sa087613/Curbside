@@ -7,76 +7,138 @@ import SwiftUI
 struct DriveSummaryView: View {
     let drive: Drive
     @State private var selectedEventID: UUID?
+    @State private var clips: [UUID: EventClip]?
+    @State private var player: ReplayPlayer?
+    @State private var mapPosition: MapCameraPosition = .automatic
 
     var body: some View {
         let events = drive.events
         let score = drive.score
         let route = drive.route
 
-        ScrollView {
-            VStack(spacing: 16) {
-                ScoreHeader(drive: drive, score: score)
+        ScrollViewReader { scroll in
+            ScrollView {
+                VStack(spacing: 16) {
+                    ScoreHeader(drive: drive, score: score)
 
-                HabitCard(score: score)
+                    HabitCard(score: score)
 
-                Card {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Route").font(.headline)
-                        DriveMap(route: route, events: events, selectedEventID: $selectedEventID)
+                    Card {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Text("Route").font(.headline)
+                                Spacer()
+                                if !events.isEmpty, player == nil {
+                                    Text("Tap an event to replay it")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            DriveMap(route: route, events: events, position: $mapPosition, player: player) { event in
+                                select(event)
+                            }
                             .frame(height: 320)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
-                        SeverityLegend()
-                        if let selected = events.first(where: { $0.id == selectedEventID }) {
-                            EventRow(event: selected)
-                                .padding(10)
-                                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
-                        }
-                    }
-                }
-
-                Card {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Speed").font(.headline)
-                        SpeedChart(route: route, events: events)
-                            .frame(height: 200)
-                    }
-                }
-
-                if !events.isEmpty {
-                    Card {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Events").font(.headline)
-                            ForEach(events) { event in
-                                Button {
-                                    selectedEventID = event.id
-                                } label: {
-                                    EventRow(event: event)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .contentShape(Rectangle())
+                            SeverityLegend()
+                            if let player {
+                                ReplayPanel(player: player, onClose: closeReplay)
+                                    .padding(12)
+                                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
+                            } else if let selected = events.first(where: { $0.id == selectedEventID }) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    EventRow(event: selected)
+                                    if clips == nil {
+                                        ProgressView("Preparing replay…").font(.caption)
+                                    } else {
+                                        Text("Replay isn't available for this event.")
+                                            .font(.caption).foregroundStyle(.secondary)
+                                    }
                                 }
-                                .buttonStyle(.plain)
-                                .padding(8)
-                                .background(selectedEventID == event.id ? Color.accentColor.opacity(0.12) : .clear,
-                                            in: RoundedRectangle(cornerRadius: 8))
+                                .padding(12)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
                             }
                         }
                     }
-                }
+                    .id("map")
 
-                NavigationLink {
-                    DriveDebugView(drive: drive)
-                } label: {
-                    Label("Debug details & raw data", systemImage: "wrench.and.screwdriver")
-                        .font(.subheadline)
+                    Card {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Speed").font(.headline)
+                            SpeedChart(route: route, events: events)
+                                .frame(height: 200)
+                        }
+                    }
+
+                    if !events.isEmpty {
+                        Card {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Events").font(.headline)
+                                ForEach(events) { event in
+                                    Button {
+                                        select(event)
+                                    } label: {
+                                        EventRow(event: event)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(8)
+                                    .background(selectedEventID == event.id ? Color.accentColor.opacity(0.12) : .clear,
+                                                in: RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                        }
+                    }
+
+                    NavigationLink {
+                        DriveDebugView(drive: drive)
+                    } label: {
+                        Label("Debug details & raw data", systemImage: "wrench.and.screwdriver")
+                            .font(.subheadline)
+                    }
+                    .padding(.bottom, 8)
                 }
-                .padding(.bottom, 8)
+                .padding(16)
             }
-            .padding(16)
+            // Bring the map and replay controls into view whenever an event is picked.
+            .onChange(of: selectedEventID) { _, id in
+                guard id != nil else { return }
+                withAnimation { scroll.scrollTo("map", anchor: .top) }
+            }
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(drive.startDate.formatted(.dateTime.weekday(.abbreviated).month().day().hour().minute()))
         .navigationBarTitleDisplayMode(.inline)
-        .task { await DriveRouteLoader.backfillIfNeeded(drive) }
+        .task {
+            await DriveRouteLoader.backfillIfNeeded(drive)
+            clips = await EventClipLoader.load(for: drive)
+            // An event tapped while clips were loading starts as soon as they're ready.
+            if player == nil, let id = selectedEventID, let event = events.first(where: { $0.id == id }) {
+                select(event)
+            }
+        }
+        .onDisappear { player?.pause() }
+    }
+
+    private func select(_ event: DrivingEvent) {
+        selectedEventID = event.id
+        player?.pause()
+        guard let clip = clips?[event.id] else {
+            player = nil
+            return
+        }
+        let newPlayer = ReplayPlayer(clip: clip)
+        player = newPlayer
+        withAnimation(.easeInOut(duration: 0.6)) { mapPosition = .region(clip.region) }
+        newPlayer.play()
+    }
+
+    private func closeReplay() {
+        player?.pause()
+        player = nil
+        selectedEventID = nil
+        withAnimation(.easeInOut(duration: 0.6)) { mapPosition = .automatic }
     }
 }
 
@@ -188,17 +250,21 @@ private struct HabitCard: View {
 private struct DriveMap: View {
     let route: [RoutePoint]
     let events: [DrivingEvent]
-    @Binding var selectedEventID: UUID?
+    @Binding var position: MapCameraPosition
+    /// Active replay, if any: draws the clip path and the moving car.
+    let player: ReplayPlayer?
+    var onSelect: (DrivingEvent) -> Void
 
     var body: some View {
-        Map(initialPosition: .automatic) {
+        Map(position: $position, interactionModes: [.pan, .zoom]) {
             if route.count > 1 {
                 MapPolyline(coordinates: route.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) })
-                    .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    // Map content doesn't resolve Color.accentColor to the app's accent; use the asset.
+                    .stroke(Color("AccentColor"), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
             }
             if let start = route.first {
                 Annotation("Start", coordinate: CLLocationCoordinate2D(latitude: start.latitude, longitude: start.longitude)) {
-                    Circle().fill(.white).stroke(Color.accentColor, lineWidth: 4).frame(width: 14, height: 14)
+                    Circle().fill(.white).stroke(Color("AccentColor"), lineWidth: 4).frame(width: 14, height: 14)
                 }
             }
             if let end = route.last, route.count > 1 {
@@ -212,14 +278,23 @@ private struct DriveMap: View {
                 if let lat = event.latitude, let lon = event.longitude {
                     Annotation(event.kind.displayName, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon)) {
                         Button {
-                            selectedEventID = event.id
+                            onSelect(event)
                         } label: {
-                            EventPin(event: event, selected: selectedEventID == event.id)
+                            EventPin(event: event, selected: player?.clip.id == event.id)
                         }
                         .buttonStyle(.plain)
                     }
                     .annotationTitles(.hidden)
                 }
+            }
+            if let player {
+                MapPolyline(coordinates: player.clip.coordinates)
+                    .stroke(player.clip.event.severity.color, style: StrokeStyle(lineWidth: 7, lineCap: .round, lineJoin: .round))
+                let frame = player.frame
+                Annotation("", coordinate: CLLocationCoordinate2D(latitude: frame.latitude, longitude: frame.longitude)) {
+                    CarMarker(headingDegrees: frame.headingDegrees, color: .indigo)
+                }
+                .annotationTitles(.hidden)
             }
         }
         .mapStyle(.standard(pointsOfInterest: .excludingAll))

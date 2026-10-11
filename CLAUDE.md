@@ -49,6 +49,7 @@ CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocati
     CurbsideConfig.swift  ← ALL tunable thresholds and weights live here
     Detection/            EventDetector, AxisEstimator, GPSTrack
     Scoring/              drive score (Curbside Score is added in Phase 4)
+    Replay/               EventClip: the 5 s before each event, rebuilt from stored data
     Export/               DriveLog (debug JSON format), DriveMetrics
   Sources/replay/         `replay` CLI: runs an exported drive through the real detection + scoring code
   Tests/                  Swift Testing suites; SyntheticDrive builds physically consistent fake drives
@@ -66,7 +67,12 @@ Rules already in place:
   - Phone handling suppresses events.
 - Raw drive logs are JSON files in `Documents/Drives` (visible in the Files app). SwiftData stores the
   summary, the events, and a 1 Hz route.
+- Event replay keeps no extra buffer. `EventClipBuilder` re-runs the raw log through `EventDetector` to
+  recover the exact brake/cornering signal around each event. If the raw log is missing, it falls back to
+  the stored 1 Hz route and estimates braking from GPS speed changes, with no cornering force.
 - Units are mph only.
+- Gotcha: never assign to a property inside its own `didSet` on an `@Observable` class. The macro turns it
+  into a computed property and it recurses until it crashes.
 - Backend (Phase 5): Firebase (Auth + Firestore) was recommended over CloudKit, for invite codes, a
   cross-user leaderboard, and possible Android/web parents. Confirm with the user before adding it. Raw
   sensor logs never leave the phone; only summaries are shared, and only after the teen consents.
@@ -90,9 +96,9 @@ Work one phase at a time. After each phase, tell the user what to test on a real
 clear message, and stop until they've tested.
 
 1. ✅ Drive recording, event detection, debug export, and replay harness
-2. Drive score + post-drive summary (score, event map color-coded by severity, the one habit to fix,
+2. ✅ Drive score + post-drive summary (score, event map color-coded by severity, the one habit to fix,
    speed chart)
-3. 5-second event replay: tap an event to watch a car marker, a speed readout, and a brake-force indicator
+3. ✅ 5-second event replay: tap an event to watch a car marker, a speed readout, and a brake-force indicator
    over the 5 s leading up to it
 4. Curbside Score (pure module + tests), trends, and history
 5. Accounts, families, parent dashboard, leaderboard, and teen consent

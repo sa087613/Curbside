@@ -70,6 +70,24 @@ struct GPSTrack {
         return (a.latitude + (b.latitude - a.latitude) * f, a.longitude + (b.longitude - a.longitude) * f)
     }
 
+    /// Heading in degrees clockwise from north: GPS course where valid, otherwise the bearing
+    /// between the surrounding fixes. Nil when stationary with no course.
+    func heading(at time: Double) -> Double? {
+        guard fixes.count > 1 else { return fixes.first.flatMap { $0.hasValidCourse ? $0.course : nil } }
+        let i = min(max(Self.lowerBound(fixes, time), 1), fixes.count - 1)
+        let a = fixes[i - 1], b = fixes[i]
+        if a.hasValidCourse, b.hasValidCourse {
+            var d = b.course - a.course
+            if d > 180 { d -= 360 }
+            if d < -180 { d += 360 }
+            let f = min(max((time - a.t) / (b.t - a.t), 0), 1)
+            return (a.course + d * f + 360).truncatingRemainder(dividingBy: 360)
+        }
+        if let c = (b.hasValidCourse ? b : a.hasValidCourse ? a : nil)?.course { return c }
+        guard haversineMeters(lat1: a.latitude, lon1: a.longitude, lat2: b.latitude, lon2: b.longitude) > 1 else { return nil }
+        return bearingDegrees(lat1: a.latitude, lon1: a.longitude, lat2: b.latitude, lon2: b.longitude)
+    }
+
     /// Net heading change (degrees, absolute) across fixes in [t0 - 1, t1 + 1], or nil if
     /// fewer than two fixes have a valid course.
     func courseChange(from t0: Double, to t1: Double) -> Double? {

@@ -213,3 +213,18 @@ public struct ScoringConfig: Codable, Sendable, Equatable {
         }
     }
 }
+
+// MARK: - Event replay
+
+public struct ReplayConfig: Codable, Sendable, Equatable {
+    /// How much driving before the event's peak to replay.
+    public var leadSeconds: Double = 5
+    /// How much after the peak to include (0 = the clip ends at the worst moment).
+    public var trailSeconds: Double = 0
+    /// Frames per second in a built clip. Playback interpolates between frames.
+    public var frameRateHz: Double = 30
+
+    public init() {}
+
+    public static let `default` = ReplayConfig()
+}
