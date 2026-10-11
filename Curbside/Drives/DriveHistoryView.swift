@@ -69,6 +69,20 @@ struct DriveHistoryView: View {
         }
         .glassList()
         .navigationTitle("History")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button("Load demo drives", systemImage: "sparkles") { DemoDrives.load(into: context) }
+                    if drives.contains(where: DemoDrives.isDemo) {
+                        Button("Remove demo drives", systemImage: "trash", role: .destructive) {
+                            DemoDrives.removeAll(from: context)
+                        }
+                    }
+                } label: {
+                    Label("Demo", systemImage: "ellipsis.circle")
+                }
+            }
+        }
         .navigationDestination(for: Drive.self) { DriveSummaryView(drive: $0) }
     }
 }

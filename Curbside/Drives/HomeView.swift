@@ -40,11 +40,15 @@ struct HomeView: View {
 
                 SectionHeading("Recent drives")
                 if drives.isEmpty {
-                    Text("Your recorded drives will show up here.")
-                        .font(DS.Typeface.body)
-                        .foregroundStyle(DS.Palette.muted)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .glassCard()
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Your recorded drives will show up here.")
+                            .font(DS.Typeface.body)
+                            .foregroundStyle(DS.Palette.muted)
+                        Button("Load demo drives", systemImage: "sparkles") { DemoDrives.load(into: context) }
+                            .buttonStyle(.glassCompact)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .glassCard()
                 }
                 ForEach(drives.prefix(recentCount)) { drive in
                     NavigationLink(value: drive) {

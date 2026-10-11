@@ -40,6 +40,7 @@
 		D78774CE3F86CEBB02B4F906 /* FamilyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416C684D1A43F2196B0043F9 /* FamilyStore.swift */; };
 		D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86545892EBA84B5BB6316C23 /* Drive.swift */; };
 		D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD327013E52BEADF8D0B0A4 /* RootView.swift */; };
+		E9EFFEE4A9BDF0844EEB9A9E /* DemoDrives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6E5252F6DC499B59EF28C1 /* DemoDrives.swift */; };
 		F0CC044A1DE5F49D93601057 /* RewardsCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDEECD09D341AC2C5C16302 /* RewardsCenter.swift */; };
 		F468102CCEE20842E9335202 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B16B70EF33B1C5978AF4026 /* FirebaseFirestore */; };
 		FE420ED07FDEB7A3DD90525E /* AppleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C488BBADDF0C9B0C4FDD4CE /* AppleSignIn.swift */; };
@@ -56,6 +57,7 @@
 		2F58F444D3A6428C31C6791B /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
 		36060E0671B3A29A91DA1308 /* DriveRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveRecorder.swift; sourceTree = "<group>"; };
 		37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveSummaryView.swift; sourceTree = "<group>"; };
+		3B6E5252F6DC499B59EF28C1 /* DemoDrives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoDrives.swift; sourceTree = "<group>"; };
 		3D4CE434C6C2FFF664012492 /* CurbsideCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CurbsideCore; path = CurbsideCore; sourceTree = SOURCE_ROOT; };
 		3DBE22B56D5EB8FB249E381D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		416C684D1A43F2196B0043F9 /* FamilyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyStore.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 		8F2DF51C8C1734AA138F94B4 /* Drives */ = {
 			isa = PBXGroup;
 			children = (
+				3B6E5252F6DC499B59EF28C1 /* DemoDrives.swift */,
 				86545892EBA84B5BB6316C23 /* Drive.swift */,
 				C42B4D558E050C5A4BDBDD94 /* DriveDebugView.swift */,
 				26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */,
@@ -328,6 +331,7 @@
 				C85FF78AA6DF46CFE0B336E5 /* CelebrationView.swift in Sources */,
 				635695A71B525A6C15B345E7 /* ConsentView.swift in Sources */,
 				B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */,
+				E9EFFEE4A9BDF0844EEB9A9E /* DemoDrives.swift in Sources */,
 				6F9C7ED0D38E9A8CF90453DE /* DemoFamilyBackend.swift in Sources */,
 				97CD1BDC5B61C3284BA71F42 /* DesignSystem.swift in Sources */,
 				D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */,

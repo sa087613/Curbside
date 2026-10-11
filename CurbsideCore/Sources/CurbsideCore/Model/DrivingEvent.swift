@@ -132,4 +132,13 @@ public struct DetectionResult: Codable, Sendable {
     /// Fraction of processed motion samples measured with a calibrated forward axis.
     public var calibratedFraction: Double
     public var processedMotionSamples: Int
+
+    public init(events: [DrivingEvent], rejected: [RejectedCandidate] = [], notes: [DetectorNote] = [],
+                calibratedFraction: Double, processedMotionSamples: Int) {
+        self.events = events
+        self.rejected = rejected
+        self.notes = notes
+        self.calibratedFraction = calibratedFraction
+        self.processedMotionSamples = processedMotionSamples
+    }
 }
