@@ -58,11 +58,15 @@ There is no live ranking and no popup while you drive. Curbside is quiet until y
 
 ## Demo
 
-| Presentation site | Demo video | Screenshots |
+| Presentation site | Demo video |
 |---|---|---|
 | `site/`, run locally (not deployed yet) | [`design/curbside-demo-video.html`](design/curbside-demo-video.html), a 2:30 animated walkthrough | Design references in [`design/`](design/) |
 
 The app includes hard-coded demo drives and a demo family, so you can see every screen without going for a drive. See [`Curbside/Drives/DemoDrives.swift`](Curbside/Drives/DemoDrives.swift).
+
+### Our domain
+
+*MLH: Best Domain Name from GoDaddy Registry.* The presentation site's domain is **[curbyourhabits.___]**. "Curb" is half of our name and a verb that means to hold back. Curbside's whole job is to show you the one habit to curb, so the name says what the app does before you open it.
 
 ## How it works
 
@@ -218,7 +222,7 @@ Exported drive logs are saved in the app's `Documents/Drives` folder, which show
 ## Team
 
 [@sa087613](https://github.com/sa087613)
-[Goose-101](https://github.com/Goose-101)
+[@Goose-101](https://github.com/Goose-101)
 
 ## License
 
