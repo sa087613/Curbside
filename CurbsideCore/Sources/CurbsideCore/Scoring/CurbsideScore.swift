@@ -99,6 +99,19 @@ public struct ScoreTrend: Sendable, Equatable {
     public var delta: Int
     public var direction: TrendDirection
     public var windowDays: Int
+
+    public init(delta: Int, direction: TrendDirection, windowDays: Int) {
+        self.delta = delta
+        self.direction = direction
+        self.windowDays = windowDays
+    }
+
+    /// Direction from the change, using the configured deadband.
+    public init(delta: Int, config: CurbsideScoreConfig = .default) {
+        self.init(delta: delta,
+                  direction: delta > config.trendDeadband ? .up : delta < -config.trendDeadband ? .down : .flat,
+                  windowDays: config.trendWindowDays)
+    }
 }
 
 public enum ScoreFactorKind: Sendable, Hashable {

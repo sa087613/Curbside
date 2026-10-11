@@ -1,0 +1,91 @@
+rules_version = '2';
+
+// Curbside Firestore security rules.
+//
+// Data layout:
+//   users/{uid}                                  profile (name, familyID) – owner only
+//   families/{fid}                               family name/creator – members only
+//   families/{fid}/members/{uid}                 role, consent, published standing – members only
+//   families/{fid}/members/{uid}/drives/{id}     shared drive summaries – owner + parents, only with consent
+//   inviteCodes/{code}                           code → family – get by exact code only, never listed
+//
+// Privacy guarantees enforced here (not just in the app):
+//   1. Nothing about a member's driving is stored unless that member has `sharing == true`.
+//   2. Drive summaries are readable only by their owner and the family's parents.
+//   3. Teens never read other members' drives; they see the member list (names, scores) only.
+//   4. Nobody outside a family can read anything about it.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function memberPath(fid, uid) { return /databases/$(database)/documents/families/$(fid)/members/$(uid); }
+    function isMember(fid) { return signedIn() && exists(memberPath(fid, me())); }
+    function isParent(fid) { return isMember(fid) && get(memberPath(fid, me())).data.role == 'parent'; }
+    function isSharing(fid, uid) { return get(memberPath(fid, uid)).data.sharing == true; }
+
+    // Published standing fields may only exist while sharing is on.
+    function standingAllowed(data) {
+      return data.sharing == true || !('standing' in data) || data.standing == null;
+    }
+
+    function validInvite(fid, code, role) {
+      let path = /databases/$(database)/documents/inviteCodes/$(code);
+      return exists(path)
+        && get(path).data.familyID == fid
+        && get(path).data.role == role
+        && get(path).data.expiresAt > request.time;
+    }
+
+    match /users/{uid} {
+      allow read, create, update, delete: if signedIn() && me() == uid;
+    }
+
+    match /families/{fid} {
+      allow read: if isMember(fid);
+      allow create: if signedIn() && request.resource.data.createdBy == me();
+      allow update: if isParent(fid) && request.resource.data.createdBy == resource.data.createdBy;
+      allow delete: if isParent(fid);
+
+      match /members/{uid} {
+        allow read: if isMember(fid);
+
+        // Join: the family's creator joins as its first parent; everyone else needs a valid invite for their role.
+        allow create: if signedIn() && uid == me()
+          && request.resource.data.role in ['parent', 'teen']
+          && standingAllowed(request.resource.data)
+          && (
+            (request.resource.data.role == 'parent'
+              && get(/databases/$(database)/documents/families/$(fid)).data.createdBy == me())
+            || validInvite(fid, request.resource.data.inviteCode, request.resource.data.role)
+          );
+
+        // Only you edit your own entry, and you can't change your role.
+        allow update: if uid == me()
+          && request.resource.data.role == resource.data.role
+          && standingAllowed(request.resource.data);
+
+        // Leave the family, or a parent removes someone.
+        allow delete: if uid == me() || isParent(fid);
+
+        match /drives/{driveID} {
+          allow read: if signedIn() && (uid == me() || (isParent(fid) && isSharing(fid, uid)));
+          allow create, update: if signedIn() && uid == me() && isMember(fid) && isSharing(fid, uid);
+          // Owners clean up when they stop sharing; parents when they remove a member.
+          allow delete: if signedIn() && (uid == me() || isParent(fid));
+        }
+      }
+    }
+
+    match /inviteCodes/{code} {
+      // Look up one code you were given; codes can't be listed or searched.
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if isParent(request.resource.data.familyID)
+        && request.resource.data.createdBy == me()
+        && request.resource.data.role in ['parent', 'teen'];
+      allow delete: if signedIn() && resource.data.createdBy == me();
+    }
+  }
+}

@@ -4,13 +4,15 @@ import SwiftUI
 struct RootView: View {
     @Environment(DriveRecorder.self) private var recorder
     @Environment(PromptGate.self) private var prompts
+    @Environment(FamilyStore.self) private var family
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
     @Environment(\.modelContext) private var context
     @State private var tab: AppTab = .home
     @State private var homePath: [Drive] = []
 
     enum AppTab: Hashable {
-        case home, trends, history
+        case home, trends, history, family
     }
 
     var body: some View {
@@ -32,6 +34,14 @@ struct RootView: View {
             }
             .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
             .tag(AppTab.history)
+
+            FamilyTabView()
+                .tabItem { Label("Family", systemImage: "person.3.fill") }
+                .tag(AppTab.family)
+        }
+        .task { await family.refresh() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await family.republishStanding() } }
         }
         // Open the summary of the drive that was just saved.
         .onChange(of: recorder.lastSavedDriveID) { _, id in

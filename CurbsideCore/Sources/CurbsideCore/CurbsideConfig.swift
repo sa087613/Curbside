@@ -283,3 +283,26 @@ public struct ScaleAnchor: Codable, Sendable, Equatable {
         self.score = score
     }
 }
+
+// MARK: - Family sharing
+
+public struct FamilyConfig: Codable, Sendable, Equatable {
+    /// Characters in an invite code (shown as two groups of four).
+    public var inviteCodeLength = 8
+    /// Invite codes stop working after this many days.
+    public var inviteValidDays = 7
+    /// Shared routes are simplified to at most this many points…
+    public var sharedRouteMaxPoints = 300
+    /// …starting with this tolerance (meters) and loosening until they fit.
+    public var sharedRouteToleranceMeters = 8.0
+    /// Coordinates are rounded to this many decimal places before upload (5 ≈ 1 m).
+    public var sharedCoordinateDecimals = 5
+    /// Drives a parent sees per teen.
+    public var recentDrivesShown = 20
+    /// "This week" for the weekly summary.
+    public var weeklySummaryDays = 7
+
+    public init() {}
+
+    public static let `default` = FamilyConfig()
+}

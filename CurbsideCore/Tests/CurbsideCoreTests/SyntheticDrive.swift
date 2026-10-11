@@ -150,7 +150,7 @@ struct SyntheticDrive {
     }
 }
 
-struct SeededRNG {
+struct SeededRNG: RandomNumberGenerator {
     private var state: UInt64
 
     init(seed: UInt64) { state = seed }

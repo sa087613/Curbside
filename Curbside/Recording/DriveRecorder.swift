@@ -29,6 +29,8 @@ final class DriveRecorder {
 
     /// The drive just saved, so the UI can open its summary.
     var lastSavedDriveID: UUID?
+    /// Runs after each drive is saved (family sharing). Must not show UI.
+    @ObservationIgnored var onDriveSaved: ((Drive) async -> Void)?
 
     /// True while the recording screen should be shown.
     var isRecording: Bool { phase == .recording || phase == .saving }
@@ -139,11 +141,13 @@ final class DriveRecorder {
         let metrics = DriveMetrics.compute(locations: capture.locations, duration: end.timeIntervalSince(start))
 
         let context = container.mainContext
-        context.insert(Drive(id: id, startDate: start, endDate: end, metrics: metrics, result: capture.result,
-                             route: RoutePoint.route(from: capture.locations),
-                             motionSampleCount: capture.motion.count, locationCount: capture.locations.count,
-                             logFileName: fileName))
+        let drive = Drive(id: id, startDate: start, endDate: end, metrics: metrics, result: capture.result,
+                          route: RoutePoint.route(from: capture.locations),
+                          motionSampleCount: capture.motion.count, locationCount: capture.locations.count,
+                          logFileName: fileName)
+        context.insert(drive)
         try context.save()
         lastSavedDriveID = id
+        if let onDriveSaved { Task { await onDriveSaved(drive) } }
     }
 }

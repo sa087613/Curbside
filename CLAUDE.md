@@ -44,6 +44,7 @@ Curbside/                 iOS app target (SwiftUI, @Observable, SwiftData, Swift
   Recording/              LocationService, MotionService, DriveRecorder, RecordingView
   Drives/                 Drive (@Model), home, history, summary, event replay, debug views
   Score/                  gauge, score card, "what's moving your score", Trends tab
+  Family/                 FamilyBackend (Firebase + demo), FamilyStore, sign-in, consent, leaderboard, parent dashboard
   Support/                formatting and shared UI helpers
 CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocation / SwiftUI
   Sources/CurbsideCore/
@@ -54,6 +55,7 @@ CurbsideCore/             local Swift package: pure Swift, no UIKit / CoreLocati
     Export/               DriveLog (debug JSON format), DriveMetrics
   Sources/replay/         `replay` CLI: runs an exported drive through the real detection + scoring code
   Tests/                  Swift Testing suites; SyntheticDrive builds physically consistent fake drives
+firebase/                 firestore.rules + emulator tests (npm test)
 project.yml               XcodeGen spec, the source of truth for Curbside.xcodeproj
 ```
 
@@ -85,9 +87,23 @@ Rules already in place:
 - Units are mph only.
 - Gotcha: never assign to a property inside its own `didSet` on an `@Observable` class. The macro turns it
   into a computed property and it recurses until it crashes.
-- Backend (Phase 5): Firebase (Auth + Firestore) was recommended over CloudKit, for invite codes, a
-  cross-user leaderboard, and possible Android/web parents. Confirm with the user before adding it. Raw
-  sensor logs never leave the phone; only summaries are shared, and only after the teen consents.
+- Backend: Firebase (Auth with Sign in with Apple, plus Firestore), project `curbside-3fb59`. It was
+  chosen over CloudKit for invite codes, the cross-user leaderboard, and possible Android/web parents.
+  - All access goes through the `FamilyBackend` protocol. `FirebaseFamilyBackend` is the real one;
+    `DemoFamilyBackend` is an in-memory demo family ("Preview with a demo family"). `FamilyStore` holds the
+    setup phase, members, and syncing.
+  - `Curbside/GoogleService-Info.plist` is gitignored and copied into the app by a build script only when
+    it exists. Without it the app builds and Family runs in demo mode only.
+  - Privacy is enforced in `firebase/firestore.rules` and tested in the emulator, not just in the app:
+    - Nothing about a member is stored unless they're sharing.
+    - Drives are readable only by their owner and the family's parents.
+    - Teens see the member list and scores, but never other members' drives.
+  - What leaves the phone is exactly `SharedDrive` plus `SharedStanding` (in `CurbsideCore/Family/`). A
+    test fails if either gains a field that `SharingDisclosure` (the consent screen) doesn't list.
+  - Raw logs, speeds, g-forces, and replays never leave the phone. Only drives recorded after the user
+    consents are uploaded.
+  - Uploads happen silently after a drive is saved, never with UI.
+  - When the rules change, re-test them and paste them into Firebase console › Firestore › Rules.
 
 ## Commands
 
@@ -96,6 +112,7 @@ xcodegen generate                         # after adding/removing files or editi
 cd CurbsideCore && swift test             # core unit tests (fast, no simulator)
 cd CurbsideCore && swift run replay drive.json --verbose [--csv signal.csv] [--config cfg.json]
 cd CurbsideCore && swift run replay --dump-config > cfg.json
+cd firebase && JAVA_HOME=/opt/homebrew/opt/openjdk@21 PATH="$JAVA_HOME/bin:$PATH" npm test   # Firestore rules (emulator)
 xcodebuild -project Curbside.xcodeproj -scheme Curbside -destination 'generic/platform=iOS Simulator' build
 ```
 
@@ -113,5 +130,5 @@ clear message, and stop until they've tested.
 3. ✅ 5-second event replay: tap an event to watch a car marker, a speed readout, and a brake-force indicator
    over the 5 s leading up to it
 4. ✅ Curbside Score (pure module + tests), trends, and history
-5. Accounts, families, parent dashboard, leaderboard, and teen consent
+5. ✅ Accounts, families, parent dashboard, leaderboard, and teen consent
 6. Rewards: parent goals plus a mock partner catalog behind a protocol

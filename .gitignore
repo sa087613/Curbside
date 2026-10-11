@@ -4,3 +4,8 @@ DerivedData/
 .build/
 .swiftpm/
 *.xcuserstate
+node_modules/
+firebase-debug.log
+firestore-debug.log
+# Firebase app config: not secret, but no reason to publish it.
+Curbside/GoogleService-Info.plist

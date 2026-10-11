@@ -16,15 +16,40 @@ settings:
 packages:
   CurbsideCore:
     path: CurbsideCore
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    exactVersion: 12.19.2
 targets:
   Curbside:
     type: application
     platform: iOS
     sources:
-      - Curbside
+      - path: Curbside
+        # Bundled by the script below only when present, so fresh clones still build (demo mode).
+        excludes: ["GoogleService-Info.plist"]
     dependencies:
       - package: CurbsideCore
         product: CurbsideCore
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+    entitlements:
+      path: Curbside/Curbside.entitlements
+      properties:
+        com.apple.developer.applesignin: [Default]
+    postCompileScripts:
+      - name: Bundle GoogleService-Info.plist if present
+        basedOnDependencyAnalysis: false
+        script: |
+          SRC="${SRCROOT}/Curbside/GoogleService-Info.plist"
+          DEST="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
+          if [ -f "$SRC" ]; then
+            cp "$SRC" "$DEST"
+          else
+            rm -f "$DEST"
+            echo "warning: Curbside/GoogleService-Info.plist not found; Family runs in demo mode only."
+          fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sophaban.curbside
@@ -34,6 +59,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SUPPORTS_MACCATALYST: NO
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
     info:
       path: Curbside/Info.plist
       properties:

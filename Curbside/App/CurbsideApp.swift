@@ -6,6 +6,7 @@ struct CurbsideApp: App {
     private let container: ModelContainer
     @State private var prompts: PromptGate
     @State private var recorder: DriveRecorder
+    @State private var family: FamilyStore
 
     init() {
         do {
@@ -15,7 +16,11 @@ struct CurbsideApp: App {
         }
         let prompts = PromptGate()
         _prompts = State(initialValue: prompts)
-        _recorder = State(initialValue: DriveRecorder(container: container, prompts: prompts))
+        let recorder = DriveRecorder(container: container, prompts: prompts)
+        let family = FamilyStore(container: container, prompts: prompts)
+        recorder.onDriveSaved = { [weak family] drive in await family?.driveSaved(drive) }
+        _recorder = State(initialValue: recorder)
+        _family = State(initialValue: family)
     }
 
     var body: some Scene {
@@ -23,6 +28,7 @@ struct CurbsideApp: App {
             RootView()
                 .environment(prompts)
                 .environment(recorder)
+                .environment(family)
         }
         .modelContainer(container)
     }

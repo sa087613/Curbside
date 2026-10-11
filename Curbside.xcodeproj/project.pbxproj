@@ -8,35 +8,54 @@
 
 /* Begin PBXBuildFile section */
 		02C09B0E6F84F72E15C83404 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAC5D9E7BBEF6F1F6F7E99E /* HomeView.swift */; };
+		08FC060DCDFB824913992659 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 394D01BABB4B36BE8B2A5F1A /* FirebaseAuth */; };
 		2377C5EE6D0A5EDA3FDBC9E8 /* DriveSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */; };
 		2679406871B1B75785AD6008 /* DriveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */; };
+		2ABC202D2715456CFB0AEB5C /* FirebaseFamilyBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = F853DB11CE034B0348CC54EB /* FirebaseFamilyBackend.swift */; };
 		5CF38761B990AC9DCD816932 /* ScoreViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3650AAEDFB6877777973B3 /* ScoreViews.swift */; };
 		5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E0548A5B72251857492250 /* LocationService.swift */; };
+		635695A71B525A6C15B345E7 /* ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AD2C34C08CEF890FC8069A /* ConsentView.swift */; };
 		67C4EB640DD41500BC24440B /* CurbsideCore in Frameworks */ = {isa = PBXBuildFile; productRef = 40DA7DE0C1514638382900A6 /* CurbsideCore */; };
+		6B170B600D3DD5317B5D1239 /* FamilyTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E3D4F61E712FAE48BB78D /* FamilyTabView.swift */; };
 		6B319B42E20AF18E8FC55000 /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85A80137B17F1A2794F9B16 /* Format.swift */; };
+		6F9C7ED0D38E9A8CF90453DE /* DemoFamilyBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD296C231668116A6987F /* DemoFamilyBackend.swift */; };
 		72E331DFC3D2C283792335FA /* DriveDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42B4D558E050C5A4BDBDD94 /* DriveDebugView.swift */; };
 		748380ADE4DA0895BE6C3281 /* EventReplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA0B026903B860A354AB5DA /* EventReplay.swift */; };
 		8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36060E0671B3A29A91DA1308 /* DriveRecorder.swift */; };
+		95006C910811B6F02CF9263D /* ParentDashboardViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BA2A337DF4C4234A0FF532 /* ParentDashboardViews.swift */; };
 		96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B07EA18884F73DA787960D /* MotionService.swift */; };
+		98A7556DA7B40520846383FB /* FamilyHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D8A9565A548D1AFCA1742D /* FamilyHomeView.swift */; };
+		998C1BA6DD58CE70C0E8B400 /* FamilyBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249D6CE9EB859C7420BF3D20 /* FamilyBackend.swift */; };
 		A2A37B72AA593074A0F5BB19 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA38B0881952A6986AC9B68 /* TrendsView.swift */; };
 		A6A10E5591A5DF3A966C158C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DBE22B56D5EB8FB249E381D /* Assets.xcassets */; };
 		AD9554960B1392250979E1FB /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA17784032113533F08F553 /* RecordingView.swift */; };
 		B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */; };
+		CB208A3FC16BA1057DB62156 /* FamilySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CBC0E2B38A544AAAC51451 /* FamilySettingsView.swift */; };
 		CBE7A2A1C4180B0F2ED93C01 /* PromptGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756738551C7A755DD6CA58E5 /* PromptGate.swift */; };
+		D78774CE3F86CEBB02B4F906 /* FamilyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416C684D1A43F2196B0043F9 /* FamilyStore.swift */; };
 		D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86545892EBA84B5BB6316C23 /* Drive.swift */; };
 		D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD327013E52BEADF8D0B0A4 /* RootView.swift */; };
+		F468102CCEE20842E9335202 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5B16B70EF33B1C5978AF4026 /* FirebaseFirestore */; };
+		FE420ED07FDEB7A3DD90525E /* AppleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C488BBADDF0C9B0C4FDD4CE /* AppleSignIn.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		16E0548A5B72251857492250 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		17BA2A337DF4C4234A0FF532 /* ParentDashboardViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentDashboardViews.swift; sourceTree = "<group>"; };
 		1B3650AAEDFB6877777973B3 /* ScoreViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViews.swift; sourceTree = "<group>"; };
+		249D6CE9EB859C7420BF3D20 /* FamilyBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyBackend.swift; sourceTree = "<group>"; };
 		26CABCA111D84E8C1725A05F /* DriveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveHistoryView.swift; sourceTree = "<group>"; };
 		29B07EA18884F73DA787960D /* MotionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionService.swift; sourceTree = "<group>"; };
 		36060E0671B3A29A91DA1308 /* DriveRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveRecorder.swift; sourceTree = "<group>"; };
 		37B6644ADE0951665DE88FA3 /* DriveSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveSummaryView.swift; sourceTree = "<group>"; };
 		3D4CE434C6C2FFF664012492 /* CurbsideCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CurbsideCore; path = CurbsideCore; sourceTree = SOURCE_ROOT; };
 		3DBE22B56D5EB8FB249E381D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		416C684D1A43F2196B0043F9 /* FamilyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyStore.swift; sourceTree = "<group>"; };
+		45AD2C34C08CEF890FC8069A /* ConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentView.swift; sourceTree = "<group>"; };
+		4C4E3D4F61E712FAE48BB78D /* FamilyTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyTabView.swift; sourceTree = "<group>"; };
+		5C488BBADDF0C9B0C4FDD4CE /* AppleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignIn.swift; sourceTree = "<group>"; };
 		6BA38B0881952A6986AC9B68 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
+		731F3F1BBC6841056A212681 /* Curbside.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Curbside.entitlements; sourceTree = "<group>"; };
 		756738551C7A755DD6CA58E5 /* PromptGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptGate.swift; sourceTree = "<group>"; };
 		7BA0B026903B860A354AB5DA /* EventReplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventReplay.swift; sourceTree = "<group>"; };
 		7DAC5D9E7BBEF6F1F6F7E99E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -44,10 +63,14 @@
 		BCA17784032113533F08F553 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		BCD327013E52BEADF8D0B0A4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		C42B4D558E050C5A4BDBDD94 /* DriveDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveDebugView.swift; sourceTree = "<group>"; };
+		CA1CD296C231668116A6987F /* DemoFamilyBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoFamilyBackend.swift; sourceTree = "<group>"; };
+		D3D8A9565A548D1AFCA1742D /* FamilyHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyHomeView.swift; sourceTree = "<group>"; };
 		DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurbsideApp.swift; sourceTree = "<group>"; };
+		E2CBC0E2B38A544AAAC51451 /* FamilySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilySettingsView.swift; sourceTree = "<group>"; };
 		E5E4043349F2703C3F6910A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E85A80137B17F1A2794F9B16 /* Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Format.swift; sourceTree = "<group>"; };
 		EF985AA6CB2AFDAA7261650C /* Curbside.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Curbside.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F853DB11CE034B0348CC54EB /* FirebaseFamilyBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFamilyBackend.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +79,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				67C4EB640DD41500BC24440B /* CurbsideCore in Frameworks */,
+				08FC060DCDFB824913992659 /* FirebaseAuth in Frameworks */,
+				F468102CCEE20842E9335202 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +124,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6C4E946813CD5BB95EE0F918 /* Family */ = {
+			isa = PBXGroup;
+			children = (
+				5C488BBADDF0C9B0C4FDD4CE /* AppleSignIn.swift */,
+				45AD2C34C08CEF890FC8069A /* ConsentView.swift */,
+				CA1CD296C231668116A6987F /* DemoFamilyBackend.swift */,
+				249D6CE9EB859C7420BF3D20 /* FamilyBackend.swift */,
+				D3D8A9565A548D1AFCA1742D /* FamilyHomeView.swift */,
+				E2CBC0E2B38A544AAAC51451 /* FamilySettingsView.swift */,
+				416C684D1A43F2196B0043F9 /* FamilyStore.swift */,
+				4C4E3D4F61E712FAE48BB78D /* FamilyTabView.swift */,
+				F853DB11CE034B0348CC54EB /* FirebaseFamilyBackend.swift */,
+				17BA2A337DF4C4234A0FF532 /* ParentDashboardViews.swift */,
+			);
+			path = Family;
+			sourceTree = "<group>";
+		};
 		865F1F7691A9A6D8486A1223 = {
 			isa = PBXGroup;
 			children = (
@@ -134,9 +176,11 @@
 			isa = PBXGroup;
 			children = (
 				3DBE22B56D5EB8FB249E381D /* Assets.xcassets */,
+				731F3F1BBC6841056A212681 /* Curbside.entitlements */,
 				E5E4043349F2703C3F6910A7 /* Info.plist */,
 				130B49097277698581C70568 /* App */,
 				8F2DF51C8C1734AA138F94B4 /* Drives */,
+				6C4E946813CD5BB95EE0F918 /* Family */,
 				18C244AF8DC59297CEF02582 /* Recording */,
 				A7DF31AC66762087523242E0 /* Score */,
 				FAF024E69F693C642CD4CC0E /* Support */,
@@ -160,6 +204,7 @@
 			buildConfigurationList = 97C3C9117CD902FFC7D309E4 /* Build configuration list for PBXNativeTarget "Curbside" */;
 			buildPhases = (
 				B44F3C6AB6243C16B7E43653 /* Sources */,
+				D7682E9B9B2BFE8CCAF0A0E8 /* Bundle GoogleService-Info.plist if present */,
 				D5DD51EDDBD3BFE9678CA887 /* Resources */,
 				1851C65A4DBC7DDB5D1AF3A5 /* Frameworks */,
 			);
@@ -170,6 +215,8 @@
 			name = Curbside;
 			packageProductDependencies = (
 				40DA7DE0C1514638382900A6 /* CurbsideCore */,
+				394D01BABB4B36BE8B2A5F1A /* FirebaseAuth */,
+				5B16B70EF33B1C5978AF4026 /* FirebaseFirestore */,
 			);
 			productName = Curbside;
 			productReference = EF985AA6CB2AFDAA7261650C /* Curbside.app */;
@@ -200,6 +247,7 @@
 			mainGroup = 865F1F7691A9A6D8486A1223;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				740F44E5D81C8B182F0DACAF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				ACBDAABE1EA2DAF5EFFF90A2 /* XCLocalSwiftPackageReference "CurbsideCore" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -223,22 +271,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D7682E9B9B2BFE8CCAF0A0E8 /* Bundle GoogleService-Info.plist if present */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle GoogleService-Info.plist if present";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SRC=\"${SRCROOT}/Curbside/GoogleService-Info.plist\"\nDEST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist\"\nif [ -f \"$SRC\" ]; then\n  cp \"$SRC\" \"$DEST\"\nelse\n  rm -f \"$DEST\"\n  echo \"warning: Curbside/GoogleService-Info.plist not found; Family runs in demo mode only.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B44F3C6AB6243C16B7E43653 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE420ED07FDEB7A3DD90525E /* AppleSignIn.swift in Sources */,
+				635695A71B525A6C15B345E7 /* ConsentView.swift in Sources */,
 				B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */,
+				6F9C7ED0D38E9A8CF90453DE /* DemoFamilyBackend.swift in Sources */,
 				D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */,
 				72E331DFC3D2C283792335FA /* DriveDebugView.swift in Sources */,
 				2679406871B1B75785AD6008 /* DriveHistoryView.swift in Sources */,
 				8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */,
 				2377C5EE6D0A5EDA3FDBC9E8 /* DriveSummaryView.swift in Sources */,
 				748380ADE4DA0895BE6C3281 /* EventReplay.swift in Sources */,
+				998C1BA6DD58CE70C0E8B400 /* FamilyBackend.swift in Sources */,
+				98A7556DA7B40520846383FB /* FamilyHomeView.swift in Sources */,
+				CB208A3FC16BA1057DB62156 /* FamilySettingsView.swift in Sources */,
+				D78774CE3F86CEBB02B4F906 /* FamilyStore.swift in Sources */,
+				6B170B600D3DD5317B5D1239 /* FamilyTabView.swift in Sources */,
+				2ABC202D2715456CFB0AEB5C /* FirebaseFamilyBackend.swift in Sources */,
 				6B319B42E20AF18E8FC55000 /* Format.swift in Sources */,
 				02C09B0E6F84F72E15C83404 /* HomeView.swift in Sources */,
 				5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */,
 				96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */,
+				95006C910811B6F02CF9263D /* ParentDashboardViews.swift in Sources */,
 				CBE7A2A1C4180B0F2ED93C01 /* PromptGate.swift in Sources */,
 				AD9554960B1392250979E1FB /* RecordingView.swift in Sources */,
 				D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */,
@@ -255,8 +335,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Curbside/Curbside.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Curbside/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -398,8 +480,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Curbside/Curbside.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Curbside/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -443,10 +527,31 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		740F44E5D81C8B182F0DACAF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 12.19.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		394D01BABB4B36BE8B2A5F1A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 740F44E5D81C8B182F0DACAF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		40DA7DE0C1514638382900A6 /* CurbsideCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CurbsideCore;
+		};
+		5B16B70EF33B1C5978AF4026 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 740F44E5D81C8B182F0DACAF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
