@@ -1,0 +1,69 @@
+# Source of truth for Curbside.xcodeproj. After adding/removing files or changing settings:
+#   xcodegen generate
+name: Curbside
+options:
+  bundleIdPrefix: com.sophaban
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    # Signing team. Change here (then `xcodegen generate`) or in Xcode › Signing & Capabilities.
+    DEVELOPMENT_TEAM: A3ZZHU4YHF
+    CODE_SIGN_STYLE: Automatic
+packages:
+  CurbsideCore:
+    path: CurbsideCore
+targets:
+  Curbside:
+    type: application
+    platform: iOS
+    sources:
+      - Curbside
+    dependencies:
+      - package: CurbsideCore
+        product: CurbsideCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sophaban.curbside
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SUPPORTS_MACCATALYST: NO
+    info:
+      path: Curbside/Info.plist
+      properties:
+        CFBundleDisplayName: Curbside
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        ITSAppUsesNonExemptEncryption: false
+        # Keeps GPS + motion recording when you switch apps or lock the phone (blue location pill shows).
+        UIBackgroundModes: [location]
+        NSLocationWhenInUseUsageDescription: >-
+          Curbside uses your location while you're recording a drive to measure your speed and
+          draw your route. It stops when you end the drive.
+        # Not prompted in Phase 1 (device motion needs no permission); used later for auto-detecting drives.
+        NSMotionUsageDescription: >-
+          Curbside uses your phone's motion sensors to notice hard braking, fast starts, and sharp turns during a drive.
+        # Exposes Documents/Drives in the Files app so raw drive logs are easy to pull off the phone.
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+schemes:
+  Curbside:
+    build:
+      targets:
+        Curbside: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - package: CurbsideCore/CurbsideCoreTests

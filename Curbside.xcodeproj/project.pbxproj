@@ -1,0 +1,426 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4BC0037F4D9145B0D741369B /* DriveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995C22057102A072BA61864 /* DriveListView.swift */; };
+		5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E0548A5B72251857492250 /* LocationService.swift */; };
+		67C4EB640DD41500BC24440B /* CurbsideCore in Frameworks */ = {isa = PBXBuildFile; productRef = 40DA7DE0C1514638382900A6 /* CurbsideCore */; };
+		6B319B42E20AF18E8FC55000 /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85A80137B17F1A2794F9B16 /* Format.swift */; };
+		8BB89A95C4C586C307E28DF1 /* DriveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64482B169650CB6A173B04AD /* DriveDetailView.swift */; };
+		8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36060E0671B3A29A91DA1308 /* DriveRecorder.swift */; };
+		96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B07EA18884F73DA787960D /* MotionService.swift */; };
+		A6A10E5591A5DF3A966C158C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DBE22B56D5EB8FB249E381D /* Assets.xcassets */; };
+		AD9554960B1392250979E1FB /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA17784032113533F08F553 /* RecordingView.swift */; };
+		B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */; };
+		CBE7A2A1C4180B0F2ED93C01 /* PromptGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756738551C7A755DD6CA58E5 /* PromptGate.swift */; };
+		D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86545892EBA84B5BB6316C23 /* Drive.swift */; };
+		D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD327013E52BEADF8D0B0A4 /* RootView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		16E0548A5B72251857492250 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		29B07EA18884F73DA787960D /* MotionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionService.swift; sourceTree = "<group>"; };
+		36060E0671B3A29A91DA1308 /* DriveRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveRecorder.swift; sourceTree = "<group>"; };
+		3D4CE434C6C2FFF664012492 /* CurbsideCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CurbsideCore; path = CurbsideCore; sourceTree = SOURCE_ROOT; };
+		3DBE22B56D5EB8FB249E381D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		64482B169650CB6A173B04AD /* DriveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveDetailView.swift; sourceTree = "<group>"; };
+		756738551C7A755DD6CA58E5 /* PromptGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptGate.swift; sourceTree = "<group>"; };
+		86545892EBA84B5BB6316C23 /* Drive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive.swift; sourceTree = "<group>"; };
+		9995C22057102A072BA61864 /* DriveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveListView.swift; sourceTree = "<group>"; };
+		BCA17784032113533F08F553 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		BCD327013E52BEADF8D0B0A4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurbsideApp.swift; sourceTree = "<group>"; };
+		E5E4043349F2703C3F6910A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E85A80137B17F1A2794F9B16 /* Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Format.swift; sourceTree = "<group>"; };
+		EF985AA6CB2AFDAA7261650C /* Curbside.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Curbside.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1851C65A4DBC7DDB5D1AF3A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67C4EB640DD41500BC24440B /* CurbsideCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		130B49097277698581C70568 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DC78FB47C9A005B3431CC194 /* CurbsideApp.swift */,
+				756738551C7A755DD6CA58E5 /* PromptGate.swift */,
+				BCD327013E52BEADF8D0B0A4 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		18C244AF8DC59297CEF02582 /* Recording */ = {
+			isa = PBXGroup;
+			children = (
+				36060E0671B3A29A91DA1308 /* DriveRecorder.swift */,
+				16E0548A5B72251857492250 /* LocationService.swift */,
+				29B07EA18884F73DA787960D /* MotionService.swift */,
+				BCA17784032113533F08F553 /* RecordingView.swift */,
+			);
+			path = Recording;
+			sourceTree = "<group>";
+		};
+		56A530AF70667C0DACD4C0B1 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				3D4CE434C6C2FFF664012492 /* CurbsideCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		6172A5F4B1F930E20120E5C5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EF985AA6CB2AFDAA7261650C /* Curbside.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		865F1F7691A9A6D8486A1223 = {
+			isa = PBXGroup;
+			children = (
+				C572B10097A98B9C4FE461A5 /* Curbside */,
+				56A530AF70667C0DACD4C0B1 /* Packages */,
+				6172A5F4B1F930E20120E5C5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8F2DF51C8C1734AA138F94B4 /* Drives */ = {
+			isa = PBXGroup;
+			children = (
+				86545892EBA84B5BB6316C23 /* Drive.swift */,
+				64482B169650CB6A173B04AD /* DriveDetailView.swift */,
+				9995C22057102A072BA61864 /* DriveListView.swift */,
+			);
+			path = Drives;
+			sourceTree = "<group>";
+		};
+		C572B10097A98B9C4FE461A5 /* Curbside */ = {
+			isa = PBXGroup;
+			children = (
+				3DBE22B56D5EB8FB249E381D /* Assets.xcassets */,
+				E5E4043349F2703C3F6910A7 /* Info.plist */,
+				130B49097277698581C70568 /* App */,
+				8F2DF51C8C1734AA138F94B4 /* Drives */,
+				18C244AF8DC59297CEF02582 /* Recording */,
+				FAF024E69F693C642CD4CC0E /* Support */,
+			);
+			path = Curbside;
+			sourceTree = "<group>";
+		};
+		FAF024E69F693C642CD4CC0E /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				E85A80137B17F1A2794F9B16 /* Format.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6BACE72B486EEA99F0B89217 /* Curbside */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 97C3C9117CD902FFC7D309E4 /* Build configuration list for PBXNativeTarget "Curbside" */;
+			buildPhases = (
+				B44F3C6AB6243C16B7E43653 /* Sources */,
+				D5DD51EDDBD3BFE9678CA887 /* Resources */,
+				1851C65A4DBC7DDB5D1AF3A5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Curbside;
+			packageProductDependencies = (
+				40DA7DE0C1514638382900A6 /* CurbsideCore */,
+			);
+			productName = Curbside;
+			productReference = EF985AA6CB2AFDAA7261650C /* Curbside.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F28A13EB9CF9146EEA8A631E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6BACE72B486EEA99F0B89217 = {
+						DevelopmentTeam = A3ZZHU4YHF;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 04A3704061D9229A30C32F5F /* Build configuration list for PBXProject "Curbside" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 865F1F7691A9A6D8486A1223;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ACBDAABE1EA2DAF5EFFF90A2 /* XCLocalSwiftPackageReference "CurbsideCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6172A5F4B1F930E20120E5C5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6BACE72B486EEA99F0B89217 /* Curbside */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D5DD51EDDBD3BFE9678CA887 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6A10E5591A5DF3A966C158C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B44F3C6AB6243C16B7E43653 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B32928267C17E53C37E6B3AE /* CurbsideApp.swift in Sources */,
+				D97A890B0DFE3837EEEF5CE9 /* Drive.swift in Sources */,
+				8BB89A95C4C586C307E28DF1 /* DriveDetailView.swift in Sources */,
+				4BC0037F4D9145B0D741369B /* DriveListView.swift in Sources */,
+				8FF22C419A3D71F3BDD5E318 /* DriveRecorder.swift in Sources */,
+				6B319B42E20AF18E8FC55000 /* Format.swift in Sources */,
+				5FC0F96C3AC35DB9B60FA562 /* LocationService.swift in Sources */,
+				96BE23268DB43859DF5F4A86 /* MotionService.swift in Sources */,
+				CBE7A2A1C4180B0F2ED93C01 /* PromptGate.swift in Sources */,
+				AD9554960B1392250979E1FB /* RecordingView.swift in Sources */,
+				D9D6D1EFE2DD165B1BF30D9B /* RootView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		587005BA8555E8C48D306E93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Curbside/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sophaban.curbside;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		695C6733F0E61EAB07154F77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = A3ZZHU4YHF;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C249723F2FFFD1BBC465F2F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = A3ZZHU4YHF;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		DD2359B0E5929E98ECF41D17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Curbside/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sophaban.curbside;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		04A3704061D9229A30C32F5F /* Build configuration list for PBXProject "Curbside" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				695C6733F0E61EAB07154F77 /* Debug */,
+				C249723F2FFFD1BBC465F2F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		97C3C9117CD902FFC7D309E4 /* Build configuration list for PBXNativeTarget "Curbside" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD2359B0E5929E98ECF41D17 /* Debug */,
+				587005BA8555E8C48D306E93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		ACBDAABE1EA2DAF5EFFF90A2 /* XCLocalSwiftPackageReference "CurbsideCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = CurbsideCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		40DA7DE0C1514638382900A6 /* CurbsideCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CurbsideCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F28A13EB9CF9146EEA8A631E /* Project object */;
+}
