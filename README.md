@@ -58,11 +58,8 @@ There is no live ranking and no popup while you drive. Curbside is quiet until y
 
 ## Demo
 
-| Presentation site | Demo video |
-|---|---|---|
-| `site/`, run locally (not deployed yet) | [`design/curbside-demo-video.html`](design/curbside-demo-video.html), a 2:30 animated walkthrough | Design references in [`design/`](design/) |
-
-The app includes hard-coded demo drives and a demo family, so you can see every screen without going for a drive. See [`Curbside/Drives/DemoDrives.swift`](Curbside/Drives/DemoDrives.swift).
+https://www.curbyourhabits.club/
+https://youtu.be/g2PFaxXqu9o
 
 ### Our domain
 
