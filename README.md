@@ -218,6 +218,7 @@ Exported drive logs are saved in the app's `Documents/Drives` folder, which show
 ## Team
 
 [@sa087613](https://github.com/sa087613)
+[Goose-101](https://github.com/Goose-101)
 
 ## License
 
